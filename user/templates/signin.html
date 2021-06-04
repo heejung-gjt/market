@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
+{% block content %}
+<section class="login-section">
+  <div class="login-logo">
+    <img class="login-img" src="{% static 'img/감자.png' %}" alt="">
+    <span>LOGIN</span>
+  </div>
+  <form class="login-form" action="" method="POST">
+    {% csrf_token %}
+    <input class="login-id" type="text" name="userid" placeholder="ID">
+    <input class="login-pwd" type="password" name="pwd" placeholder="PASSWORD">
+    <button class="login-submit" type="submit">로그인하기</button>
+  </form>
+  <button class="login-kakao" type="submit">카카오톡으로 로그인하기</button>
+  <small class="login-infor"><a href="#">회원가입</a> / <a href="#">비밀번호찾기</a></small>
+  
+</section>
+
+{% endblock content %}

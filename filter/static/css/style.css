@@ -1,0 +1,163 @@
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+  font-size: 10px;
+  font-family: 'Libre Franklin', sans-serif;
+}
+a{
+  color: black;
+  display: inline-block;
+}
+
+/* base */
+.container{
+max-width: 1400px;
+margin: 0 auto;
+}
+.nav{
+  /* background-color: yellow; */
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid rgb(206, 204, 204);
+  
+}
+.nav-logo{
+  display: flex;
+  align-items: center;
+  width: 20%;
+  text-align: center;
+}
+.logo-img{
+  width: 50px;
+  height: 50px;
+}
+
+.nav-logo h1 a{
+  display: inline-block;
+  font-size: 4em;
+  line-height: 1.5;
+  font-family: 'Nanum Pen Script', cursive;
+}
+.nav-menu{
+  text-align: center;
+  /* background-color: pink; */
+  width: 45%;
+}
+.menu-ul{
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.menu-ul li a{
+  font-family: 'Libre Franklin', sans-serif;
+  letter-spacing: 3px;
+  display: inline-block;
+  font-size:1.6em;
+  padding: 20px;
+  margin: 0 15px;
+}
+
+.menu-ul li a:hover,
+.menu-ul li a:focus
+{
+  color: dodgerblue;
+  font-weight: bold;
+}
+
+.nav-link{
+  display: flex;
+  width: 35%;
+}
+.nav-user{
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+.user-img{
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+.nav-user img{
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+.user-name{
+  font-size: 1.5em;
+}
+.nav-link{
+  text-align: center;
+  align-items: center;
+}
+.nav-link a{
+  display: inline-block;
+  font-size:1.5em;
+  margin: 0 10px;
+  padding: 8px 0px;
+  width: 120px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: lightgray;
+  transition: all 200ms;
+}
+.nav-link a:hover,
+.nav-link a:focus
+{
+  background-color: rgba(0, 0, 0, 0.671);
+  color: #eee;
+}
+
+/* login */
+.login-section{
+  margin-top:50px;
+  text-align: center;
+}
+.login-img{
+  width: 300px;
+  height: 300px;
+}
+.login-section span{
+  display: block;
+  font-size: 4.8em;
+  letter-spacing: 3px;
+  font-weight: bold;
+  font-family: 'Nanum Pen Script', cursive;
+}
+.login-form{
+  text-align: center;
+  margin-top:20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.login-id,.login-pwd,.login-submit,.login-kakao{
+  width: 300px;
+  margin-bottom:15px;
+  padding:15px 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: none;
+}
+.login-id,.login-pwd{
+  box-shadow: 0px 0px 5px 0px rgb(150, 147, 147);
+}
+.login-submit{
+  cursor: pointer;
+  background-color: dodgerblue;
+  color: white;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+.login-submit:hover{
+  background-color: rgba(0, 0, 0, 0.671);
+  color: #eee;
+  transition: all 200ms;
+}
+.login-infor{
+  display: block;
+  font-size: 1.5em;
+}

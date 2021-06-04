@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100&display=swap" rel="stylesheet">
+  <title>감자마켓</title>
+  {% block head %}
+  {% endblock head %}
+</head>
+
+<body>
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-logo">
+        <img class="logo-img" src="{% static 'img/감자.png' %}" alt="">
+        <h1><a href="{% url 'home' %}">감자마켓</a></h1>
+      </div>
+      <div class="nav-menu">
+        <ul class="menu-ul">
+          <li><a href="#">모든제품</a></li>
+          <li><a href="#"> 카테코리별</a></li>
+        </ul>
+      </div>
+      <div class="nav-link">
+        <article class="nav-user">
+          <img class="user-img" src="{% static 'img/감자.png' %}" alt="">
+          <span class="user-name">000님</span>
+
+        </article>
+        <a href="{% url 'user:signin' %}">로그인</a>
+        <a href="#">회원가입</a>
+      </div>
+    </nav>
+
+    {% block content %}
+    {% endblock content %}
+  </div>
+</body>
+
+</html>
