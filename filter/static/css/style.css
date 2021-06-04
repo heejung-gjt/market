@@ -111,7 +111,7 @@ margin: 0 auto;
 }
 
 /* login */
-.login-section{
+.login-section,.register-section{
   margin-top:50px;
   text-align: center;
 }
@@ -119,14 +119,18 @@ margin: 0 auto;
   width: 300px;
   height: 300px;
 }
-.login-section span{
+.register-img{
+  width: 250px;
+  height: 250px;
+}
+.login-section span,.register-section span{
   display: block;
   font-size: 4.8em;
   letter-spacing: 3px;
   font-weight: bold;
   font-family: 'Nanum Pen Script', cursive;
 }
-.login-form{
+.login-form,.register-form{
   text-align: center;
   margin-top:20px;
   display: flex;
@@ -134,7 +138,8 @@ margin: 0 auto;
   align-items: center;
   justify-content: center;
 }
-.login-id,.login-pwd,.login-submit,.login-kakao{
+.login-id,.login-pwd,.login-submit,.login-kakao,
+.register-id,.register-email,.register-pwd,.register-pwd-chk,.register-submit,.register-kakao{
   width: 300px;
   margin-bottom:15px;
   padding:15px 10px;
@@ -142,22 +147,25 @@ margin: 0 auto;
   border-radius: 5px;
   border: none;
 }
-.login-id,.login-pwd{
+.login-id,.register-email,.login-pwd,
+.register-id,.register-pwd,.register-pwd-chk{
   box-shadow: 0px 0px 5px 0px rgb(150, 147, 147);
 }
-.login-submit{
+.login-submit,.register-submit{
   cursor: pointer;
   background-color: dodgerblue;
   color: white;
   font-weight: bold;
   font-size: 1.3em;
 }
-.login-submit:hover{
+.login-submit:hover,
+.register-submit:hover{
   background-color: rgba(0, 0, 0, 0.671);
   color: #eee;
   transition: all 200ms;
 }
-.login-infor{
+.login-infor,
+.register-infor{
   display: block;
   font-size: 1.5em;
 }

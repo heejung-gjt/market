@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
+{% block content %}
+<section class="register-section">
+  <div class="register-logo">
+    <img class="register-img" src="{% static 'img/감자register.png' %}" alt="">
+    <span>REGISTER</span>
+  </div>
+  <form class="register-form" action="" method="POST">
+    {% csrf_token %}
+    <input class="register-id" type="text" name="userid" placeholder="ID">
+    <input class="register-email" type="text" name="email" placeholder="EMAIL">
+    <input class="register-pwd" type="password" name="pwd" placeholder="PASSWORD">
+    <input class="register-pwd-chk" type="password" name="pwd-chk" placeholder="PASSWORD CHECK">
+    <button class="register-submit" type="submit">회원가입하기</button>
+  </form>
+  <button class="register-kakao" type="submit">카카오톡으로 회원가입하기</button>
+  <small class="register-infor"><a href="{% url 'user:signin' %}">로그인</a></small>
+  
+</section>
+
+{% endblock content %}
