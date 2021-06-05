@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
+{% block content %}
+
+<h1 class="product-main">전체 제품</h1>
+<section class="product-social">
+  <select name="social-clicked">
+    <option value=""selected>필터링보기</option>
+    <option value="">댓글 많은 순</option>
+    <option value="">찜 많은 순</option>
+  </select>
+</section>
+<section class="product-section">
+  <ul class="product-list">
+    <a class="product-link" href="{% url 'product:detail' %}"><li class="product">
+      <div class="product-writer">
+      <span><i class="product-icon fas fa-user-circle"></i> 감자채 조아 </span>
+      </div>
+      <div class="product-imgs">
+        <img class="product-img" src="{% static 'img/감자.png' %}" alt="">
+      </div>
+      <span class="product-title">감자 나눔 할 분 있으신가요 10개 주고 참외가 먹고싶네요 훗훗</span>
+      <strong class="product-price">4000원</strong>
+      <div class="social">
+        <span class="social-comment">댓글 +10 </span>
+        <span class="social-like"> 찜 +20</span>
+      </div>
+    </li>
+  </a>
+  <a class="product-link" href="{% url 'product:detail' %}"><li class="product">
+    <div class="product-writer">
+    <span><i class="product-icon fas fa-user-circle"></i> 감자채 조아 </span>
+    </div>
+    <div class="product-imgs">
+      <img class="product-img" src="{% static 'img/감자.png' %}" alt="">
+    </div>
+    <span class="product-title">감자 나눔 할 분 있으신가요 10개 주고 참외가 먹고싶네요 훗훗</span>
+    <strong class="product-price">4000원</strong>
+    <div class="social">
+      <span class="social-comment">댓글 +10 </span>
+      <span class="social-like"> 찜 +20</span>
+    </div>
+  </li>
+</a>
+<a class="product-link" href="#"><li class="product">
+  <div class="product-writer">
+  <span><i class="product-icon fas fa-user-circle"></i> 감자채 조아 </span>
+  </div>
+  <div class="product-imgs">
+    <img class="product-img" src="{% static 'img/감자.png' %}" alt="">
+  </div>
+  <span class="product-title">감자 나눔 할 분 있으신가요 10개 주고 참외가 먹고싶네요 훗훗</span>
+  <strong class="product-price">4000원</strong>
+  <div class="social">
+    <span class="social-comment">댓글 +10 </span>
+    <span class="social-like"> 찜 +20</span>
+  </div>
+</li>
+</a>
+<a class="product-link" href="#"><li class="product">
+  <div class="product-writer">
+  <span><i class="product-icon fas fa-user-circle"></i> 감자채 조아 </span>
+  </div>
+  <div class="product-imgs">
+    <img class="product-img" src="{% static 'img/감자.png' %}" alt="">
+  </div>
+  <span class="product-title">감자 나눔 할 분 있으신가요 10개 주고 참외가 먹고싶네요 훗훗</span>
+  <strong class="product-price">4000원</strong>
+  <div class="social">
+    <span class="social-comment">댓글 +10 </span>
+    <span class="social-like"> 찜 +20</span>
+  </div>
+</li>
+</a>
+  </ul>
+</section>
+
+
+
+{% endblock content %}
+
+{% block script %}
+<script>
+
+
+</script>
+{% endblock script %}

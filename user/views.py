@@ -23,3 +23,6 @@ class LegisterView(View):
     
     return redirect('home')
 
+
+class ProfileView(TemplateView):
+  template_name = 'profile.html'

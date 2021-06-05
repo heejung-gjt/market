@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://kit.fontawesome.com/453205446a.js" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
@@ -21,12 +22,12 @@
     <nav class="nav">
       <div class="nav-logo">
         <img class="logo-img" src="{% static 'img/감자.png' %}" alt="">
-        <h1><a href="{% url 'home' %}">감자마켓</a></h1>
+        <h1><a href="{% url 'product:article' %}">감자마켓</a></h1>
       </div>
       <div class="nav-menu">
         <ul class="menu-ul">
-          <li><a href="#">모든제품</a></li>
-          <li><a href="#"> 카테코리별</a></li>
+          <li><a class="menu-all checked" href="{% url 'product:article' %}">모든제품</a></li>
+          <li><a class="menu-category" href="{% url 'product:category' %}"> 카테고리별</a></li>
         </ul>
       </div>
       <div class="nav-link">
@@ -35,14 +36,43 @@
           <span class="user-name">000님</span>
 
         </article>
-        <a href="{% url 'user:signin' %}">로그인</a>
-        <a href="{% url 'user:signup' %}">회원가입</a>
+        <!-- <a href="{% url 'user:signin' %}">로그인</a>
+        <a href="{% url 'user:signup' %}">회원가입</a> -->
+        <a href="{% url 'user:profile' %}">마이페이지</a>
+        <a href="{% url 'user:signup' %}">로그아웃</a>
       </div>
     </nav>
 
     {% block content %}
     {% endblock content %}
   </div>
+  
+  {% block footer %}
+  <footer class="footer">
+    <section class="footer-container">
+      <span>footer</span>
+    </section>
+  </footer>
+  {% endblock footer %}
+
+  {% block script %}
+  {% endblock script %}
+
+  <script>
+    document.querySelector('.menu-all').onclick = (e) => {
+      // e.preventDefault();
+      document.querySelector('.menu-all').classList.add('checked');
+      document.querySelector('.menu-category').classList.remove('checked');
+    }
+
+    document.querySelector('.menu-category').onclick = (e) => {
+      // e.preventDefault();
+      document.querySelector('.menu-all').classList.remove('checked');
+      document.querySelector('.menu-category').classList.add('checked');
+    }
+
+  </script>
+
 </body>
 
 </html>

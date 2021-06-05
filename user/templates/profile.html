@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
+{% block content %}
+<section class="profile-section">
+  <div class="profile-infor">
+    <ul class="infor-ul">
+      <li class="profile-infor"><button class="clicked profile-btn" onclick="profileInfor(event)"; href="#"><i class="fas fa-user-circle"></i><span>프로필 설정</span></button></li>
+      <li class="write-infor"><button class="write-btn" onclick="writeInfor(event)";><i class="fas fa-pen"></i><span>내가 쓴 글</span></button></li>
+      <li class="like-infor"><button class="like-btn"onclick="likeInfor(event)";><i class="fab fa-gratipay"></i><span>내가 찜한 제품</span></button></li>
+    </ul>
+  </div>
+  <div class="infor">
+  {% include 'profile-infor.html' %}
+</div>
+</div>
+{% block footer %}
+<footer></footer>
+{% endblock footer %}
+{% endblock content %}
+
+{% block script %}
+<script>
+
+profileInfor = (e) => {
+  e.preventDefault();
+  $profileInfor = document.querySelector('.infor');
+  $profileInfor.innerHTML = `{% include 'profile-infor.html' %}`
+  document.querySelector('.profile-btn').classList.add('clicked');
+  document.querySelector('.write-btn').classList.remove('clicked');
+  document.querySelector('.like-btn').classList.remove('clicked');
+}
+writeInfor = (e) => {
+  e.preventDefault();
+  $profileInfor = document.querySelector('.infor');
+  $profileInfor.innerHTML = `{% include 'write-infor.html' %}`
+  document.querySelector('.profile-btn').classList.remove('clicked');
+  document.querySelector('.write-btn').classList.add('clicked');
+  document.querySelector('.like-btn').classList.remove('clicked');
+  
+}
+likeInfor = (e) => {
+  e.preventDefault();
+  $profileInfor = document.querySelector('.infor');
+  $profileInfor.innerHTML = `{% include 'like-infor.html' %}`
+  document.querySelector('.profile-btn').classList.remove('clicked');
+  document.querySelector('.write-btn').classList.remove('clicked');
+  document.querySelector('.like-btn').classList.add('clicked');
+  
+}
+
+</script>
+{% endblock script %}
