@@ -1,0 +1,7 @@
+<section class="product-nav">
+  <ul class="product-menus">
+    {% for category in category_list %}
+    <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}">{{category}}</a></li>
+    {% endfor %}
+  </ul>
+</section>

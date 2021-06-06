@@ -18,16 +18,27 @@
 </head>
 
 <body>
+
   <div class="container">
     <nav class="nav">
       <div class="nav-logo">
         <img class="logo-img" src="{% static 'img/감자.png' %}" alt="">
-        <h1><a href="{% url 'product:article' %}">감자마켓</a></h1>
+        <h1><a href="{% url 'home' %}">감자마켓</a></h1>
       </div>
       <div class="nav-menu">
         <ul class="menu-ul">
-          <li><a class="menu-all checked" href="{% url 'product:article' %}">모든제품</a></li>
-          <li><a class="menu-category" href="{% url 'product:category' %}"> 카테고리별</a></li>
+          <li><a class="menu-all checked" href="{% url 'home' %}">모든제품</a></li>
+          <li><a class="menu-category" href="#"> 카테고리별</a>
+          <div class="menu-category-list">
+            <ul class="menu-category-list-ul non-active ">
+              {% for category in category_list.all %}
+              <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}">{{category.name}}</a></li>
+              <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}">{{category.name}}</a></li>
+              {% endfor %}
+              
+            </ul>
+          </div>
+          </li>
         </ul>
       </div>
       <div class="nav-link">
@@ -48,6 +59,7 @@
   </div>
   
   {% block footer %}
+
   <footer class="footer">
     <section class="footer-container">
       <span>footer</span>
@@ -69,8 +81,16 @@
       // e.preventDefault();
       document.querySelector('.menu-all').classList.remove('checked');
       document.querySelector('.menu-category').classList.add('checked');
+      document.querySelector('.menu-category-list-ul').classList.remove('non-active');
+      document.querySelector('.menu-category-list-ul').classList.add('active');
+      
     }
 
+    // document.querySelector('.menu-category').onclick = (e) =>{
+    //   e.preventDefault();
+    //   console.log('click')
+
+    // }
   </script>
 
 </body>

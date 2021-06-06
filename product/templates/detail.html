@@ -6,17 +6,17 @@
 {% endblock head %}
 {% block content %}
 
-<h1>제품 디테일 페이지</h1>
-
 <section class="detail-section">
   <div class="detail-img">
-    <img class="detail-user-img" src="{% static 'img/감자.png' %}" alt="">
+    {% for photo in article.photo.all %}
+    <img class="detail-user-img" src="{{photo.image.url}}" alt="">
+    {% endfor %}
   </div>
   <div class="detail-writer">
     <div class="writer">
       <div class="writer-infor">
         <i class="writer-icon fas fa-user-circle"></i> 
-        <span class="writer-nickname">감자댜 </span>
+        <span class="writer-nickname">{{article.writer}} </span>
       <span class="writer-region">경기 배곧동</span>
     </div>
     <div class="writer-cheat">
@@ -25,19 +25,12 @@
     </div>
   </div>
   <div class="detail-title">
-    <span class="detail-product-name">(정품)감자(국내산)</span>
-    <span class="detail-product-price">20000원</span>
+    <span class="detail-product-name">{{article.name}}</span>
+    <span class="detail-product-price">{{article.price}}원</span>
   </div>
   <div class="detail-description">
     <p>
-    ✔️2014년 신세계 강남에서 구입했습니다
-    (케이스 없음)
-
-    ✔️발사이즈는 245 양말신고 편하게 신었음
-    (UK5/ EU38/ US7)
-
-    ✔️실제 착용은 5회 미만…얼마 못신음 ㅠ
-    저렴하게 갖고가세요
+   {{article.content}}
     </p>
   </div>
   <div class="detail-comment">
@@ -46,10 +39,6 @@
     <button type="submit">댓글입력</button>
   </div>
 </section>
-
-
-
-
 
 {% endblock content %}
 

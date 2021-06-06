@@ -1,25 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'category.html' %}
 
 {% block head %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock head %}
-{% block content %}
 
-<h1 class="product-main">전체 제품</h1>
-<section class="product-social">
-  <div class="product-add">
-    <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
-  </div>
-  <select name="social-clicked">
-    <option value=""selected>필터링보기</option>
-    <option value="">댓글 많은 순</option>
-    <option value="">찜 많은 순</option>
-  </select>
-</section>
+{% include 'product-nav.html' %}
+
+{% block product-main-title %}
+<h1 class="product-main">{{category_title.name}} 제품</h1>
+{% endblock product-main-title %}
+
+{% block product-main-content %}
+
 <section class="product-section">
   <ul class="product-list">
-    {% for article in article_list %}
+    {% for article in category_articles.all %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
       <div class="product-writer">
       <span><i class="product-icon fas fa-user-circle"></i> {{article.writer}} </span>
@@ -27,9 +23,9 @@
       <div class="product-imgs">
         {% for photo in article.photo.all %}
         <img class="product-img" src="{{photo.image.url}}" alt="">
-        {% endfor %}
+      {% endfor %}
       </div>
-      <span class="product-title">{{article.name}} </span>
+      <span class="product-title">{{article.name}}</span>
       <strong class="product-price">{{article.price}} 원</strong>
       <div class="social">
         <span class="social-comment">댓글 +10 </span>
@@ -37,16 +33,21 @@
       </div>
     </li>
   </a>
-  {% endfor %}
+    {% endfor %}
   </ul>
 </section>
 
+{% endblock product-main-content %}
 
 
-{% endblock content %}
+
+
 
 {% block script %}
 <script>
+
+      document.querySelector('.menu-all').classList.remove('checked');
+      document.querySelector('.menu-category').classList.add('checked');
 
 
 </script>
