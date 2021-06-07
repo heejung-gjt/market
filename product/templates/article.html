@@ -29,6 +29,7 @@
         <img class="product-img" src="{{photo.image.url}}" alt="">
         {% endfor %}
       </div>
+      <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
       <span class="product-title">{{article.name}} </span>
       <strong class="product-price">{{article.price}} 원</strong>
       <div class="social">

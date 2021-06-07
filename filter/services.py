@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from filter.models import Category,CategoryDetail
 
 
+# proudcts filter 
 class ProductFilterService():
 
   @staticmethod
@@ -28,9 +29,6 @@ class ProductFilterService():
   @staticmethod
   def find_by_filter_article(user):
     articles = Article.objects.filter(writer__pk = user.pk)
-    print(user.pk)
-    # articles = Article.objects.all()
-    print(articles)
     return articles
 
   @staticmethod
@@ -38,8 +36,6 @@ class ProductFilterService():
     category_detail = CategoryDetail.objects.filter(category__pk=category_detail_pk)
     return category_detail
   
-
-class ProductDetailService():
   @staticmethod
   def get_detail_infor(article_pk):
     article = Article.objects.filter(pk=article_pk).first()

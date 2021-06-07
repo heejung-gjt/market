@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, CategoryDetail, Article,Photo
+from .models import Category, CategoryDetail, Article,Photo,Price
 
 # Register your models here.
 
@@ -7,6 +7,7 @@ admin.site.register(Category)
 admin.site.register(CategoryDetail)
 # admin.site.register(Article)
 admin.site.register(Photo)
+admin.site.register(Price)
 
 
 # Photo 클래스를 inline으로 나타낸다.

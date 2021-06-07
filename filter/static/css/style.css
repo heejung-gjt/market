@@ -382,24 +382,32 @@ select{
 }
 .product-title{
   display: block;
-  font-size: 2.5em;
+  font-size: 2.0em;
   padding: 10px 0px 0px 0px;
   margin: 5px auto;
   white-space: nowrap; 
   overflow: hidden; 
   position: absolute;
+  /* top: 0px; */
   left: 23px;
   text-overflow: ellipsis;
   letter-spacing: 3px;
   text-align: center;
 }
-.product-list li span{
-  font-size: 1.7em;
+.product-discount{
+  display: block;
+  font-size: 1.2em;
+  text-align: left;
+  bottom: 73px;
+  color: #319e45;
+  font-weight: bold;
+  position: absolute;
+  left: 23px;
 }
 .product-price{
   font-size: 1.5em;
   text-align: left;
-  bottom: 70px;
+  bottom: 50px;
   position: absolute;
   left: 23px;
 }
@@ -416,7 +424,7 @@ select{
 .social-like{
   margin-right: 9px;
   display: inline-block;
-  font-size: 0.5em;
+  font-size: 1.5em;
   font-weight: bold;
   color: rgb(68, 67, 67);
 }
@@ -515,7 +523,6 @@ justify-content: space-around;
 }
 
 .detail-title{
-
   padding: 20px 15px;
   text-align: left;
   font-size: 1.3em;
@@ -531,6 +538,10 @@ justify-content: space-around;
 .detail-product-price{
   font-size: 1.6em;
   font-weight: bold;
+}
+.detail-product-origin-price{
+  font-size: 1.1em;
+  text-decoration: line-through;
 }
 
 .detail-description{

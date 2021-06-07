@@ -1,14 +1,14 @@
-from filter.models import Category, CategoryDetail
 from product.models import Article
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import TemplateView,ListView,DetailView
+from django.shortcuts import redirect, render
+from django.views.generic import ListView,DetailView
 from django.views.generic import View
 from .models import Article
-from filter.services import ProductDetailService, ProductFilterService
+from filter.services import ProductFilterService
 from .services import ProductService
 from .dto import ArticleDto
-# Create your views here.
 
+
+# main page 
 class ProductView(ListView):
   model = Article
   template_name = 'article.html'
@@ -19,30 +19,32 @@ class ProductView(ListView):
     context['article_list'] = ProductFilterService.find_by_all_article()
     return context
 
-
+# product detail page
 class DetailView(DetailView):
   model = Article
   template_name = 'detail.html'
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
-    context['article'] = ProductDetailService.get_detail_infor(self.kwargs['pk'])
+    context['article'] = ProductFilterService.get_detail_infor(self.kwargs['pk'])
     categorys = ProductFilterService.find_by_all_category()
     context['category_list'] =categorys
     return context
 
-
+# create product
 class ArticleCreateView(View):
   def get(self, request, *args, **kwargs):
     categorys = ProductFilterService.find_by_all_category()
     context = {'category_list':categorys}
+
     return render(request, 'upload_product.html',context)
 
   def post(self, request, *args, **kwargs):
     category_pk =request.POST['category_pk']
     article_dto = self._build_article_dto(request)
+
     ProductService.create(article_dto)
-    
+
     return redirect('filter:category-list',category_pk)
 
   def _build_article_dto(self, request):
@@ -58,6 +60,7 @@ class ArticleCreateView(View):
     )
 
 
+# product sub select menu
 class SelectView(View):
   def get(self, request, *args, **kwargs):
     categorys = ProductFilterService.find_by_all_category()
@@ -65,8 +68,5 @@ class SelectView(View):
     category_detail = ProductFilterService.find_by_category_detail(category_detail_pk)
     category = ProductFilterService.find_by_category_title(category_detail_pk)
     context = {'category_list':categorys,'category':category,'state':True,'category_detail':category_detail}
+    
     return render(request, 'upload_product.html',context)
-  
-  def post(self, request, *args, **kwargs):
-
-    return render(request, 'upload_product.html')

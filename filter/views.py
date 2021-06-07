@@ -23,4 +23,5 @@ class CategoryListView(DetailView):
     context['category_articles'] = ProductFilterService.find_by_product_list(self.kwargs['pk'])
     context['category_title'] = ProductFilterService.find_by_category_title(self.kwargs['pk'])
     context['category_list'] = ProductFilterService.find_by_all_category()
+    
     return context
