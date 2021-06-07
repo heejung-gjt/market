@@ -1,3 +1,4 @@
+from filter.models import Category, CategoryDetail
 from product.models import Article
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView,ListView,DetailView
@@ -8,10 +9,8 @@ from .services import ProductService
 from .dto import ArticleDto
 # Create your views here.
 
-# listview로 바꿔야함
 class ProductView(ListView):
   model = Article
-  # context_object_name = 'article_list'
   template_name = 'article.html'
 
   def get_context_data(self, **kwargs):
@@ -52,7 +51,22 @@ class ArticleCreateView(View):
       category_pk = request.POST['category_pk'],
       content = request.POST['content'],
       image = request.FILES.getlist('image'),
+      origin_price = request.POST['origin_price'],
       price = request.POST['price'],
-      writer = request.user
+      writer = request.user,
+      category_detail_pk = request.POST['category_pk']
     )
 
+
+class SelectView(View):
+  def get(self, request, *args, **kwargs):
+    categorys = ProductFilterService.find_by_all_category()
+    category_detail_pk = request.GET.get('category_pk')
+    category_detail = ProductFilterService.find_by_category_detail(category_detail_pk)
+    category = ProductFilterService.find_by_category_title(category_detail_pk)
+    context = {'category_list':categorys,'category':category,'state':True,'category_detail':category_detail}
+    return render(request, 'upload_product.html',context)
+  
+  def post(self, request, *args, **kwargs):
+
+    return render(request, 'upload_product.html')

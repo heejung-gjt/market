@@ -1,3 +1,29 @@
 <div class="infor-section-profile">
   <h2><i class="fas fa-user-circle"></i>내가 쓴글</h2>
+
+  <section class="writer-section">
+    <ul class="writer-product-list">
+      {% for article in articles.all %}
+      <li class="writer-product">
+        <div class="writer-product-infor">
+        <div class="writer-product-imgs">
+          {% for photo in article.photo.all %}
+          <img class="writer-product-img" src="{{photo.image.url}}" alt="">
+        {% endfor %}
+        </div>
+        <a class="writer-product-link" href="{% url 'product:detail' article.pk %}">
+          <span class="writer-product-title">{{article.name}}</span>
+          <span class="writer-product-section">[{{article.category.name}} 코너]</span>
+          <strong class="writer-product-price">{{article.price}} 원</strong>
+        </a>
+      </div>
+        <div class="writer-product-btn">
+          <button>삭제하기</button>
+          <button>수정하기</button>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
 </div>

@@ -32,5 +32,6 @@ class LegisterView(View):
 class ProfileView(View):
    def get(self,request, *args, **kwargs):
     categorys = ProductFilterService.find_by_all_category()
-    context = {'category_list':categorys}
+    writer_articles = ProductFilterService.find_by_filter_article(request.user)
+    context = {'category_list':categorys,'articles':writer_articles}
     return render(request, 'profile.html',context)
