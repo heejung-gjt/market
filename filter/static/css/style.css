@@ -35,6 +35,7 @@ margin: 0 auto;
 }
 
 .nav-logo h1 a{
+  color: #319e45;
   display: inline-block;
   font-size: 4em;
   line-height: 1.5;
@@ -287,16 +288,17 @@ border-radius: 5px;
 .infor-section-profile{
   text-align: left;
   min-height: 1000px;
-  background-color: yellow;
+  /* background-color: yellow; */
   width: 75%;
   float: left;
 }
 .infor-section-profile h2{
   font-size: 2em;
   text-align: left;
-  margin-left: 100px;
+  margin-left: 60px;
+  margin-bottom: 30px;
   display: inline-block;
-  background-color: red;
+  /* background-color: red; */
 }
 .infor-section-profile h2 i{
   font-size: 1em;
@@ -311,7 +313,6 @@ border-radius: 5px;
 /* product */
 .checked{
   border-radius: 5px;
-  color: dodgerblue;
   font-weight: bold;
 }
 .product-main{
@@ -437,7 +438,6 @@ justify-content: space-around;
   height: 35px;
 }
 .product-menu a{
-  background-color: ;
   font-size: 1.5em;
   padding: 0px 10px;
   }
@@ -587,6 +587,8 @@ justify-content: space-around;
 {width: 40px;
 }
 .image-section{
+  /* background-color: yellow; */
+  position: relative;
   text-align: center;
 }
 .image-preview{
@@ -598,33 +600,49 @@ justify-content: space-around;
   border-radius: 5px;
 }
 .image-form{
-  margin-top:100px ;
+  /* margin-top:100px; */
   /* background-color:yellow; */
   text-align: center;
 }
 .image-select{
-    margin: 10px;
+
+  font-size: 1.5em;
+    margin: 20px;
     display: inline-block;
-    width: 400px;
+    width: 600px;
     padding: 19px 10px;
     font-family: inherit;
     background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg) no-repeat 95% 50%;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border: 1px solid #999;
+    border: 1px solid #eee;
+    box-shadow: 0px 0px 6px 3px #eee ;
     border-radius: 0px;
+    position: relative;
   }
+.select02{
+  margin-top:150px;
+}
   
 .image-name{
-  margin: 10px;
-  width: 600px;
+  font-size: 1.5em;
+  margin: 20px;
+  width: 90%;
   padding: 20px 10px;
   box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  box-shadow: 0px 0px 6px 3px #eee ;
 }
 .image-content{
-  width: 600px;
+  font-size: 1.5em;
+  box-shadow: 0px 0px 6px 3px #eee ;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  width: 90%;
   height: 600px;
+
 }
 .image-file{
   width: 600px;
@@ -649,9 +667,53 @@ justify-content: space-around;
   box-sizing: border-box;
 }
 .image-price{
-  width: 200px;
+  width: 120px;
   height: 40px;
+  box-shadow: 0px 0px 6px 3px #eee ;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  margin: 0 5px;
+  font-size: 1.5em;
+  padding: 5px;
+  box-sizing: border-box;
 }
+
+.won{
+  font-size: 1.3em;
+  line-height: 2.8;
+  margin: 0px 0px;
+
+}
+.price-label{
+  display: inline-block;
+  font-size: 1.5em;
+  line-height: 2.6;
+  margin: 0 10px 0 -15px;
+}
+.image-origin-price{
+  display: inline-block;
+  font-size: 1.5em;
+  line-height: 2;
+  margin: 0 5px;
+  box-sizing: border-box;
+}
+.image-price-div{
+  display: flex;
+  justify-content: center;
+}
+.fa-arrow-right{
+  font-size: 20px;
+  color: #319e45;
+  line-height: 2;
+  margin: 0 20px 0 10px;
+}
+
+.image-select label{
+  display: inline-block;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
 .upload-preview-img{
   position: absolute;
   width: 600px;
@@ -666,4 +728,59 @@ justify-content: space-around;
   margin-top: 10px;
   width: 250px;
   height: 50px;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+/* profile user writer */
+.writer-section{
+  /* text-align: left; */
+  /* background-color: yellow; */
+  width: 95%;
+  height: 600px;
+  margin-left: 60px;
+}
+.writer-product-list{
+  display: flex;
+  text-align: left;
+  flex-direction: column;
+}
+.writer-product{
+  align-items: center;
+  padding: 0px 20px;
+  line-height: 3.5;
+  height: 50px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 10px 0px;
+}
+.writer-product-title{
+  font-size: 1.5em;
+}
+.writer-product-section{
+  font-size: 1.5em;
+}
+.writer-product-btn{
+  display: inline-block;
+}
+.writer-product-btn button{
+  border-radius: 5px;
+  height: 50px;
+    width: 70px;
+    border: none;
+    font-size: 1.5em;
+}
+.writer-product-img{
+  width: 50px;
+  height: 50px;
+  padding: 10px 0px;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+.writer-product-link{
+  margin-left: 70px;
 }

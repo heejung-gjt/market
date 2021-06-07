@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from product.views import ProductView,DetailView,ArticleCreateView
+from product.views import ProductView,DetailView,ArticleCreateView,SelectView
 from product import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -9,6 +9,7 @@ app_name = 'product'
 urlpatterns = [
     path('', ProductView.as_view(),name='article'),
     path('detail/<pk>', DetailView.as_view(),name='detail'),
+    path('select/', SelectView.as_view(),name='select'),
     path('user/', include('user.urls')),
     
     # 이미지 업로드

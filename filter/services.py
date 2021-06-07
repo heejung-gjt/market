@@ -1,6 +1,6 @@
 from product.models import Article
 from django.shortcuts import get_object_or_404
-from filter.models import Category
+from filter.models import Category,CategoryDetail
 
 
 class ProductFilterService():
@@ -25,6 +25,19 @@ class ProductFilterService():
     article_list = Article.objects.all()
     return article_list
 
+  @staticmethod
+  def find_by_filter_article(user):
+    articles = Article.objects.filter(writer__pk = user.pk)
+    print(user.pk)
+    # articles = Article.objects.all()
+    print(articles)
+    return articles
+
+  @staticmethod
+  def find_by_category_detail(category_detail_pk):
+    category_detail = CategoryDetail.objects.filter(category__pk=category_detail_pk)
+    return category_detail
+  
 
 class ProductDetailService():
   @staticmethod

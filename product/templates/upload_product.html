@@ -9,24 +9,41 @@
 <h1>사진업로드</h1>
 
 <section class="image-section">
-  <!-- <div class="image-preview">
-</div> -->
-<form class="image-form" action="{% url 'product:upload_product' %}" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="upload-img">
-  <input onchange="setThumbnail(event)" class="image-file upload-img-input" type="file" name="image" multiple width="50"><br>
-  <div class="multiple-container"></div>
-  <img src="#" alt="이미지 미리보기" class="upload-preview-img" onerror="this.src=`{% static 'img/img5.png' %}`">
-</div>
-  <select class="image-select" name="category_pk">
+<form class="select-form" action="{% url 'product:select' %}" method="GET">
+  <select class="image-select select02" name="category_pk">
+    {% if state %}
+    <option value=""selected>{{category}}</option>
+    {% else %}
+    <option value=""selected>카테고리선택</option>
+    {% endif %}
     {% for category in category_list %}
     <option value="{{category.pk}}">{{category}}</option>
     {% endfor %}
-  </select><br>
-  <label for="image-price">가격 :</label>
-  <input id="image-price" class="image-price" type="text" name="price"><br>
-  <input class="image-name" type="text" name="name" value="제목입력"><br>
-  <textarea class="image-content" name="content"placeholder="내용입력"></textarea><br>
+</select><br>
+</form>
+<form class="image-form" action="{% url 'product:upload_product' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <select class="image-select" name="category_pk">
+      {% for detail in category_detail %}
+      <option value="{{detail.pk}}">{{detail}}</option>
+      {% endfor %}
+    </select><br>
+    <div class="upload-img">
+      <input onchange="setThumbnail(event)" class="image-file upload-img-input" type="file" name="image" multiple
+        width="50"><br>
+      <div class="multiple-container"></div>
+      <img src="#" alt="이미지 미리보기" class="upload-preview-img" onerror="this.src=`{% static 'img/img5.png' %}`">
+    </div>
+
+  <div class="image-price-div">
+    <label class="price-label" for="image-origin-price">가격 :</label>
+    <input id="image-origin-price" class="image-price image-origin-price" type="text" name="origin_price"> <span
+      class="won">원</span><br>
+    <i class="fas fa-arrow-right"></i>
+    <input id="image-price" class="image-price" type="text" name="price"> <span class="won">원</span><br>
+  </div>
+  <input class="image-name" type="text" name="name" placeholder="제목입력"><br>
+  <textarea class="image-content" name="content" placeholder="내용입력"></textarea><br>
   <input class="image-submit" type="submit" value="등록하기" />
   <br></form>
 </section>
@@ -36,40 +53,47 @@
 {% block script %}
 <script>
   // 이미지 업로드 기능
-const $uploadImgInput = document.querySelector('.upload-img-input');
-const $uploadPreviewImg = document.querySelector('.upload-preview-img');
-const $multipleContainer = document.querySelector('.multiple-container');
+  const $uploadImgInput = document.querySelector('.upload-img-input');
+  const $uploadPreviewImg = document.querySelector('.upload-preview-img');
+  const $multipleContainer = document.querySelector('.multiple-container');
 
-function setThumbnail(event) {
-  for(let image of event.target.files){
-    let reader = new FileReader();
-    reader.onload = function(event){
-      let img = document.createElement('img');
-      img.setAttribute('src',event.target.result);
+  function setThumbnail(event) {
+    for (let image of event.target.files) {
+      let reader = new FileReader();
+      reader.onload = function (event) {
+        let img = document.createElement('img');
+        img.setAttribute('src', event.target.result);
 
-      document.querySelector('.multiple-container').appendChild(img);
+        document.querySelector('.multiple-container').appendChild(img);
+      }
+
+      console.log(image);
+      reader.readAsDataURL(image);
     }
-  
-    console.log(image);
-    reader.readAsDataURL(image);
   }
-}
-$uploadPreviewImg.onclick = () =>{
-  $uploadImgInput.click();
-}
+  $uploadPreviewImg.onclick = () => {
+    $uploadImgInput.click();
+  }
 
-$uploadImgInput.onchange = (e) => {
-  const imgFile = e.target.files;
-  let fileArr = Array.prototype.slice.call(imgFile)
-  for(img of fileArr){
-    reader = new FileReader();
-    reader.onload = () => {
-      $uploadPreviewImg.setAttribute("src", reader.result);
+  $uploadImgInput.onchange = (e) => {
+    const imgFile = e.target.files;
+    let fileArr = Array.prototype.slice.call(imgFile)
+    for (img of fileArr) {
+      reader = new FileReader();
+      reader.onload = () => {
+        $uploadPreviewImg.setAttribute("src", reader.result);
+      }
+      reader.readAsDataURL(img);
+
     }
-    reader.readAsDataURL(img);
-    
   }
-}
+
+  document.querySelector('.select-form').onchange = (e) => {
+    console.log(document.querySelector('.image-select').value)
+    $selectForm = document.querySelector('.select-form');
+    $selectForm.submit();
+
+  }
 
 
 

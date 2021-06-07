@@ -6,11 +6,6 @@ from filter.services import ProductFilterService
 # Create your views here.
 
 
-# class HomeView(ListView):
-#   model = Category
-#   context_object_name = 'category_list'
-#   template_name = 'home.html'
-
 
 class CategoryView(ListView):
   model = Category
