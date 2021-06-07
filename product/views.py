@@ -1,3 +1,4 @@
+from filter.models import Category
 from product.models import Article
 from django.shortcuts import redirect, render
 from django.views.generic import ListView,DetailView
@@ -5,7 +6,7 @@ from django.views.generic import View
 from .models import Article
 from filter.services import ProductFilterService
 from .services import ProductService
-from .dto import ArticleDto
+from .dto import ArticleDto, EditDto
 
 
 # main page 
@@ -70,3 +71,32 @@ class SelectView(View):
     context = {'category_list':categorys,'category':category,'state':True,'category_detail':category_detail}
     
     return render(request, 'upload_product.html',context)
+
+
+# product edit
+class EditView(View):
+  def get(self, request, *args, **kwargs):
+    article = ProductFilterService.get_detail_infor(kwargs['pk'])
+    context = {'article':article}
+    return render(request, 'edit.html',context)
+
+  def post(self,request,*args, **kwargs):
+    article_dto = self._build_edit_article_dto(request)
+    ProductService.edit(article_dto)
+
+    return redirect('home')
+
+  def _build_edit_article_dto(self, request):
+    category = Article.objects.filter(pk=self.kwargs['pk']).first().category
+    category_pk = Category.objects.filter(name=category).first().pk
+
+    return EditDto(
+      name = request.POST['name'],
+      category_pk = category_pk,
+      content = request.POST['content'],
+      image = request.FILES.getlist('image'),
+      origin_price = request.POST['origin_price'],
+      price = request.POST['price'],
+      writer = request.user,
+      article_pk = self.kwargs['pk']
+    )

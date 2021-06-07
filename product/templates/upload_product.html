@@ -9,18 +9,19 @@
 <h1>사진업로드</h1>
 
 <section class="image-section">
-<form class="select-form" action="{% url 'product:select' %}" method="GET">
-  <select class="image-select select02" name="category_pk">
-    {% if state %}
-    <option value=""selected>{{category}}</option>
-    {% else %}
-    <option value=""selected>카테고리선택</option>
-    {% endif %}
-    {% for category in category_list %}
-    <option value="{{category.pk}}">{{category}}</option>
-    {% endfor %}
-</select><br>
-</form>
+
+  <form class="select-form" action="{% url 'product:select' %}" method="GET">
+    <select class="image-select select02" name="category_pk">
+      {% for category in category_list %}
+      <option value="{{category.pk}}">{{category}}</option>
+      {% endfor %}
+      {% if state %}
+      <option value=""selected>{{category}}</option>
+      {% else %}
+      <option value=""selected>카테고리선택</option>
+      {% endif %}
+  </select><br>
+  </form>
 <form class="image-form" action="{% url 'product:upload_product' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <select class="image-select" name="category_pk">

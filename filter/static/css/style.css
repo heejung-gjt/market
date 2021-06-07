@@ -611,12 +611,9 @@ justify-content: space-around;
   border-radius: 5px;
 }
 .image-form{
-  /* margin-top:100px; */
-  /* background-color:yellow; */
   text-align: center;
 }
 .image-select{
-
   font-size: 1.5em;
     margin: 20px;
     display: inline-block;
@@ -794,4 +791,16 @@ justify-content: space-around;
 }
 .writer-product-link{
   margin-left: 70px;
+}
+
+/* edit */
+
+.edit-user-img{
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  width: 200px;height: 200px;
+}
+.edit-img-div{
+  text-align: center;
 }

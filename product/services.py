@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .dto import ArticleDto
+from .dto import ArticleDto, EditDto
 from .models import Article,Price
 from filter.models import Category, CategoryDetail
 from .models import Photo
@@ -47,5 +47,29 @@ class ProductService():
         image = img
       )  
       photo.save()
+  
+  @staticmethod
+  def edit(dto:EditDto):
+    category = get_object_or_404(Category, pk=dto.category_pk)
+    article = Article.objects.filter(pk = dto.article_pk).first()
+    _article = Article.objects.filter(pk=dto.article_pk).update(
+      category = category,
+      name = dto.name,
+      content = dto.content,
+      origin_price = dto.origin_price,
+      price = dto.price,
+      writer = dto.writer
+    )
+    
+
+    queryset = Photo.objects.filter(article__pk = dto.article_pk)    
+    queryset.delete() 
+
+    for img in dto.image:
+      Photo.objects.filter(article__pk = dto.article_pk).create(
+        article = article,
+        image = img
+      )  
+
 
     

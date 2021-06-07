@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+
+{% endblock head %}
+{% block content %}
+
+<h1>사진업로드</h1>
+
+<div class="edit-img-div">
+{% for photo in article.photo.all %}
+<img class="edit-user-img" src="{{photo.image.url}}" alt="">
+{% endfor %}
+</div>
+<section class="edit-section image-section">
+<form class="edit-form image-form" action="{% url 'product:edit' article.pk %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="edit-upload-img upload-img">
+      <input class="image-file upload-img-input" type="file" name="image" multiple><br>
+      <div class="multiple-container"></div>
+      <img src="#" alt="이미지 미리보기" class="upload-preview-img" onerror="this.src=`{% static 'img/img5.png' %}`">
+    </div>
+
+  <div class="image-price-div">
+    <label class="price-label" for="image-origin-price">가격 :</label>
+    <input id="image-origin-price" class="image-price image-origin-price" type="text" name="origin_price" value="{{article.origin_price}}"> <span
+      class="won">원</span><br>
+    <i class="fas fa-arrow-right"></i>
+    <input id="image-price" class="image-price" type="text" name="price"value="{{article.price}}"> <span class="won">원</span><br>
+  </div>
+  <input class="image-name" type="text" name="name" value="{{article.name}}"><br>
+  <textarea class="image-content" name="content">{{article.content}}</textarea><br>
+  <input class="image-submit" type="submit" value="수정하기" />
+  <br></form>
+</section>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+  // 이미지 업로드 기능
+  const $uploadImgInput = document.querySelector('.upload-img-input');
+  const $uploadPreviewImg = document.querySelector('.upload-preview-img');
+  const $editImg = document.querySelector('.edit-user-img');
+  const $multipleContainer = document.querySelector('.multiple-container');
+
+  $uploadPreviewImg.onclick = () => {
+    $uploadImgInput.click();
+  }
+
+
+// 이미지 여러개
+  $uploadImgInput.onchange = (e) => {
+    document.querySelector('.edit-img-div').innerHTML='';
+    for (let image of event.target.files) {
+      let reader = new FileReader();
+      reader.onload = function (event) {
+        let img = document.createElement('img');
+        img.classList.add('edit-user-img');
+        img.setAttribute('src', event.target.result);
+
+        document.querySelector('.edit-img-div').appendChild(img);
+      }
+
+      console.log(image);
+      reader.readAsDataURL(image);
+    }
+  }
+
+
+
+
+</script>
+{% endblock script %}
