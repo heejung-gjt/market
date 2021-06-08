@@ -19,10 +19,10 @@ class ProductService():
 
   @staticmethod
   def create(dto:ArticleDto):
-    category = get_object_or_404(Category, pk=dto.category_pk)
     category_detail_name = CategoryDetail.objects.filter(pk = dto.category_detail_pk).first()
     category_detail_obj = Article.objects.filter(category_detail__name = category_detail_name).first()
-    
+    category_pk = CategoryDetail.objects.filter(pk = dto.category_pk).first().category.pk
+    category = get_object_or_404(Category, pk=category_pk)
     article = Article.objects.create(
       name = dto.name,
       category = category,
@@ -52,7 +52,7 @@ class ProductService():
   def edit(dto:EditDto):
     category = get_object_or_404(Category, pk=dto.category_pk)
     article = Article.objects.filter(pk = dto.article_pk).first()
-    _article = Article.objects.filter(pk=dto.article_pk).update(
+    Article.objects.filter(pk=dto.article_pk).update(
       category = category,
       name = dto.name,
       content = dto.content,
@@ -60,16 +60,21 @@ class ProductService():
       price = dto.price,
       writer = dto.writer
     )
+    discount_rate = calculate(dto.origin_price, dto.price)
+    Price.objects.filter(article__pk = dto.article_pk).update(
+      article = article,
+      discount_rate = discount_rate 
+    )
     
+    if dto.image:
+      queryset = Photo.objects.filter(article__pk = dto.article_pk)    
+      queryset.delete() 
 
-    queryset = Photo.objects.filter(article__pk = dto.article_pk)    
-    queryset.delete() 
-
-    for img in dto.image:
-      Photo.objects.filter(article__pk = dto.article_pk).create(
-        article = article,
-        image = img
-      )  
+      for img in dto.image:
+        Photo.objects.filter(article__pk = dto.article_pk).create(
+          article = article,
+          image = img
+          )  
 
 
     

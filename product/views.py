@@ -1,4 +1,4 @@
-from filter.models import Category
+from filter.models import Category, CategoryDetail
 from product.models import Article
 from django.shortcuts import redirect, render
 from django.views.generic import ListView,DetailView
@@ -17,7 +17,10 @@ class ProductView(ListView):
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['category_list'] = ProductFilterService.find_by_all_category()
-    context['article_list'] = ProductFilterService.find_by_all_article()
+    # context['article_list'] = ProductFilterService.find_by_all_article()
+    # context['article_list'] = Article.object.filter()
+    context['article_list'] = ProductFilterService.find_by_not_deleted_article()
+    
     return context
 
 # product detail page
@@ -41,9 +44,9 @@ class ArticleCreateView(View):
     return render(request, 'upload_product.html',context)
 
   def post(self, request, *args, **kwargs):
-    category_pk =request.POST['category_pk']
+    category_detail_pk =request.POST['category_pk']
     article_dto = self._build_article_dto(request)
-
+    category_pk = ProductFilterService.find_by_category_pk_in_category_detail(category_detail_pk)
     ProductService.create(article_dto)
 
     return redirect('filter:category-list',category_pk)
@@ -100,3 +103,13 @@ class EditView(View):
       writer = request.user,
       article_pk = self.kwargs['pk']
     )
+
+
+# article delete
+class DeleteView(View):
+  def get(self, request, *args, **kwargs):
+    Article.objects.filter(pk=kwargs['pk']).update(
+      is_deleted = True
+    )
+    
+    return redirect('product:article')

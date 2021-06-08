@@ -27,6 +27,11 @@ class ProductFilterService():
     return article_list
 
   @staticmethod
+  def find_by_not_deleted_article():
+    article_list = Article.objects.filter(is_deleted = False)
+    return article_list
+
+  @staticmethod
   def find_by_filter_article(user):
     articles = Article.objects.filter(writer__pk = user.pk)
     return articles
@@ -35,6 +40,11 @@ class ProductFilterService():
   def find_by_category_detail(category_detail_pk):
     category_detail = CategoryDetail.objects.filter(category__pk=category_detail_pk)
     return category_detail
+
+  @staticmethod
+  def find_by_category_pk_in_category_detail(category_detail_pk):
+    category_pk = CategoryDetail.objects.filter(pk = category_detail_pk).first().category.pk
+    return category_pk
   
   @staticmethod
   def get_detail_infor(article_pk):

@@ -6,8 +6,6 @@
 {% endblock head %}
 {% block content %}
 
-<h1>사진업로드</h1>
-
 <section class="image-section">
 
   <form class="select-form" action="{% url 'product:select' %}" method="GET">
@@ -30,11 +28,17 @@
       {% endfor %}
     </select><br>
     <div class="upload-img">
-      <input onchange="setThumbnail(event)" class="image-file upload-img-input" type="file" name="image" multiple
+      <input class="image-file upload-img-input" type="file" name="image" multiple
         width="50"><br>
-      <div class="multiple-container"></div>
-      <img src="#" alt="이미지 미리보기" class="upload-preview-img" onerror="this.src=`{% static 'img/img5.png' %}`">
+      <!-- <div class="upload-container"> -->
+        <img src="#" alt="이미지 미리보기" class="upload-preview-img" onerror="this.src=`{% static 'img/person.png' %}`" >
+      <!-- </div> -->
     </div>
+    <div class="edit-img-div">
+      {% for photo in article.photo.all %}
+      <img class="edit-user-img" src="{{photo.image.url}}" alt="">
+      {% endfor %}
+      </div>
 
   <div class="image-price-div">
     <label class="price-label" for="image-origin-price">가격 :</label>
@@ -58,34 +62,39 @@
   const $uploadPreviewImg = document.querySelector('.upload-preview-img');
   const $multipleContainer = document.querySelector('.multiple-container');
 
-  function setThumbnail(event) {
-    for (let image of event.target.files) {
-      let reader = new FileReader();
-      reader.onload = function (event) {
-        let img = document.createElement('img');
-        img.setAttribute('src', event.target.result);
+  // function setThumbnail(event) {
+  //   for (let image of event.target.files) {
+  //     let reader = new FileReader();
+  //     reader.onload = function (event) {
+  //       let img = document.createElement('img');
+  //       img.setAttribute('src', event.target.result);
 
-        document.querySelector('.multiple-container').appendChild(img);
-      }
+  //       document.querySelector('.multiple-container').appendChild(img);
+  //     }
 
-      console.log(image);
-      reader.readAsDataURL(image);
-    }
-  }
+  //     console.log(image);
+  //     reader.readAsDataURL(image);
+  //   }
+  // }
   $uploadPreviewImg.onclick = () => {
     $uploadImgInput.click();
   }
 
-  $uploadImgInput.onchange = (e) => {
-    const imgFile = e.target.files;
-    let fileArr = Array.prototype.slice.call(imgFile)
-    for (img of fileArr) {
-      reader = new FileReader();
-      reader.onload = () => {
-        $uploadPreviewImg.setAttribute("src", reader.result);
-      }
-      reader.readAsDataURL(img);
+// 이미지 여러개
+$uploadImgInput.onchange = (e) => {
+    document.querySelector('.edit-img-div').innerHTML='';
+    for (let image of event.target.files) {
+      let reader = new FileReader();
+      reader.onload = function (event) {
+        let img = document.createElement('img');
+        img.classList.add('edit-user-img');
+        img.setAttribute('src', event.target.result);
 
+        document.querySelector('.edit-img-div').appendChild(img);
+      }
+
+      console.log(image);
+      reader.readAsDataURL(image);
     }
   }
 

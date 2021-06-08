@@ -16,6 +16,7 @@
 <section class="product-section">
   <ul class="product-list">
     {% for article in category_articles.all %}
+    {% if not article.is_deleted %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
       <div class="product-writer">
       <span><i class="product-icon fas fa-user-circle"></i> {{article.writer}} </span>
@@ -34,6 +35,7 @@
       </div>
     </li>
   </a>
+  {% endif %}
     {% endfor %}
   </ul>
 </section>

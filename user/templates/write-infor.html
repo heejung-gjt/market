@@ -18,7 +18,7 @@
         </a>
       </div>
         <div class="writer-product-btn">
-          <button>삭제하기</button>
+          <a href="{% url 'product:delete' article.pk %}">삭제하기</a>
 
           <a href="{% url 'product:edit' article.pk %}">수정하기</a>
         </div>

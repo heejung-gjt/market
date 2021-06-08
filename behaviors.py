@@ -17,7 +17,7 @@ class TimeStampable(models.Model):
 
 
 class Deleteable(models.Model):
-  is_deleted = models.BooleanField(default=True)
+  is_deleted = models.BooleanField(default=False)
 
   class Meta:
     abstract = True
