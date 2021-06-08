@@ -9,6 +9,6 @@ class Category(Nameable):
 
 
 class CategoryDetail(Nameable):
-  category = models.OneToOneField(Category,on_delete=models.CASCADE ,related_name='category')
+  category = models.ForeignKey(Category,on_delete=models.CASCADE ,related_name='category')
   def __str__(self):
     return self.name

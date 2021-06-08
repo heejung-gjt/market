@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.fields.related import OneToOneField
 from behaviors import Nameable, TimeStampable, Deleteable
 from filter.models import CategoryDetail, Category
 # Create your models here.

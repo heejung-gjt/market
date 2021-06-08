@@ -13,6 +13,49 @@
 
 {% block product-main-content %}
 
+<form class="select-sub-form" action="{% url 'filter:category-sub-list' category_title.pk %}" method="GET">
+  <section class="product-social">
+    <div class="product-add">
+      <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
+    </div>
+
+    <select class="category_detail_select" name="sub_menu_pk">
+      <option value="" selected>필터링보기</option>
+      <option value="0">전체보기</option>
+      {% for sub_menu in category_sub_list.all %}
+      <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
+      {% endfor %}
+    </select>
+  </section>
+
+</form>
+
+{% if sub_state and not is_deleted %}
+<section class="product-section">
+  <ul class="product-list">
+    {% for article in articles.all %}
+    <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
+      <div class="product-writer">
+      <span><i class="product-icon fas fa-user-circle"></i> {{article.writer}} </span>
+      </div>
+      <div class="product-imgs">
+        {% for photo in article.photo.all %}
+        <img class="product-img" src="{{photo.image.url}}" alt="">
+      {% endfor %}
+      </div>
+      <span class="product-title">{{article.name}}</span>
+      <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
+      <strong class="product-price">{{article.price}} 원</strong>
+      <div class="social">
+        <span class="social-comment">댓글 +10 </span>
+        <span class="social-like"> 찜 +20</span>
+      </div>
+    </li>
+  </a>
+    {% endfor %}
+  </ul>
+</section>
+{% else %}
 <section class="product-section">
   <ul class="product-list">
     {% for article in category_articles.all %}
@@ -39,6 +82,8 @@
     {% endfor %}
   </ul>
 </section>
+{% endif %}
+
 
 {% endblock product-main-content %}
 
@@ -49,9 +94,13 @@
 {% block script %}
 <script>
 
-      document.querySelector('.menu-all').classList.remove('checked');
-      document.querySelector('.menu-category').classList.add('checked');
+  document.querySelector('.menu-all').classList.remove('checked');
+  document.querySelector('.menu-category').classList.add('checked');
 
+document.querySelector('.select-sub-form').onchange = (e) => {
+$selectForm = document.querySelector('.select-sub-form');
+$selectForm.submit();
+}
 
 </script>
 {% endblock script %}

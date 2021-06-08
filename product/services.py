@@ -21,6 +21,7 @@ class ProductService():
   def create(dto:ArticleDto):
     category_detail_name = CategoryDetail.objects.filter(pk = dto.category_detail_pk).first()
     category_detail_obj = Article.objects.filter(category_detail__name = category_detail_name).first()
+    # print('obj',category_detail_obj)
     category_pk = CategoryDetail.objects.filter(pk = dto.category_pk).first().category.pk
     category = get_object_or_404(Category, pk=category_pk)
     article = Article.objects.create(
@@ -38,8 +39,8 @@ class ProductService():
       discount_rate = discount_rate 
     )
     
-    if category_detail_obj is None:
-      article.category_detail.add(category_detail_name)
+    # if category_detail_obj is None:
+    article.category_detail.add(category_detail_name)
 
     for img in dto.image:
       photo = Photo.objects.create(
