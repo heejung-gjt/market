@@ -106,6 +106,7 @@ margin: 0 auto;
   min-height: 300px;
 }
 
+
 .product-add{
 display: inline-block;
 margin-right: 25px;
@@ -381,14 +382,15 @@ select{
   height: 200px;
 }
 .product-title{
+  width: 250px;
   display: block;
+  white-space: nowrap;
   font-size: 2.0em;
   padding: 10px 0px 0px 0px;
   margin: 5px auto;
   white-space: nowrap; 
   overflow: hidden; 
   position: absolute;
-  /* top: 0px; */
   left: 23px;
   text-overflow: ellipsis;
   letter-spacing: 3px;
@@ -523,7 +525,7 @@ justify-content: space-around;
 }
 
 .detail-title{
-  padding: 20px 15px;
+  padding: 20px 0px;
   text-align: left;
   font-size: 1.3em;
   display: flex;
@@ -553,7 +555,7 @@ justify-content: space-around;
   min-height: 100px;
 }
 .detail-description p{
-  white-space:pre;
+  white-space:pre-line;
   font-size: 1.3em;
 }
 .detail-comment{
