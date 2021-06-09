@@ -80,7 +80,8 @@ class SelectView(View):
 class EditView(View):
   def get(self, request, *args, **kwargs):
     article = ProductFilterService.get_detail_infor(kwargs['pk'])
-    context = {'article':article}
+    categorys = ProductFilterService.find_by_all_category()
+    context = {'category_list':categorys,'article':article}
     return render(request, 'edit.html',context)
 
   def post(self,request,*args, **kwargs):
