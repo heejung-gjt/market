@@ -198,7 +198,7 @@ border-radius: 5px;
   justify-content: center;
 }
 .login-id,.login-pwd,.login-submit,.login-kakao,
-.register-id,.register-email,.register-pwd,.register-pwd-chk,.register-submit,.register-kakao{
+.register-id,.register-nickname,.register-pwd,.register-pwd-chk,.register-submit,.register-kakao{
   width: 300px;
   margin-bottom:15px;
   padding:15px 10px;
@@ -206,7 +206,7 @@ border-radius: 5px;
   border-radius: 5px;
   border: none;
 }
-.login-id,.register-email,.login-pwd,
+.login-id,.register-nickname,.login-pwd,
 .register-id,.register-pwd,.register-pwd-chk{
   box-shadow: 0px 0px 5px 0px rgb(150, 147, 147);
 }

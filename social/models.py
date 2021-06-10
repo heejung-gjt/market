@@ -7,7 +7,6 @@ from product.models import Article
 class Comment(Nameable, TimeStampable):
     writer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='guest_comment')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='comment')
-    
     def __str__(self):
         return self.name
 

@@ -6,7 +6,7 @@ from .models import Photo
 
 # product sale percentage function
 def calculate(origin_price, sale_price):
-  origin_price = origin_price
+  # origin_price = origin_price
   price = sale_price
   price_gap = int(origin_price) - int(price)
   real_sale = int(price_gap)/int(origin_price)*100
