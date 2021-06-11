@@ -1,3 +1,21 @@
-<div class="infor-section-profile">
+
+<section class="infor-section-profile">
   <h2><i class="fas fa-user-circle"></i>프로필 설정</h2>
-</div>
+  <div class="profile-edit">
+  <form class="profile-image-form" action="{% url 'user:profile' user.profile.pk %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+  
+    <div onclick="UploadImg(event)" class="profile-upload-img">
+      <input class="profile-image-file profile-upload-img-input" type="file" name="image" width="50"><br>
+      <i class="far fa-image"></i>
+      <img src="{{user.profile.image}}" alt="" class="profile-upload-preview-img" >
+    </div>
+    <div class="profile-edit-infor">
+    <input class="register-id" type="text" name="userid" placeholder="ID"value="{{user.username}}">
+    <input class="register-nickname" type="text" name="nickname" placeholder="NICKNAME" value="{{user.profile.nickname}}">
+    <input class="register-pwd" type="password" name="password" placeholder="변경 할 비밀번호">
+    <input class="register-submit" type="submit" value="수정하기">
+    </div> 
+  </form>
+    </div>
+  </section>

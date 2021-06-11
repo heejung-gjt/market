@@ -1,12 +1,13 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 from django.views.generic import View
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 from filter.services import ProductFilterService
 from product.models import Article
+from user.models import Profile
 from .services import UserService
 from django.contrib import auth
-from .dto import SignupDto,SigninDto
+from .dto import SignupDto,SigninDto, UpdateUserDto
 
 import json
 import bcrypt
@@ -76,10 +77,25 @@ def logout(request):
 
 
 class ProfileView(View):
-   def get(self,request, *args, **kwargs):
-    categorys = ProductFilterService.find_by_all_category()
-    writer_articles = Article.objects.filter(is_deleted=False, writer=request.user)
+	def get(self,request, *args, **kwargs):
+		categorys = ProductFilterService.find_by_all_category()
+		writer_articles = Article.objects.filter(is_deleted=False, writer=request.user)
+		context = {'category_list':categorys,'articles':writer_articles}
+		return render(request, 'profile.html',context)
+	
+	def post(self,request, *args, **kwargs):
+		user_infor_dto = self._build_user_infor(request)
+		UserService.update(user_infor_dto)
 
-    # writer_articles = ProductFilterService.find_by_filter_article(request.user)
-    context = {'category_list':categorys,'articles':writer_articles}
-    return render(request, 'profile.html',context)
+
+		return redirect('user:profile',kwargs['pk'])
+	
+	def _build_user_infor(self,request):
+		return UpdateUserDto(
+			image = request.FILES.getlist('image'),
+			userid = request.POST['userid'],
+			nickname = request.POST['nickname'],
+			password = request.POST['password'],
+			user_pk = request.user.pk 
+		)
+			

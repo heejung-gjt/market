@@ -13,17 +13,6 @@
 {% endblock product-main-title %}
 
 
-<!-- <section class="product-social">
-  <div class="product-add">
-    <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
-  </div>
-  <select name="social-clicked">
-    <option value="" selected>필터링보기</option>
-    <option value="">댓글 많은 순</option>
-    <option value="">찜 많은 순</option>
-  </select>
-</section> -->
-
 {% block product-main-content %}
 <section class="product-section">
   <ul class="product-list">
@@ -31,8 +20,12 @@
     <a class="product-link" href="#">
       <li class="product">
         <div class="product-writer">
-          <span><i class="product-icon fas fa-user-circle"></i> 감자채 조아 </span>
-        </div>
+          {% if article.writer.profile.image.url %}
+        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image"><strong>{{article.writer}}</strong></span>
+        {% else %}
+        <span><i class="product-icon fas fa-user-circle"></i><strong>{{article.writer}}</strong> </span>
+      {% endif %}  
+      </div>
         <div class="product-imgs">
           <img class="product-img" src="{% static 'img/감자.png' %}" alt="">
         </div>

@@ -310,7 +310,66 @@ border-radius: 5px;
   background-color: dodgerblue;
 }
 
+.profile-edit{
+  text-align: center;
+}
+.profile-upload-img{
+  background-color: #eee;
+  overflow: hidden;
+  box-shadow: 0px 0px 7px 2px rgb(209, 207, 207);
+  margin: 0 auto;
+  position: relative;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.profile-image-file{
+  position: relative;
+  top: 70px;
+  left: 40px;
+  width: 0px;
+}
+.fa-image{
+  font-size: 5.5em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  color: #495057;
+}
+.profile-upload-preview-img{
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 250px;
+  height: 270px;
+}
+.profile-edit-infor{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+.profile-edit-infor input{
+  width: 400px;
+}
+.upload-img-div{
+  text-overflow: ellipsis;
+  position: absolute;
+  top: 0;
 
+
+}
+.upload-user-img{
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  text-overflow: ellipsis;
+  top: 0;
+  left: 0;
+}
 /* product */
 .checked{
   border-radius: 5px;
@@ -370,6 +429,22 @@ select{
 }
 .product-writer{
   text-align: left;
+}
+.product-writer span{
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+.product-writer strong{
+  margin-left: 5px;
+  font-size: 1.2em;
+}
+.product-user-image{
+  width: 30px;
+  height: 30px;
+  box-shadow: 0px 0px 1px 1px rgb(194, 191, 191);
+  border-radius: 50%;
+
 }
 .product-imgs{
   width: 250px;
@@ -813,3 +888,5 @@ justify-content: space-around;
   text-align: center;
   margin: 40px 0;
 }
+
+ 

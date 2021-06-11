@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-from product.models import Article
-from filter.models import Category, CategoryDetail
 from django.contrib.auth.models import User
 
 

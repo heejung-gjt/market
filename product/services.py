@@ -68,8 +68,7 @@ class ProductService():
     )
     
     if dto.image:
-      queryset = Photo.objects.filter(article__pk = dto.article_pk)    
-      queryset.delete() 
+      Photo.objects.filter(article__pk = dto.article_pk).delete() 
 
       for img in dto.image:
         Photo.objects.filter(article__pk = dto.article_pk).create(

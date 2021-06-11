@@ -15,7 +15,6 @@ let param = {
   'user_id': userId,
   'password': userPwd,
   'password_chk':userPwdChk,
-  'email': userEmail
 }
 let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 

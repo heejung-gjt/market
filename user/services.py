@@ -1,7 +1,7 @@
 from django.contrib import auth
 from django.contrib.auth.models import User
 from .models import Profile
-from .dto import SignupDto, SigninDto
+from .dto import SignupDto, SigninDto, UpdateUserDto
 
 class UserService():
 
@@ -14,6 +14,7 @@ class UserService():
       },
       'user':''
     }
+
     user = User.objects.filter(username = dto.userid)
     nickname = Profile.objects.filter(nickname = dto.nickname)
     if not dto.userid or not dto.password or not dto.password_chk or not dto.nickname:
@@ -41,6 +42,7 @@ class UserService():
       Profile.objects.create(
         user = user,
         nickname = dto.nickname,
+        image = "바지3.jpg"
       )
       result['user'] = user
       return result
@@ -62,3 +64,24 @@ class UserService():
       return result
     result['user'] = user
     return result  
+  
+  @staticmethod
+  def update(dto:UpdateUserDto):
+    result ={
+    'error':{
+      'state':False,
+      'msg':'',
+    },
+  }
+    user = User.objects.filter(pk=dto.user_pk).first()
+    
+    Profile.objects.filter(user__pk =dto.user_pk).delete()
+    Profile.objects.filter(user__pk=dto.user_pk).create(
+      user = user,
+      image = dto.image[0],
+      nickname = dto.nickname,
+    )
+
+
+
+

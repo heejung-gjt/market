@@ -42,12 +42,12 @@
         </ul>
       </div>
       <div class="nav-link">
+        {% if user.is_authenticated %}
         <article class="nav-user">
-          <img class="user-img" src="{% static 'img/감자.png' %}" alt="">
+          <img class="user-img" src="{{user.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`" >
           <span class="user-name">{{user.username}}님</span>
         </article>
-      {% if user.is_authenticated %}
-        <a href="{% url 'user:profile' %}">마이페이지</a>
+        <a href="{% url 'user:profile' user.profile.pk %}">마이페이지</a>
         <a href="{% url 'user:logout' %}">로그아웃</a>
         {% else %}
         <a href="{% url 'user:signin' %}">로그인</a>
