@@ -20,11 +20,7 @@
     <a class="product-link" href="#">
       <li class="product">
         <div class="product-writer">
-          {% if article.writer.profile.image.url %}
-        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image"><strong>{{article.writer}}</strong></span>
-        {% else %}
-        <span><i class="product-icon fas fa-user-circle"></i><strong>{{article.writer}}</strong> </span>
-      {% endif %}  
+        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer}}</strong></span>
       </div>
         <div class="product-imgs">
           <img class="product-img" src="{% static 'img/감자.png' %}" alt="">
@@ -33,7 +29,7 @@
         <strong class="product-price">4000원</strong>
         <div class="social">
           <span class="social-comment">댓글 +10 </span>
-          <span class="social-like"> 찜 +20</span>
+           <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
         </div>
       </li>
     </a>

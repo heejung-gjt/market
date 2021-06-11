@@ -580,8 +580,7 @@ justify-content: space-around;
   display: inline-block;
   margin: auto 0px;
 }
-.writer-cheat button{
-  display: inline-block;
+.cheat-btn{
   height: 30px;
   width: 120px;
   border: none;
@@ -593,7 +592,7 @@ justify-content: space-around;
   letter-spacing: 3px;
   cursor: pointer;
 }
-.writer-cheat button:hover{
+.cheat-btn:hover{
   color: black;
   background-color: rgba(87, 84, 84, 0.671);
   transition: all 200ms;
@@ -671,6 +670,25 @@ justify-content: space-around;
     border: none;
     font-size: 1.2em;
 }
+.like-button{
+border: none;
+color: whitesmoke;
+display: inline;
+width: 0px;
+}
+.like{
+  margin-top: 5px;
+}
+.detail-like{
+  cursor: pointer;
+  color: rgb(175, 170, 170);
+  font-size: 25px;
+  background-color: white;
+}
+.liked{
+  color: red
+}
+
 /* product upload */
 
 .image {

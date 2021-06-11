@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from product.views import ProductView,DetailView,ArticleCreateView,SelectView,EditView,DeleteView
+from product.views import ProductView,DetailView,ArticleCreateView,SelectView,EditView,DeleteView,LikeView
 from product import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -12,6 +12,7 @@ urlpatterns = [
     path('select/', SelectView.as_view(),name='select'),
     path('edit/<pk>',EditView.as_view(), name='edit'),
     path('delete/<pk>',DeleteView.as_view(), name='delete'),
+    path('like',LikeView.as_view(), name='like'),
     #  path('user/', include('user.urls')),
     
     

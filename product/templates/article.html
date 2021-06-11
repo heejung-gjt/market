@@ -22,11 +22,7 @@
     {% for article in article_list %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
       <div class="product-writer">
-        {% if article.writer.profile.image.url %}
-      <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image"><strong>{{article.writer}}</strong></span>
-      {% else %}
-      <span><i class="product-icon fas fa-user-circle"></i><strong>{{article.writer}}</strong> </span>
-    {% endif %}  
+        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer}}</strong></span>
     </div>
       <div class="product-imgs">
         {% for photo in article.photo.all %}
@@ -38,7 +34,7 @@
       <strong class="product-price">{{article.price}} 원</strong>
       <div class="social">
         <span class="social-comment">댓글 +10 </span>
-        <span class="social-like"> 찜 +20</span>
+        <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
       </div>
     </li>
   </a>
