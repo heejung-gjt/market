@@ -80,7 +80,7 @@ function likeBtn(article_pk) {
     let param = {
       'article_pk': article_pk,
     }
-    fetch("{% url 'product:like' %}", {
+    fetch("{% url 'social:like' %}", {
       method: 'POST',
       headers: {
         "X-CSRFToken": likeCsrfValue,

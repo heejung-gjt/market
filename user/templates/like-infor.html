@@ -1,3 +1,33 @@
 <div class="infor-section-profile">
   <h2><i class="fas fa-user-circle"></i>내가 찜한 제품</h2>
+
+  <section class="writer-section">
+    <ul class="writer-product-list">
+      {% if empty %}
+      
+      <sapn class="no-product">찜 한 제품이 없어요 !</sapn>
+      {% else %}
+      {% for article in like_articles %}
+      <li class="writer-product">
+        <div class="writer-product-infor">
+          <div class="writer-product-imgs">
+            {% for photo in article.photo.all %}
+            <img class="writer-product-img" src="{{photo.image.url}}" alt="">
+            {% endfor %}
+          </div>
+          <a class="writer-product-link" href="{% url 'product:detail' article.pk %}">
+            <span class="writer-product-title">{{article.name}}</span>
+          </a>
+        </div>
+        <div class="writer-product-btn">
+          <form class="like-form" action="" method="POST">
+          {% csrf_token %}
+            <input class="like-button" ><i class="detail-like fas fa-heart liked" onclick="likeBtn('{{article.pk}}')"></i></input>
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+      {% endif %}
+    </ul>
+  </section>
 </div>

@@ -5,6 +5,7 @@ app_name = 'social'
 urlpatterns = [
 
     path('like',LikeView.as_view(), name='like'),
+    
     #  path('user/', include('user.urls')),
 ]
     

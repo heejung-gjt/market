@@ -12,7 +12,7 @@ urlpatterns = [
     path('select/', SelectView.as_view(),name='select'),
     path('edit/<pk>',EditView.as_view(), name='edit'),
     path('delete/<pk>',DeleteView.as_view(), name='delete'),
-    path('like',LikeView.as_view(), name='like'),
+    # path('like',LikeView.as_view(), name='like'),
     #  path('user/', include('user.urls')),
     
     
