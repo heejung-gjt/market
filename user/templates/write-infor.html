@@ -3,6 +3,9 @@
 
   <section class="writer-section">
     <ul class="writer-product-list">
+      {% if writer_empty %}
+      <sapn class="no-product">작성한 글이 없어요 !</sapn>
+      {% else %}
       {% for article in articles.all %}
       <li class="writer-product">
         <div class="writer-product-infor">
@@ -24,6 +27,7 @@
         </div>
       </li>
       {% endfor %}
+      {% endif %}
     </ul>
   </section>
 

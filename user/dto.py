@@ -17,7 +17,5 @@ class SigninDto():
 @dataclass 
 class UpdateUserDto():
   image:str
-  userid:str
   nickname:str
-  password:str
   user_pk:str

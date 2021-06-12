@@ -82,8 +82,17 @@ class ProfileView(View):
         categorys = ProductFilterService.find_by_all_category()
         writer_articles = Article.objects.filter(is_deleted=False, writer=request.user)
         like_articles = Like.objects.filter(users__pk = request.user.pk).all()
-        print('dddddddddd',like_articles)
+        articles = Article.objects.filter(is_deleted=False).all()
+        like_articles = []
+        for article in articles:
+            if request.user in article.like.users.all():
+                like_articles.append(article)
         context = {'category_list':categorys,'articles':writer_articles,'like_articles':like_articles}
+
+        if like_articles == []:
+            context['empty'] = True
+        if writer_articles.first() == None:
+            context['writer_empty'] = True
         return render(request, 'profile.html',context)
 	
     def post(self,request, *args, **kwargs):
@@ -96,9 +105,7 @@ class ProfileView(View):
     def _build_user_infor(self,request):
         return UpdateUserDto(
             image = request.FILES.getlist('image'),
-            userid = request.POST['userid'],
             nickname = request.POST['nickname'],
-            password = request.POST['password'],
             user_pk = request.user.pk 
         )
 			
