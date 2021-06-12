@@ -11,7 +11,6 @@ import json
 class LikeView(View):
 
   def get(self, request, **kwargs):
-    print('hwe')
     return render(request,'detail.html')
   
   def post(self, request,**kwargs):
@@ -37,6 +36,7 @@ class LikeView(View):
           is_liked = True
         )
         context['is_liked'] = True  
+      context['article_pk'] = article_pk
       return JsonResponse(context)
 
 def kakako_login(reqeust):

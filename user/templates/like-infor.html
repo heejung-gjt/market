@@ -23,7 +23,7 @@
         <div class="writer-product-btn">
           <form class="like-form" action="" method="POST">
           {% csrf_token %}
-            <input class="like-button" ><i class="detail-like fas fa-heart liked" onclick="likeBtn('{{article.pk}}')"></i></input>
+            <input class="like-button like-button{{article.pk}}" ><i class="detail-like detail-like{{article.pk}} fas fa-heart liked" onclick="likeBtn('{{article.pk}}')"></i></input>
           </form>
         </div>
       </li>

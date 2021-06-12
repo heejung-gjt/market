@@ -90,7 +90,7 @@ fetch("{% url 'social:like' %}", {
   console.log('readdss',response)
   return response.json()
 }).then(function (data) {
-  let likedIcon = document.querySelector(`.detail-like`);
+  let likedIcon = document.querySelector(`.detail-like${data.article_pk}`);
   if (data.is_liked){
       likedIcon.classList.add('liked');
   }
