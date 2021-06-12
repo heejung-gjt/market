@@ -16,7 +16,7 @@ class LikeView(View):
   
   def post(self, request,**kwargs):
     if request.is_ajax():
-      context = {'msg':'msg'}
+      context = {}
       data = json.loads(request.body)
       article_pk = data.get('article_pk')
       article = get_object_or_404(Article,pk=article_pk)

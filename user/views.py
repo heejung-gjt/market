@@ -1,3 +1,4 @@
+from social.models import Like
 from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 from django.views.generic import View
@@ -77,25 +78,27 @@ def logout(request):
 
 
 class ProfileView(View):
-	def get(self,request, *args, **kwargs):
-		categorys = ProductFilterService.find_by_all_category()
-		writer_articles = Article.objects.filter(is_deleted=False, writer=request.user)
-		context = {'category_list':categorys,'articles':writer_articles}
-		return render(request, 'profile.html',context)
+    def get(self,request, *args, **kwargs):
+        categorys = ProductFilterService.find_by_all_category()
+        writer_articles = Article.objects.filter(is_deleted=False, writer=request.user)
+        like_articles = Like.objects.filter(users__pk = request.user.pk).all()
+        print('dddddddddd',like_articles)
+        context = {'category_list':categorys,'articles':writer_articles,'like_articles':like_articles}
+        return render(request, 'profile.html',context)
 	
-	def post(self,request, *args, **kwargs):
-		user_infor_dto = self._build_user_infor(request)
-		UserService.update(user_infor_dto)
+    def post(self,request, *args, **kwargs):
+	    user_infor_dto = self._build_user_infor(request)
+	    UserService.update(user_infor_dto)
 
 
-		return redirect('user:profile',kwargs['pk'])
+	    return redirect('user:profile',kwargs['pk'])
 	
-	def _build_user_infor(self,request):
-		return UpdateUserDto(
-			image = request.FILES.getlist('image'),
-			userid = request.POST['userid'],
-			nickname = request.POST['nickname'],
-			password = request.POST['password'],
-			user_pk = request.user.pk 
-		)
+    def _build_user_infor(self,request):
+        return UpdateUserDto(
+            image = request.FILES.getlist('image'),
+            userid = request.POST['userid'],
+            nickname = request.POST['nickname'],
+            password = request.POST['password'],
+            user_pk = request.user.pk 
+        )
 			

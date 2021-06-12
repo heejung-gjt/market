@@ -72,5 +72,35 @@ likeInfor = (e) => {
   function UploadImg(event){
     $uploadImgInput.click();
   }
+  // 찜한 제품 프로필
+function likeBtn(article_pk) {
+
+let likeCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+let param = {
+  'article_pk': article_pk,
+}
+fetch("{% url 'social:like' %}", {
+  method: 'POST',
+  headers: {
+    "X-CSRFToken": likeCsrfValue,
+    "X-Requested-With": "XMLHttpRequest"
+  },
+  body: JSON.stringify(param),
+}).then(function (response) {
+  console.log('readdss',response)
+  return response.json()
+}).then(function (data) {
+  let likedIcon = document.querySelector(`.detail-like`);
+  if (data.is_liked){
+      likedIcon.classList.add('liked');
+  }
+  else{
+    likedIcon.classList.remove('liked');
+  }
+
+}).catch((error) => {
+  console.log('error', error);
+})
+}
 </script>
 {% endblock script %}

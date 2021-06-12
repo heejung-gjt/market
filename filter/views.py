@@ -15,17 +15,15 @@ class CategoryView(ListView):
 
   
 class CategoryListView(DetailView):
-  model = Category
-  template_name = 'category-list.html'
 
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
+  def get(self, request, **kwargs):
+    context = {}
     context['sub_state'] = False
     context['category_articles'] = ProductFilterService.find_by_product_list(self.kwargs['pk'])
     context['category_title'] = ProductFilterService.find_by_category_title(self.kwargs['pk'])
     context['category_list'] = ProductFilterService.find_by_all_category()
     context['category_sub_list'] = CategoryDetail.objects.filter(category__pk = self.kwargs['pk'])
-    return context
+    return render(request, 'category-list.html',context)
 
 # show sub menu article
 class CategorySubListView(DetailView):

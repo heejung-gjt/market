@@ -29,19 +29,21 @@ class ProductView(ListView):
 
 # product detail page
 class DetailView(DetailView):
-  model = Article
-  template_name = 'detail.html'
+  # model = Article
+  # template_name = 'detail.html'
 
-  def get_context_data(self , **kwargs):
-    context = super().get_context_data(**kwargs)
+  def get(self, request, **kwargs):
+    context={}
     context['article'] = ProductFilterService.get_detail_infor(self.kwargs['pk'])
-    like = Like.objects.filter(article__pk = self.kwargs['pk']).first()
-    if like.is_liked is True:
-      context['is_liked'] = True
-    else:
-      context['is_liked'] = False
+    like = Like.objects.filter(article__pk = kwargs['pk']).first()
+    if like is not None:
+        if request.user in like.users.all(): 
+          context['is_liked'] = True
+        else:
+          context['is_liked'] = False
+    return render(request,'detail.html',context)
+  
 
-    return context
 
 # create product
 class ArticleCreateView(View):
