@@ -20,10 +20,10 @@ class LikeView(View):
       article_pk = data.get('article_pk')
       article = get_object_or_404(Article,pk=article_pk)
       like = Like.objects.filter(article__pk=article_pk).first()
-      if like is None:
-        like = Like.objects.create(
-          article = article
-        )
+      # if like is None:
+      #   like = Like.objects.create(
+      #     article = article
+      #   )
       if request.user in like.users.all(): 
         Like.objects.filter(article__pk = article_pk).update(
           is_liked = False

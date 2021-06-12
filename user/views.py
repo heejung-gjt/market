@@ -84,6 +84,7 @@ class ProfileView(View):
         like_articles = Like.objects.filter(users__pk = request.user.pk).all()
         articles = Article.objects.filter(is_deleted=False).all()
         like_articles = []
+        
         for article in articles:
             if request.user in article.like.users.all():
                 like_articles.append(article)

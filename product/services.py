@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from .dto import ArticleDto, EditDto
 from .models import Article,Price
+from social.models import Like
 from filter.models import Category, CategoryDetail
 from .models import Photo
 
@@ -38,6 +39,9 @@ class ProductService():
       article = article,
       discount_rate = discount_rate 
     )
+    Like.objects.create(
+        article = article
+        )
     
     # if category_detail_obj is None:
     article.category_detail.add(category_detail_name)
