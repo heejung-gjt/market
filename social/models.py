@@ -3,18 +3,20 @@ from behaviors import Nameable, TimeStampable
 from django.contrib.auth.models import User
 from product.models import Article
 
-class ReComment(TimeStampable):
-  content = models.CharField(max_length=255)
-
-
-class Comment(Nameable, TimeStampable):
+class Comment(TimeStampable):
+    content = models.CharField(max_length=255)
     article = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True, related_name='comment')
     writer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='guest_comment')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='comment')
-    recomment = models.ManyToManyField(ReComment, related_name='comment',blank=True)
 
     def __str__(self):
-        return self.name
+        return self.content
+
+
+class ReComment(TimeStampable):
+  content = models.CharField(max_length=255)
+  writer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='re_comment')
+  comment = models.ManyToManyField(Comment, related_name='re_comment',blank=True)
 
 
 class Like(models.Model):

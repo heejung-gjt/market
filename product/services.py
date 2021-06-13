@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from .dto import ArticleDto, EditDto
 from .models import Article,Price
-from social.models import Like
+from social.models import Comment, Like
 from filter.models import Category, CategoryDetail
 from .models import Photo
 
@@ -52,6 +52,7 @@ class ProductService():
         image = img
       )  
       photo.save()
+    
   
   @staticmethod
   def edit(dto:EditDto):

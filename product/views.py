@@ -1,6 +1,6 @@
 from user.models import Profile
 from filter.models import Category, CategoryDetail
-from social.models import Like
+from social.models import Like,Comment
 from product.models import Article
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView,DetailView
@@ -29,19 +29,25 @@ class ProductView(ListView):
 
 # product detail page
 class DetailView(DetailView):
-  # model = Article
-  # template_name = 'detail.html'
 
   def get(self, request, **kwargs):
     context={}
     context['article'] = ProductFilterService.get_detail_infor(self.kwargs['pk'])
     like = Like.objects.filter(article__pk = kwargs['pk']).first()
+    comments = Comment.objects.filter(article__pk = kwargs['pk']).all()
+    context['comments'] = comments
+    
     if like is not None:
         if request.user in like.users.all(): 
           context['is_liked'] = True
         else:
           context['is_liked'] = False
+    # comment
+
     return render(request,'detail.html',context)
+
+  def post(self, request, **kwargs):
+    pass
   
 
 

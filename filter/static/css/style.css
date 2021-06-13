@@ -634,28 +634,22 @@ justify-content: space-around;
 }
 .detail-comment{
   text-align: left;
-  padding: 15px 20px;
+  padding: 15px 0px;
 }
-.detail-comment span{
-  display: inline-block;
-  font-size: 1.5em;
-  font-weight: bold;
-  padding: 20px 0px;
-}
+
 .input-comment{
   padding: 10px 5px;
   width: 300px;
   border: 1px solid rgb(207, 205, 205);
 }
-.detail-comment button{
+.comment-btn{
+  display: inline-block;
   border: none;
   width: 100px;
   padding:  10px 5px;
   cursor: pointer;
 }
-
 .detail-product-btn{
-  /* display: inline-block; */
   display: flex;
   justify-content: space-around;
   margin-top:10px;
@@ -687,6 +681,86 @@ width: 0px;
 }
 .liked{
   color: red
+}
+/* detail comment */
+.detail-comment{
+  /* background-color: yellow; */
+}
+.detail-comment span{
+  font-size:1.0em;
+}
+.comment-ul{
+  margin-top: 30px;
+}
+.comment-li{
+  margin:5px 0;
+  font-size: 1.3em;
+  padding: 8px 0;
+
+}
+.comment-li span{
+  
+  /* padding: 0px; */
+}
+.recomment-ul{
+  padding-left: 20px;
+  margin-top: 5px;
+}
+.recomment-li{
+  border-bottom: 1px solid rgb(233, 229, 229);
+  font-size: 1.3em;
+  padding: 15px 0;
+}
+.comment-owner{
+  background-color: red;
+}
+.comment-profile-span{
+  display: flex;
+  align-items: center;
+}
+.comment-content{
+  margin-left: 43px;
+}
+.comment-profile-img{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid rgb(207, 206, 206);
+}
+.comment-reply,.comment-delete{
+  display: inline-block;
+  padding: 0px 7px;
+  margin-left:15px;
+  border-radius: 5px;
+  background-color: rgb(231, 228, 228);
+}
+.owner{
+  color: #f53535;
+  border: 1px solid #f53535;
+  padding: 1px 7px;
+  border-radius: 25px;
+}
+.input-re-comment{
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #eee;
+  border: 2px solid rgb(196, 193, 193);
+  height: 200px;
+  padding: 10px;
+  border-radius: 5px;
+  
+}
+.input-re-comment-input{
+  text-align: right;
+}
+.re-comment-btn{
+  padding:8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.non-display{
+  display: none;
 }
 
 /* product upload */

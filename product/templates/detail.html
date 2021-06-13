@@ -16,36 +16,37 @@
     <div class="writer">
       <div class="writer-infor">
         {% if article.writer.profile.image.url %}
-      <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`">
-      {% else %}
-      <i class="product-icon fas fa-user-circle"></i>
-    {% endif %}  
-        <span class="writer-nickname">{{article.writer}} </span>
-      <span class="writer-region">경기 배곧동</span>
-      <span class="writer-region">{{article.created_at}}</span>
-    </div>
-    {% if user.is_authenticated %}
-    <div class="writer-cheat">
-      <div class="detail-product-btn">
-        {% if user.pk == article.writer.pk %}
-        <a href="{% url 'product:delete' article.pk %}">삭제하기</a>
-        <a href="{% url 'product:edit' article.pk %}">수정하기</a>
+        <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image"
+          onerror="this.src=`{% static 'img/감자.png' %}`">
         {% else %}
-        <button class="cheat-btn">채팅하기</button>
+        <i class="product-icon fas fa-user-circle"></i>
         {% endif %}
+        <span class="writer-nickname">{{article.writer}} </span>
+        <span class="writer-region">경기 배곧동</span>
+        <span class="writer-region">{{article.created_at}}</span>
       </div>
-      <div class="like">
-        <form class="like-form" action="" method="POST">
-        {% csrf_token %}
-        {% if is_liked %}
-          <input class="like-button" ><i class="detail-like fas fa-heart liked"onclick="likeBtn('{{article.pk}}')"></i></input>
-       {% else %}
-       <input class="like-button" ><i class="detail-like fas fa-heart"onclick="likeBtn('{{article.pk}}')"></i></input>
-       {% endif %}
-        </form>
+      {% if user.is_authenticated %}
+      <div class="writer-cheat">
+        <div class="detail-product-btn">
+          {% if user.pk == article.writer.pk %}
+          <a href="{% url 'product:delete' article.pk %}">삭제하기</a>
+          <a href="{% url 'product:edit' article.pk %}">수정하기</a>
+          {% else %}
+          <button class="cheat-btn">채팅하기</button>
+          {% endif %}
+        </div>
+        <div class="like">
+          <form class="like-form" action="" method="POST">
+            {% csrf_token %}
+            {% if is_liked %}
+            <input class="like-button like-button{{article.pk}}" ><i class="detail-like detail-like{{article.pk}} fas fa-heart liked" onclick="likeBtn('{{article.pk}}')"></i></input>
+            {% else %}
+            <input class="like-button like-button{{article.pk}}" ><i class="detail-like detail-like{{article.pk}} fas fa-heart" onclick="likeBtn('{{article.pk}}')"></i></input>
+            {% endif %}
+          </form>
+        </div>
       </div>
-    </div>
-    {% endif %}
+      {% endif %}
     </div>
   </div>
   <div class="detail-title">
@@ -55,54 +56,111 @@
   </div>
   <div class="detail-description">
     <p>
-   {{article.content}}
+      {{article.content}}
     </p>
   </div>
   <div class="detail-comment">
     <span>댓글</span><br>
-    <input type="text" class="input-comment" name="comment" placeholder="댓글입력">
-    <button type="submit">댓글입력</button>
+    <form class="comment-form" action="{% url 'social:comment' article.pk %}" method="POST">
+      {% csrf_token %}
+      <input type="text" class="input-comment" name="comment" placeholder="댓글입력">
+      <input class="comment-btn" type="submit" value="입력하기" onclick="commentBtn('{{article.pk}}')">
+    </form>
+    <ul class="comment-ul">
+      {% for comment in comments %}
+      <li class="comment-li comment-li{{comment.pk}}">
+        {% if article.writer == comment.writer %}
+        <span class="comment-profile-span"><img class="user-img comment-profile-img"
+            src="{{comment.writer.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`"><strong
+            class="owner">판매자</strong><span>{{comment.created_at}}</span></span>
+        {% else %}
+        <span class="comment-profile-span"><img class="user-img comment-profile-img"
+            src="{{comment.writer.profile.image.url}}" alt=""
+            onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer}}<span>{{comment.created_at}}</span></span>
+        {% endif %}
+        {% if user == comment.writer %}
+        <span class="comment-content">{{comment.content}}</span>
+        <span class="comment-delete comment-delete{{comment.pk}}" onclick="commentDelete('{{comment.pk}}')">삭제</span>
+        {% else %}
+        <span class="comment-content">{{comment.content}}</span>
+        <span class="comment-reply comment-reply{{comment.pk}}" onclick="commentReply('{{comment.pk}}')">답글</span>
+        {% endif %}
+        <ul class="recomment-ul">
+
+          {% for recomment in comment.re_comment.all %}
+          <li class="recomment-li">
+            {% if article.writer == recomment.writer %}
+            <span class="comment-profile-span"><img class="user-img comment-profile-img"
+                src="{{recomment.writer.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`"><strong
+                class="owner">판매자</strong> <span>{{recomment.created_at}}</span>  </span>
+            {% else %}
+            <span class="comment-profile-span"><img class="user-img comment-profile-img"
+                src="{{recomment.writer.profile.image.url}}" alt=""
+                onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer}}<span>{{recomment.created_at}}</span></span>
+            {% endif %}
+            {% if user == recomment.writer %}
+            <span class="comment-content">{{recomment.content}}</span>
+            <span class="comment-delete comment-delete{{comment.pk}}"
+              onclick="commentDelete('{{comment.pk}}')">삭제</span>
+            {% else %}
+            <span class="comment-content">{{recomment.content}}</span>
+            <span class="comment-reply comment-reply{{comment.pk}}" onclick="commentReply('{{comment.pk}}')">답글</span>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        <form action="{% url 'social:re_comment' comment.pk %}" method="POST"
+          class="recomment-form{{comment.pk}} non-display">
+          {% csrf_token %}
+          <textarea type="text" class="input-re-comment input-re-comment{{comment.pk}}" name="re_comment"
+            placeholder="댓글입력"></textarea>
+          <div class="input-re-comment-input">
+            <input class="re-comment-btn re-comment-btn{{comment.pk}}" type="submit" value="입력하기"
+              onclick="reCommentBtn('{{comment.pk}}')">
+            <input class="re-comment-btn re-comment-cancel-btn{{comment.pk}}" type="submit" value="취소하기"
+              onclick="reCommentCancelBtn('{{comment.pk}}')">
+          </div>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
   </div>
 </section>
 
 {% endblock content %}
 
 {% block script %}
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/detail/script.js' %}"></script>
 <script>
-
-document.querySelector('.menu-all').classList.remove('checked');
-
-// 좋아요 토글
-
 function likeBtn(article_pk) {
 
-    let likeCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-    let param = {
-      'article_pk': article_pk,
-    }
-    fetch("{% url 'social:like' %}", {
-      method: 'POST',
-      headers: {
-        "X-CSRFToken": likeCsrfValue,
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      body: JSON.stringify(param),
-    }).then(function (response) {
-      console.log('reass',response)
-      return response.json()
-    }).then(function (data) {
-      let likedIcon = document.querySelector(`.detail-like`);
-      if (data.is_liked){
-          likedIcon.classList.add('liked');
-      }
-      else{
-        likedIcon.classList.remove('liked');
-      }
-
-    }).catch((error) => {
-      console.log('error', error);
-    })
+  let likeCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+  let param = {
+    'article_pk': article_pk,
   }
-
+  fetch("{% url 'social:like' %}", {
+    method: 'POST',
+    headers: {
+      "X-CSRFToken": likeCsrfValue,
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify(param),
+  }).then(function (response) {
+    console.log('readdss',response)
+    return response.json()
+  }).then(function (data) {
+    let likedIcon = document.querySelector(`.detail-like${data.article_pk}`);
+    if (data.is_liked){
+        likedIcon.classList.add('liked');
+    }
+    else{
+      likedIcon.classList.remove('liked');
+    }
+  
+  }).catch((error) => {
+    console.log('error', error);
+  })
+  }
 </script>
 {% endblock script %}
