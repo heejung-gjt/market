@@ -121,6 +121,8 @@
 //   document.querySelector(`.re-comment-form-div${comment_pk}`).style.display='none';
 // }
 
+
+
 function commentReply(comment_pk){
   document.querySelector(`.recomment-form${comment_pk}`).classList.remove('non-display');
 }
@@ -138,5 +140,51 @@ function reCommentBtn(comment_pk){
 
 function commentDelete(comment_pk){
   document.querySelector(`.comment-li${comment_pk}`).classList.add('non-display');
+  document.querySelector(`recomment-form${comment_pk}`).submit();
 
 }
+
+function reCommentDelete(recomment_pk){
+
+}
+
+// comment ajax
+let $commentForm = document.querySelector('.comment-form');
+
+$commentForm.addEventListener('submit', submitComment);
+
+function submitComment(e) {
+  e.preventDefault();
+  let content = document.querySelector('.input-comment').value;
+  if (content == '') {
+    return
+  }
+  let param = {
+    'article_pk': '{{article.pk}}',
+    'content': content,
+    'user_pk':'{{request.user.pk}}',
+    'owner_pk': '{{article.writer.pk}}'
+  }
+  // console.log(param)
+  let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+
+  // ajax통신
+  fetch("{% url 'social:comment' %}", {
+    method: 'POST',
+    headers: {
+      "X-CSRFToken": csrfValue,
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify(param),
+  }).then(function (response) {
+    console.log('reass',response)
+    return response.json()
+  }).then(function (data) {
+    $commentForm.reset()
+
+    
+  }).catch((error) => {
+    console.log('error', error);
+  })
+
+} 

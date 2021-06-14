@@ -133,30 +133,30 @@ class DeleteView(View):
     return redirect('product:article')
 
 
-class LikeView(View):
+# class LikeView(View):
   
-  def post(self, request,**kwargs):
-    if request.is_ajax():
-      context = {'msg':'msg'}
-      data = json.loads(request.body)
-      article_pk = data.get('article_pk')
-      article = get_object_or_404(Article,pk=article_pk)
-      like = Like.objects.filter(article__pk=article_pk).first()
-      if like is None:
-        like = Like.objects.create(
-          article = article
-        )
-      if request.user in like.users.all(): 
-        Like.objects.filter(article__pk = article_pk).update(
-          is_liked = False
-        )
-        like.users.remove(request.user)
-        context['is_liked'] = False  
-      else:
-        like.users.add(request.user)
-        Like.objects.filter(article__pk = article_pk).update(
-          is_liked = True
-        )
-        context['is_liked'] = True  
-      return JsonResponse(context)
+#   def post(self, request,**kwargs):
+#     if request.is_ajax():
+#       context = {'msg':'msg'}
+#       data = json.loads(request.body)
+#       article_pk = data.get('article_pk')
+#       article = get_object_or_404(Article,pk=article_pk)
+#       like = Like.objects.filter(article__pk=article_pk).first()
+#       if like is None:
+#         like = Like.objects.create(
+#           article = article
+#         )
+#       if request.user in like.users.all(): 
+#         Like.objects.filter(article__pk = article_pk).update(
+#           is_liked = False
+#         )
+#         like.users.remove(request.user)
+#         context['is_liked'] = False  
+#       else:
+#         like.users.add(request.user)
+#         Like.objects.filter(article__pk = article_pk).update(
+#           is_liked = True
+#         )
+#         context['is_liked'] = True  
+#       return JsonResponse(context)
   
