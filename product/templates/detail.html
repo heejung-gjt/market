@@ -83,8 +83,23 @@
             onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer}}<span>{{comment.created_at}}</span></span>
         {% endif %}
         {% if user == comment.writer %}
-        <span class="comment-content">{{comment.content}}</span>
-        <span class="comment-delete comment-delete{{comment.pk}}" onclick="commentDelete('{{comment.pk}}')">삭제</span>
+        <span class="comment-content comment-content{{comment.pk}}">{{comment.content}}</span>
+        <form class="delete-comment-form delete-comment-form{{comment.pk}}" action="" method="POST">
+          {% csrf_token %}
+          <input type="submit" class="comment-delete comment-delete{{comment.pk}}"
+            onclick="commentDelete('{{comment.pk}}')"value="삭제"></input>
+            <button type="submit" class="comment-content-edit comment-content-edit{{comment.pk}}"
+            onclick="commentContentEditBtn('{{comment.pk}}')">수정</button>
+        </form><br>
+        <!-- 글 수정 폼 -->
+        <form action="" method="POST" class="edit-comment-form edit-comment-form{{comment.pk}} non-display">
+          {% csrf_token %}
+          <input type="text" class="edit-comment edit_comment{{comment.pk}}" name="edit_text" value="{{comment.content}}">
+          <input type="submit" class="edit-comment-btn" value="수정하기" onclick="commentEditBtn('{{comment.pk}}')"></input>
+          <button type="submit" class="comment-edit-cancel comment-edit-cancel{{comment.pk}}"
+            onclick="commentEditCancelBtn('{{comment.pk}}')">취소하기</button>
+        </form>
+        <!-- 글 수정 폼 -->
         {% else %}
         <span class="comment-content">{{comment.content}}</span>
         <span class="comment-reply comment-reply{{comment.pk}}" onclick="commentReply('{{comment.pk}}')">답글</span>
@@ -105,8 +120,11 @@
             {% endif %}
             {% if user == recomment.writer %}
             <span class="comment-content">{{recomment.content}}</span>
-            <span class="comment-delete comment-delete{{comment.pk}}"
+            <form class="delete-recomment-form delete-recomment-form{{recomment.pk}}" action="" method="POST">
+            {% csrf_token %}
+              <span class="recomment-delete recomment-delete{{recomment.pk}}"
               onclick="reCommentDelete('{{recomment.pk}}')">삭제</span>
+            </form>
             {% else %}
             <span class="comment-content">{{recomment.content}}</span>
             <span class="comment-reply comment-reply{{comment.pk}}" onclick="commentReply('{{comment.pk}}')">답글</span>
@@ -208,16 +226,27 @@
     }).then(function (data) {
       let data_id = data.comment_obj.id
       $commentForm.reset()
-      console.log(data.user_img)
 
-      if ('{{article.writer.pk}}' == data.writer_pk) {
+
+      if ('{{article.writer.pk}}' == data.writer_pk || data.writer_pk == '{{request.user.pk}}') {
         document.querySelector('.comment-ul').innerHTML += `
       <li class="comment-li comment-li${data_id}">
         <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
           src="{{article.writer.profile.image.url}}" alt="" onerror="this.src='{% static 'img/감자.png' %}'"><strong
           class="owner">판매자</strong><span>${data.comment_obj.created_at}</span></span>
-          <span class="comment-content">${data.comment_obj.content}</span>
-          <span class="comment-delete comment-delete${data_id}" onclick="commentDelete('${data_id}')">삭제</span>
+          <span class="comment-content comment-content${data_id}">${data.comment_obj.content}</span>
+          <form class="delete-comment-form delete-comment-form${data_id}" action="" method="POST">
+        <input type="submit" class="comment-delete comment-delete${data_id}" onclick="commentDelete('${data_id}')"value="삭제">
+        <button type="submit" class="comment-content-edit comment-content-edit${data_id}"
+            onclick="commentContentEditBtn('${data_id}')">수정</button>
+        </form>
+      <form action="" method="POST" class="edit-comment-form edit-comment-form${data_id} non-display">
+          {% csrf_token %}
+          <input type="text" class="edit_comment${data_id}" name="edit_text" value="${data.comment_obj.content}">
+          <input type="submit" class="edit-comment-btn" value="수정하기" onclick="commentEditBtn('${data_id}')"></input>
+          <button type="submit" class="comment-edit-cancel comment-edit-cancel${data_id}"
+            onclick="commentEditCancelBtn('${data_id}')">취소하기</button>
+        </form>
           <form action="" method="POST"
           class="recomment-form${data_id} non-display" onsubmit="recommentForm('${data_id}')>
           {% csrf_token %}
@@ -239,8 +268,10 @@
               <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
                 src="${data.user_img}" alt=""
                 onerror="this.src='{% static 'img/감자.png' %}'">${data.user}<span>${data.comment_obj.created_at}</span></span>
-                <span class="comment-content">${data.comment_obj.content}</span>
-                <span class="comment-delete comment-delete${data_id}" onclick="commentDelete('${data_id}')">삭제</span>
+                <span class="comment-content ">${data.comment_obj.content}</span>
+                <form class="delete-comment-form" action="" method="POST">
+        <input type="submit" class="comment-delete comment-delete${data_id}" onclick="commentDelete(${data_id})"value="삭제">
+      </form>
                 <form action="" method="POST"
                 class="recomment-form${data_id} non-display">
                 {% csrf_token %}
@@ -256,15 +287,17 @@
                   </li>
                   `
       }
+ 
 
 
     }).catch((error) => {
       console.log('error', error);
     })
 
+
   }
 
-// 재댓글 취소하기 버튼
+  // 재댓글 취소하기 버튼
   function reCommentCancelBtn(comment_pk) {
     event.preventDefault();
     document.querySelector(`.recomment-form${comment_pk}`).classList.add('non-display');
@@ -298,6 +331,7 @@
       // console.log('reass', response)
       return response.json()
     }).then(function (data) {
+      document.querySelector(`.recomment-form${comment_pk}`).reset();
       console.log(data.recomment_obj)
       let recommentLi = ''
       for (let key in data.recomment_obj) {
@@ -320,8 +354,12 @@
         if ('{{request.user.pk}}' == data.recomment_obj[key]['writer_pk']) {
           recommentLi += `
         <span class="comment-content">${data.recomment_obj[key]['content']}</span>
-              <span class="comment-delete comment-delete${data.comment_data.id}"
-                onclick="reCommentDelete('${data.recomment_obj[key]['id']}')">삭제</span></li>`
+        <form class="delete-recomment-form delete-recomment-form${data.recomment_obj[key]['id']}" action="" method="POST">
+          {% csrf_token %}
+          <span class="comment-delete comment-delete${data.comment_data.id}"
+                onclick="reCommentDelete('${data.recomment_obj[key]['id']}')">삭제</span></li>
+              </form>
+              `
         }
         else {
           recommentLi += `
@@ -337,6 +375,135 @@
   }
 
 
+// 수정 ajax
+
+function commentEditCancelBtn(comment_pk){
+  event.preventDefault();
+  document.querySelector(`.edit-comment-form${comment_pk}`).classList.add('non-display');
+  document.querySelector(`.comment-content${comment_pk}`).classList.remove('non-display');
+  document.querySelector(`.delete-comment-form${comment_pk}`).classList.remove('non-display');
+  console.log('d')
+}
+function commentContentEditBtn(comment_pk){
+  event.preventDefault();
+  document.querySelector(`.edit-comment-form${comment_pk}`).classList.remove('non-display');
+  document.querySelector(`.comment-content${comment_pk}`).classList.add('non-display');
+  document.querySelector(`.delete-comment-form${comment_pk}`).classList.add('non-display');
+
+  console.log('d');
+}
+
+function commentEditBtn(comment_pk){
+  event.preventDefault();
+  document.querySelector(`.edit-comment-form${comment_pk}`).addEventListener('submit',EditCommentForm(comment_pk));
+}
+
+function EditCommentForm(comment_pk){
+event.preventDefault();
+edit_comment = document.querySelector(`.edit_comment${comment_pk}`).value;
+if (edit_comment == '') {
+      return
+}
+document.querySelector(`.edit-comment-form${comment_pk}`).classList.add('non-display');
+  document.querySelector(`.comment-content${comment_pk}`).classList.remove('non-display');
+  document.querySelector(`.delete-comment-form${comment_pk}`).classList.remove('non-display');
+let param = {
+      'edit_comment': edit_comment,
+      'comment_pk': comment_pk
+    }
+    let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    
+    // ajax통신
+    fetch("{% url 'social:edit' %}", {
+      method: 'POST',
+      headers: {
+        "X-CSRFToken": csrfValue,
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify(param),
+    }).then(function (response) {
+      console.log('reass', response)
+      return response.json()
+    }).then(function (data) {
+      console.log(data)
+      console.log(edit_comment = document.querySelector(`.edit_comment${comment_pk}`).value)
+      document.querySelector(`.comment-content${comment_pk}`).innerText = edit_comment
+     
+    }).catch((error) => {
+      console.log('error', error);
+    })
+  }
+  
+
+  // 삭제 ajax
+  function commentDelete(comment_pk) {
+    document.querySelector('.delete-comment-form').addEventListener('submit', deleteComment(comment_pk));
+  }
+  
+  function deleteComment(comment_pk) {
+    event.preventDefault();
+    document.querySelector(`.comment-li${comment_pk}`).classList.add('non-display');
+
+    let param = {
+      'article_pk': '{{article.pk}}',
+      'user_pk': '{{request.user.pk}}',
+      'owner_pk': '{{article.writer.pk}}',
+      'comment_pk': comment_pk
+    }
+    let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    
+    // ajax통신
+    fetch("{% url 'social:delete' %}", {
+      method: 'POST',
+      headers: {
+        "X-CSRFToken": csrfValue,
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify(param),
+    }).then(function (response) {
+      console.log('reass', response)
+      return response.json()
+    }).then(function (data) {
+      console.log(data)
+      console.log('{{comment_pk}}')
+     
+    }).catch((error) => {
+      console.log('error', error);
+    })
+  }
+  
+function reCommentDelete(recomment_pk){
+  document.querySelector(`.delete-recomment-form${recomment_pk}`).addEventListener('submit', deleteReComment(recomment_pk));
+}
+function deleteReComment(recomment_pk) {
+    event.preventDefault();
+    document.querySelector(`.recomment-li${recomment_pk}`).classList.add('non-display');
+
+    let param = {
+      'recomment_pk': recomment_pk,
+      'msg':'recomment_delete',
+    }
+    let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    
+    // ajax통신
+    fetch("{% url 'social:delete' %}", {
+      method: 'POST',
+      headers: {
+        "X-CSRFToken": csrfValue,
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify(param),
+    }).then(function (response) {
+      console.log('reass', response)
+      return response.json()
+    }).then(function (data) {
+      console.log(data)
+     
+    }).catch((error) => {
+      console.log('error', error);
+    })
+  }
+  
 </script>
 
 {% endblock script %}
