@@ -10,22 +10,6 @@ from .services import UserService
 from django.contrib import auth
 from .dto import SignupDto,SigninDto, UpdateUserDto
 
-import json
-import bcrypt
-import jwt
-
-
-class LoginView(View):
-
-  def get(self,request, *args, **kwargs):
-    categorys = ProductFilterService.find_by_all_category()
-    context = {'category_list':categorys}
-    return render(request, 'signin.html',context)
-
-  def post(self,request, *args, **kwargs):
-
-    return redirect('home')
-
 
 class RegisterView(View):
 
@@ -54,7 +38,9 @@ class RegisterView(View):
 class LoginView(View):
 
     def get(self, request, *args, **kwargs):
-        return render(request,'signin.html')
+        categorys = ProductFilterService.find_by_all_category()
+        context = {'category_list':categorys}
+        return render(request,'signin.html',context)
 
     def post(self,request, *args, **kwargs):
         signin_dto = self._fetch_signin_dto(request.POST)

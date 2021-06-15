@@ -7,22 +7,26 @@
 {% block content %}
 
 <h1 class="product-main">전체 제품</h1>
+<form class="select-filter-form" action="{% url 'filter:category-filter-list' %}" method="GET">
 <section class="product-social">
   <div class="product-add">
     <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
   </div>
-  <select name="social-clicked">
+  <select name="social-clicked_pk">
     <option value=""selected>필터링보기</option>
-    <option value="">댓글 많은 순</option>
-    <option value="">찜 많은 순</option>
+    <option value="1">최신순</option>
+    <option value="2">댓글 많은 순</option>
+    <option value="3">찜 많은 순</option>
+    <option value="4">내가 쓴 글</option>
   </select>
 </section>
+</form>
 <section class="product-section">
   <ul class="product-list">
     {% for article in article_list %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
       <div class="product-writer">
-        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer}}</strong></span>
+        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.profile.nickname}}</strong></span>
     </div>
       <div class="product-imgs">
         {% for photo in article.photo.all %}
@@ -52,7 +56,10 @@
 
 {% block script %}
 <script>
-
+document.querySelector('.select-filter-form').onchange = (e) => {
+$selectForm = document.querySelector('.select-filter-form');
+$selectForm.submit();
+}
 
 </script>
 {% endblock script %}

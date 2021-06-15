@@ -34,6 +34,7 @@ class DetailView(DetailView):
     context['article'] = ProductFilterService.get_detail_infor(self.kwargs['pk'])
     like = Like.objects.filter(article__pk = kwargs['pk']).first()
     comments = Comment.objects.filter(article__pk = kwargs['pk']).all()
+    context['category_list'] = ProductFilterService.find_by_all_category()
     context['comments'] = comments
     
     if like is not None:

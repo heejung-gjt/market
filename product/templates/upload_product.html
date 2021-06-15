@@ -13,7 +13,7 @@
       {% for category in category_list %}
       <option value="{{category.pk}}">{{category}}</option>
       {% endfor %}
-      {% if state %}
+    {% if state %}
       <option value=""selected>{{category}}</option>
       {% else %}
       <option value=""selected>카테고리선택</option>

@@ -21,8 +21,8 @@
         {% else %}
         <i class="product-icon fas fa-user-circle"></i>
         {% endif %}
-        <span class="writer-nickname">{{article.writer}} </span>
-        <span class="writer-region">경기 배곧동</span>
+        <span class="writer-nickname">{{article.writer.profile.nickname}} </span>
+
         <span class="writer-region">{{article.created_at}}</span>
       </div>
       {% if user.is_authenticated %}
@@ -80,7 +80,7 @@
         {% else %}
         <span class="comment-profile-span"><img class="user-img comment-profile-img"
             src="{{comment.writer.profile.image.url}}" alt=""
-            onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer}}<span>{{comment.created_at}}</span></span>
+            onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer.profile.nickname}}<span>{{comment.created_at}}</span></span>
         {% endif %}
         {% if user == comment.writer %}
         <span class="comment-content comment-content{{comment.pk}}">{{comment.content}}</span>
@@ -225,10 +225,11 @@
       return response.json()
     }).then(function (data) {
       let data_id = data.comment_obj.id
+      console.log(data.profile_nickname)
       $commentForm.reset()
 
 
-      if ('{{article.writer.pk}}' == data.writer_pk || data.writer_pk == '{{request.user.pk}}') {
+      if ('{{article.writer.pk}}' == data.writer_pk || '{{article.writer.pk}}' == '{{request.user.pk}}') {
         document.querySelector('.comment-ul').innerHTML += `
       <li class="comment-li comment-li${data_id}">
         <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
@@ -262,12 +263,12 @@
             </li>
             `
       }
-      else if ('{{article.writer.pk}}' !== data.writer_pk) {
+      else if ('{{article.writer.pk}}' !== data.writer_pk && data.writer_pk != '{{request.user.pk}}') {
         document.querySelector('.comment-ul').innerHTML += `
             <li class="comment-li comment-li${data_id}">
               <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
                 src="${data.user_img}" alt=""
-                onerror="this.src='{% static 'img/감자.png' %}'">${data.user}<span>${data.comment_obj.created_at}</span></span>
+                onerror="this.src='{% static 'img/감자.png' %}'">${data.profile_nickname}<span>${data.comment_obj.created_at}</span></span>
                 <span class="comment-content ">${data.comment_obj.content}</span>
                 <form class="delete-comment-form" action="" method="POST">
         <input type="submit" class="comment-delete comment-delete${data_id}" onclick="commentDelete(${data_id})"value="삭제">
@@ -286,6 +287,40 @@
                   </form>
                   </li>
                   `
+      }
+      else if(data.writer_pk == '{{request.user.pk}}' && '{{article.writer.pk}}' !== data.writer_pk){
+        document.querySelector('.comment-ul').innerHTML += `
+        <li class="comment-li comment-li${data_id}">
+              <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
+                src="${data.user_img}" alt=""
+                onerror="this.src='{% static 'img/감자.png' %}'">${data.profile_nickname}<span>${data.comment_obj.created_at}</span></span>
+                <span class="comment-content comment-content${data_id}">${data.comment_obj.content}</span>
+                <form class="delete-comment-form delete-comment-form${data_id}" action="" method="POST">
+        <input type="submit" class="comment-delete comment-delete${data_id}" onclick="commentDelete(${data_id})"value="삭제">
+        <button type="submit" class="comment-content-edit comment-content-edit${data_id}"
+            onclick="commentContentEditBtn('${data_id}')">수정</button>
+      </form>
+      <form action="" method="POST" class="edit-comment-form edit-comment-form${data_id} non-display">
+          {% csrf_token %}
+          <input type="text" class="edit_comment${data_id}" name="edit_text" value="${data.comment_obj.content}">
+          <input type="submit" class="edit-comment-btn" value="수정하기" onclick="commentEditBtn('${data_id}')"></input>
+          <button type="submit" class="comment-edit-cancel comment-edit-cancel${data_id}"
+            onclick="commentEditCancelBtn('${data_id}')">취소하기</button>
+        </form>
+          <form action="" method="POST"
+          class="recomment-form${data_id} non-display" onsubmit="recommentForm('${data_id}')>
+          {% csrf_token %}
+          <textarea type="text" class="input-re-comment input-re-comment${data_id}" name="re_comment"
+          placeholder="댓글입력"></textarea>
+          <div class="input-re-comment-input">
+            <input class="re-comment-btn re-comment-btn${data_id}" type="submit" value="입력하기"
+            ">
+            <input class="re-comment-btn re-comment-cancel-btn${data_id}" type="submit" value="취소하기"
+            onclick="reCommentCancelBtn('${data_id}')">
+            </div>
+            </form>
+            </li>
+            `
       }
  
 
@@ -347,7 +382,7 @@
           recommentLi += `<li class="recomment-li recomment-li${key}">
           <span class="comment-profile-span">
           <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']} "  src="${data.recomment_obj[key]['user_img']}" onerror="this.src='{% static 'img/감자.png' %}'">
-                ${data.recomment_obj[key]['writer']} <span>${data.recomment_obj[key]['created_at']}</span></span>
+          ${data.recomment_obj[key]['profile_nickname']} <span>${data.recomment_obj[key]['created_at']}</span></span>
                 <br>
                 `
         }
