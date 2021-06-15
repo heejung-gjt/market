@@ -1,31 +1,5 @@
-{% extends 'base.html' %}
 
-{% block head %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-{% endblock head %}
-{% block content %}
-<section class="profile-section">
-  
-  <div class="profile-infor">
-    <ul class="infor-ul">
-      <li class="profile-infor"><button class="clicked profile-btn" onclick="profileInfor(event)"; href="#"><i class="fas fa-user-circle"></i><span>프로필 설정</span></button></li>
-      <li class="write-infor"><button class="write-btn" onclick="writeInfor(event)";><i class="fas fa-pen"></i><span>내가 쓴 글</span></button></li>
-      <li class="like-infor"><button class="like-btn"onclick="likeInfor(event)";><i class="fab fa-gratipay"></i><span>내가 찜한 제품</span></button></li>
-    </ul>
-  </div>
-  <div class="infor">
-    {% include 'profile-infor.html' %}
-</div>
-</div>
-{% endblock content %}
-{% block footer %}
-{% endblock footer %}
-
-{% block script %}
-<script src="/static/js/user/script.js" type="text/javascript"></script>
-<script>
-
+// profile page switch conext - html에서 control
 profileInfor = (e) => {
   e.preventDefault();
   $profileInfor = document.querySelector('.infor');
@@ -53,8 +27,31 @@ likeInfor = (e) => {
   document.querySelector('.like-btn').classList.add('clicked');
   
 }
-  // 찜한 제품 프로필
-  function likeBtn(article_pk) {
+
+// profile user 이미지 업로드 기능
+const $uploadImgInput = document.querySelector('.profile-upload-img-input');
+const $uploadPreviewImg = document.querySelector('.profile-upload-preview-img');
+
+$uploadImgInput.onchange = (e) => {
+// document.querySelector('.upload-img-div').innerHTML='';
+let image = event.target.files[0]
+  let reader = new FileReader();
+  reader.onload = function (event) {
+    $uploadPreviewImg.setAttribute('src', event.target.result);
+  }
+
+  reader.readAsDataURL(image);
+}
+
+
+
+function UploadImg(event){
+$uploadImgInput.click();
+}
+
+
+// 찜한 제품 프로필 - html에서 control
+function likeBtn(article_pk) {
 
 let likeCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 let param = {
@@ -83,5 +80,3 @@ fetch("{% url 'social:like' %}", {
   console.log('error', error);
 })
 }
-</script>
-{% endblock script %}

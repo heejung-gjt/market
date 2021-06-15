@@ -2,7 +2,8 @@
 
 {% block head %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/product/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/filter/style.css' %}">
 {% endblock head %}
 
 {% include 'product-nav.html' %}
@@ -90,6 +91,8 @@
 
 
 {% block script %}
+<script src="/static/filter/script.js" type="text/javascript"></script>
+
 <script>
 
   document.querySelector('.menu-all').classList.remove('checked');
