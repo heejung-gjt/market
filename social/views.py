@@ -67,6 +67,9 @@ class CommentView(View):
         content = content,
 
       )
+
+      profile_nickname = Profile.objects.filter(user__pk=user_pk).first().nickname
+      context['profile_nickname'] = profile_nickname
       user_img = Profile.objects.filter(user__pk = user_pk).first().image.url
       context['user_img'] = user_img
       
@@ -101,6 +104,7 @@ class ReCommentView(View):
       context['re_content']=re_content
       context['user'] = user
       context['comment_data'] = model_to_dict(comment)
+      profile_nickname = Profile.objects.filter(user__pk=user_pk).first().nickname
       
       recomment=ReComment.objects.filter(comment__pk=comment_pk).create(
       content = re_content,
@@ -109,7 +113,7 @@ class ReCommentView(View):
       recomment.comment.add(comment)
       recomment_contents = {}
       for recomment in comment.re_comment.all():
-        recomment_contents[recomment.id] = {'id':recomment.id,'created_at':recomment.created_at,'updated_at':recomment.updated_at, 'content':recomment.content,'writer_pk':recomment.writer.pk,'writer':recomment.writer.username,'user_img': recomment.writer.profile.image.url}
+        recomment_contents[recomment.id] = {'id':recomment.id,'created_at':recomment.created_at,'updated_at':recomment.updated_at, 'content':recomment.content,'writer_pk':recomment.writer.pk,'writer':recomment.writer.username,'user_img': recomment.writer.profile.image.url,'profile_nickname':profile_nickname}
       
       context['user_img'] = recomment.writer.profile.image.url
       context['comment_user_img'] = comment.writer.profile.image.url

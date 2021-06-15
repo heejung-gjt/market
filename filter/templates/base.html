@@ -28,9 +28,9 @@
       <div class="nav-menu">
         <ul class="menu-ul">
           <li><a class="menu-all checked" href="{% url 'home' %}">모든제품</a></li>
-          <li><a class="menu-category" href="#"> 카테고리별</a>
+          <li class="menu-category-li"><a class="menu-category" href="#"> 카테고리별</a>
           <div class="menu-category-list">
-            <ul class="menu-category-list-ul non-active ">
+            <ul class="menu-category-list-ul active">
               {% for category in category_list.all %}
               <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}">{{category.name}}</a></li>
               <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}">{{category.name}}</a></li>
@@ -45,7 +45,7 @@
         {% if user.is_authenticated %}
         <article class="nav-user">
           <img class="user-img user-img{{user.pk}}" src="{{user.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`" >
-          <span class="user-name">{{user.username}}님</span>
+          <span class="user-name">{{user.profile.nickname}}님</span>
         </article>
         <a href="{% url 'user:profile' user.profile.pk %}">마이페이지</a>
         <a href="{% url 'user:logout' %}">로그아웃</a>
@@ -73,23 +73,7 @@
   {% block script %}
   {% endblock script %}
 
-  <script>
-    document.querySelector('.menu-all').onclick = (e) => {
-      // e.preventDefault();
-      document.querySelector('.menu-all').classList.add('checked');
-      document.querySelector('.menu-category').classList.remove('checked');
-    }
 
-    document.querySelector('.menu-category').onclick = (e) => {
-      // e.preventDefault();
-      document.querySelector('.menu-all').classList.remove('checked');
-      document.querySelector('.menu-category').classList.add('checked');
-      document.querySelector('.menu-category-list-ul').classList.remove('non-active');
-      document.querySelector('.menu-category-list-ul').classList.add('active');
-      
-    }
-
-  </script>
 
 </body>
 

@@ -23,6 +23,7 @@ class CategoryListView(DetailView):
     context['category_title'] = ProductFilterService.find_by_category_title(self.kwargs['pk'])
     context['category_list'] = ProductFilterService.find_by_all_category()
     context['category_sub_list'] = CategoryDetail.objects.filter(category__pk = self.kwargs['pk'])
+    context['sub_state'] = False
     return render(request, 'category-list.html',context)
 
 # show sub menu article
@@ -32,6 +33,7 @@ class CategorySubListView(DetailView):
 
   def get(self,request,*args, **kwargs):
     context = {}
+    # context['state'] = False
     context['sub_state'] = True
     if request.GET.get('sub_menu_pk') == '0':
       articles = Article.objects.filter(category__pk = kwargs['pk'], is_deleted=False).all()
@@ -41,8 +43,35 @@ class CategorySubListView(DetailView):
     context['category_sub_list'] = CategoryDetail.objects.filter(category__pk = kwargs['pk'])
     context['category_articles'] = ProductFilterService.find_by_product_list(self.kwargs['pk'])
     context['category_title'] = ProductFilterService.find_by_category_title(self.kwargs['pk'])
-    # context['category_list'] = ProductFilterService.find_by_all_category()
     categorys = ProductFilterService.find_by_all_category()
     context['category_list'] =categorys
     return render(request, 'category-list.html',context)
 
+
+class CategoryFilterListView(ListView):
+    # model = Category
+    # template_name = 'article.html'
+
+  def get(self,request,*args, **kwargs):
+      context = {}
+      # context['state'] = False
+      if request.GET.get('social-clicked_pk') == '1':
+        context['category_list'] = ProductFilterService.find_by_all_category()
+        context['article_list'] = ProductFilterService.find_by_latest_article()
+        return render(request, 'article.html',context)
+      elif request.GET.get('social-clicked_pk') == '2':
+        context['category_list'] = ProductFilterService.find_by_all_category()
+        context['article_list'] = ProductFilterService.get_order_by_comment_count()
+        return render(request, 'article.html',context)
+      elif request.GET.get('social-clicked_pk') == '3':
+        context['category_list'] = ProductFilterService.find_by_all_category()
+        context['article_list'] = ProductFilterService.get_order_by_like_count()
+        return render(request, 'article.html',context)
+      elif request.GET.get('social-clicked_pk') == '4':
+        context['category_list'] = ProductFilterService.find_by_all_category()
+        context['article_list'] = ProductFilterService.get_order_by_user_article(request)
+        return render(request, 'article.html',context)
+      else:
+        context['category_list'] = ProductFilterService.find_by_all_category()
+        context['article_list'] = ProductFilterService.find_by_not_deleted_article()
+        return render(request, 'article.html',context)

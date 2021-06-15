@@ -14,28 +14,7 @@
 
 
 {% block product-main-content %}
-<section class="product-section">
-  <ul class="product-list">
 
-    <a class="product-link" href="#">
-      <li class="product">
-        <div class="product-writer">
-        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer}}</strong></span>
-      </div>
-        <div class="product-imgs">
-          <img class="product-img" src="{% static 'img/감자.png' %}" alt="">
-        </div>
-        <span class="product-title">감자 나눔 할 분 있으신가요 10개 주고 참외가 먹고싶네요 훗훗</span>
-        <strong class="product-price">4000원</strong>
-        <div class="social">
-          <span class="social-comment">댓글 +10 </span>
-           <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
-        </div>
-      </li>
-    </a>
-
-  </ul>
-</section>
 {% endblock product-main-content %}
 
 {% endblock content %}
