@@ -33,9 +33,13 @@
       <span class="product-title">{{article.name}} </span>
       <strong class="product-price">{{article.price}} 원</strong>
       <div class="social">
-        <span class="social-comment">댓글 +10 </span>
+        {#% for comment in article.comment.all %#} 
+        
+        <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
         <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+        {#{comment.re_comment.all|length|add:article.comment.all|length}#}
       </div>
+        {#% endfor %#}
     </li>
   </a>
   {% endfor %}

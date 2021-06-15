@@ -18,7 +18,6 @@ class ReComment(TimeStampable):
   writer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='re_comment')
   comment = models.ManyToManyField(Comment, related_name='re_comment',blank=True)
 
-
 class Like(models.Model):
   article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='like')
   users = models.ManyToManyField(User, related_name='like',blank=True)

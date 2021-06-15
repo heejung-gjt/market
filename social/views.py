@@ -45,21 +45,6 @@ class LikeView(View):
       return JsonResponse(context)
 
 
-# class CommentView(View):
-
-#   def post(self, request, **kwargs):
-#     article = Article.objects.filter(pk=kwargs['pk']).first()
-    
-#     Comment.objects.create(
-#       content = request.POST['comment'],
-#       article = article,
-#       writer = request.user,
-#       owner = article.writer
-#     )
-    
-#     return redirect('product:detail',kwargs['pk'])
-
-
 class CommentView(View):
   def get(self, request, **kwargs):
     return render(request,'detail.html')
@@ -75,33 +60,27 @@ class CommentView(View):
       owner_pk = data.get('owner_pk')
       owner = User.objects.filter(pk = owner_pk).first()
       user = User.objects.filter(pk = user_pk).first().username
-      # image = Comment.objects.filter(article__pk = article_pk).first().writer.profile.image
-      # json.dumps(str(image)) 
       comment = Comment.objects.filter(article__pk = article_pk).create(
         article = article,
         writer = request.user,
         owner = owner,
-        content = content
+        content = content,
+
       )
       user_img = Profile.objects.filter(user__pk = user_pk).first().image.url
       context['user_img'] = user_img
-      print(context)
       
       comment_user_img = Profile.objects.get(user__pk = user_pk)
       comment_user_img= comment_user_img.__dict__
       del comment_user_img['_state']
 
-      # comment_user_img = comment_user_img
-      print(comment_user_img)
-      # del comment_user_img['_state']
-      # del comment_user['_state']
-      # comment_user = de/l comment_user['state']
       context['comment_user_img'] = comment_user_img
       comment_writer_pk = Comment.objects.filter(pk = comment.pk).first().writer.pk
       context['writer_pk'] = comment_writer_pk
       context['comment_obj'] = model_to_dict(comment)
       context['comment']= content
       context['user'] = user
+      context['new_comment'] = True
       # context['image'] = json.dumps(str(image))
       return JsonResponse(context)
 
@@ -140,34 +119,36 @@ class ReCommentView(View):
     article_pk = Comment.objects.filter(pk=kwargs['pk']).first().article.pk
     comment = Comment.objects.filter(pk=kwargs['pk']).first()
     recomment = ReComment.objects.filter(comment__pk = kwargs['pk']).first()
-    # recomment = ReComment.objects.filter(comment__pk=kwargs['pk']).create(
-    #   content = request.POST['re_comment'],
-    #   writer = request.user,
-    # )
-    # recomment.comment.add(comment)
+
     return redirect('product:detail',article_pk)
 
 
-# class ReCommentView(View):
-#   def get(self, request, **kwargs):
-#     return render(request,'detail.html')
-  
-#   def post(self, request,**kwargs):
-#     if request.is_ajax():
-#       context = {}
-#       data = json.loads(request.body)
-#       # article_pk = data.get('article_pk')
-#       user_pk = data.get('user_pk')
-#       writer_pk = data.get('writer_pk')
-#       article = Article.objects.filter(pk=writer_pk).first()
-#       context['article'] =article
-#       user = User.objects.filter(pk = user_pk).first().username
-#       context['re_comment']=data.get('re_comment')
-#       context['user'] = user
-#       comment_data = json.loads(serialize('json',Comment.objects.filter(pk=data.get('comment_pk'))))
-#       print(comment_data)
-#       context['comment_data'] = comment_data
-#       return JsonResponse(context)
+class EditView(View):
+   def post(self, request, **kwargs):
+
+    if request.is_ajax():
+      data = json.loads(request.body)
+      comment_pk = data.get('comment_pk')
+      content = data.get('edit_comment')
+      Comment.objects.filter(pk=comment_pk).update(
+        content = content
+      )
+      return JsonResponse({'C':'C'})
+
+
+class DeleteView(View):
+   def post(self, request, **kwargs):
+
+    if request.is_ajax():
+      data = json.loads(request.body)
+      if data.get('msg') == 'recomment_delete':
+        recomment_pk = data.get('recomment_pk')
+        ReComment.objects.filter(pk=recomment_pk).delete()
+        return JsonResponse({'r':'r'})
+      comment_pk = data.get('comment_pk')
+      Comment.objects.filter(pk=comment_pk).delete()
+      return JsonResponse({'C':'C'})
+
 
 
 def kakako_login(reqeust):

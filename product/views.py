@@ -22,7 +22,6 @@ class ProductView(ListView):
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['category_list'] = ProductFilterService.find_by_all_category()
-    
     context['article_list'] = ProductFilterService.find_by_not_deleted_article()
     
     return context

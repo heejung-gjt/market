@@ -44,7 +44,7 @@
       <div class="nav-link">
         {% if user.is_authenticated %}
         <article class="nav-user">
-          <img class="user-img" src="{{user.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`" >
+          <img class="user-img user-img{{user.pk}}" src="{{user.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`" >
           <span class="user-name">{{user.username}}님</span>
         </article>
         <a href="{% url 'user:profile' user.profile.pk %}">마이페이지</a>
@@ -52,6 +52,7 @@
         {% else %}
         <a href="{% url 'user:signin' %}">로그인</a>
         <a href="{% url 'user:signup' %}">회원가입</a> 
+
         {% endif %}
       </div>
     </nav>
@@ -88,11 +89,6 @@
       
     }
 
-    // document.querySelector('.menu-category').onclick = (e) =>{
-    //   e.preventDefault();
-    //   console.log('click')
-
-    // }
   </script>
 
 </body>

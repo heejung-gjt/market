@@ -1,3 +1,4 @@
+from social.models import Comment
 from product.models import Article
 from django.shortcuts import get_object_or_404
 from filter.models import Category,CategoryDetail
