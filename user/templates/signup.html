@@ -12,7 +12,7 @@
     <span>REGISTER</span>
   </div>
   {% if error.state %}
-  {{error.msg}}
+  <strong class="register-errmsg">{{error.msg}}</strong>
   {% endif %}
   <form class="register-form" action="{% url 'user:signup' %}" method="POST">
     {% csrf_token %}

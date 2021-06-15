@@ -1,21 +1,24 @@
-from social.models import Like
-from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 from django.views.generic import View
-from django.http import JsonResponse
-from filter.services import ProductFilterService
-from product.models import Article
-from user.models import Profile
-from .services import UserService
 from django.contrib import auth
+from social.models import Like
+from product.models import Article
+from filter.services import ProductFilterService
+from .services import UserService
 from .dto import SignupDto,SigninDto, UpdateUserDto
 
 
+def nav_sub_menu_categories():
+    sub_menu_categories = ProductFilterService.find_by_all_category()
+    context = {'category_list':sub_menu_categories}
+    return context
+
+
+# 회원가입 
 class RegisterView(View):
 
     def get(self,request, *args, **kwargs):
-        categorys = ProductFilterService.find_by_all_category()
-        context = {'category_list':categorys}
+        context = nav_sub_menu_categories()
         return render(request, 'signup.html',context)
 
     def post(self, request):
@@ -34,12 +37,12 @@ class RegisterView(View):
             password_chk = request.POST['password_chk']
         )
 
-  
+
+# 로그인
 class LoginView(View):
 
     def get(self, request, *args, **kwargs):
-        categorys = ProductFilterService.find_by_all_category()
-        context = {'category_list':categorys}
+        context = nav_sub_menu_categories()
         return render(request,'signin.html',context)
 
     def post(self,request, *args, **kwargs):

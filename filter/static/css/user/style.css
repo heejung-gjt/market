@@ -58,6 +58,11 @@
   display: block;
   font-size: 1.5em;
 }
+.login-errmsg,.register-errmsg{
+  color: rgb(248, 60, 60);
+  font-size: 1.1em;
+  letter-spacing: 3px;
+}
 
 /* mypage */
 .profile-section{

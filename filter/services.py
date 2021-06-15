@@ -3,7 +3,8 @@ from product.models import Article
 from django.shortcuts import get_object_or_404
 from filter.models import Category,CategoryDetail
 from django.db.models import Count
-# proudcts filter 
+
+
 class ProductFilterService():
 
   @staticmethod

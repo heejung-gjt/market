@@ -10,6 +10,9 @@
     <img class="login-img" src="{% static 'img/감자.png' %}" alt="">
     <span>LOGIN</span>
   </div>
+  {% if error.state %}
+  <strong class="login-errmsg">{{error.msg}}</strong>
+  {% endif %}
   <form class="login-form" action="" method="POST">
     {% csrf_token %}
     <input class="login-id" type="text" name="userid" placeholder="ID">
