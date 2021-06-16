@@ -9,17 +9,17 @@
       {% for article in articles.all %}
       <li class="writer-product">
         <div class="writer-product-infor">
-        <div class="writer-product-imgs">
-          {% for photo in article.photo.all %}
-          <img class="writer-product-img" src="{{photo.image.url}}" alt="">
-        {% endfor %}
+          <div class="writer-product-imgs">
+            {% for photo in article.photo.all %}
+            <img class="writer-product-img" src="{{photo.image.url}}" alt="">
+            {% endfor %}
+          </div>
+          <a class="writer-product-link" href="{% url 'product:detail' article.pk %}">
+            <span class="writer-product-title">{{article.name}}</span>
+            <span class="writer-product-section">[{{article.category.name}} 코너]</span>
+            <strong class="writer-product-price">{{article.price}} 원</strong>
+          </a>
         </div>
-        <a class="writer-product-link" href="{% url 'product:detail' article.pk %}">
-          <span class="writer-product-title">{{article.name}}</span>
-          <span class="writer-product-section">[{{article.category.name}} 코너]</span>
-          <strong class="writer-product-price">{{article.price}} 원</strong>
-        </a>
-      </div>
         <div class="writer-product-btn">
           <a href="{% url 'product:delete' article.pk %}">삭제하기</a>
 

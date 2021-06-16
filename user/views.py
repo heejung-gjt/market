@@ -1,20 +1,19 @@
 from django.shortcuts import render,redirect
 from django.views.generic import View
 from django.contrib import auth
-from social.models import Like
-from product.models import Article
 from filter.services import ProductFilterService
 from .services import UserService
 from .dto import SignupDto,SigninDto, UpdateUserDto
+from .utils import find_user_liked_article,check_profile_infor_empty
 
-
+# sub menu category list
 def nav_sub_menu_categories():
     sub_menu_categories = ProductFilterService.find_by_all_category()
     context = {'category_list':sub_menu_categories}
     return context
 
 
-# 회원가입 
+# register
 class RegisterView(View):
 
     def get(self,request, *args, **kwargs):
@@ -38,7 +37,7 @@ class RegisterView(View):
         )
 
 
-# 로그인
+# login
 class LoginView(View):
 
     def get(self, request, *args, **kwargs):
@@ -61,36 +60,33 @@ class LoginView(View):
         )
 
 
+# logout
 def logout(request):
   auth.logout(request)
   return redirect('product:article')
 
 
+# user profile 
 class ProfileView(View):
-    def get(self,request, *args, **kwargs):
-        categorys = ProductFilterService.find_by_all_category()
-        writer_articles = Article.objects.filter(is_deleted=False, writer=request.user)
-        like_articles = Like.objects.filter(users__pk = request.user.pk).all()
-        articles = Article.objects.filter(is_deleted=False).all()
-        like_articles = []
-        
-        for article in articles:
-            if request.user in article.like.users.all():
-                like_articles.append(article)
-        context = {'category_list':categorys,'articles':writer_articles,'like_articles':like_articles}
 
-        if like_articles == []:
-            context['empty'] = True
-        if writer_articles.first() == None:
-            context['writer_empty'] = True
+    def get(self,request, *args, **kwargs):
+        categories = ProductFilterService.find_by_all_category()
+        user_articles = ProductFilterService.find_not_deleted_user_article_list(is_deleted=False, writer=request.user)
+        articles = ProductFilterService.find_by_not_deleted_article()
+        liked_article_list = find_user_liked_article(request,articles,[])
+        like_empty, writer_empty = check_profile_infor_empty(liked_article_list,user_articles)
+        context = {'category_list':categories,'articles':user_articles,'like_articles':liked_article_list,'empty':like_empty,'writer_empty':writer_empty}
         return render(request, 'profile.html',context)
 	
     def post(self,request, *args, **kwargs):
-	    user_infor_dto = self._build_user_infor(request)
-	    UserService.update(user_infor_dto)
+        profile_pk = kwargs['pk']
+        user_infor_dto = self._build_user_infor(request)
+        result = UserService.update(user_infor_dto)
+        if result['error']['state']:
+            context = {'state':True, 'msg':result['error']['msg']}
+            return render(request,'profile.html',context)
 
-
-	    return redirect('user:profile',kwargs['pk'])
+        return redirect('user:profile',profile_pk)
 	
     def _build_user_infor(self,request):
         return UpdateUserDto(

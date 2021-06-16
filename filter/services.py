@@ -1,4 +1,4 @@
-from social.models import Comment
+from django.contrib.auth.models import User
 from product.models import Article
 from django.shortcuts import get_object_or_404
 from filter.models import Category,CategoryDetail
@@ -52,6 +52,11 @@ class ProductFilterService():
   def find_by_not_deleted_article():
     article_list = Article.objects.filter(is_deleted = False)
     return article_list
+  
+  @staticmethod
+  def find_not_deleted_user_article_list(**kwargs):
+    articles = Article.objects.filter(is_deleted=kwargs['is_deleted'], writer=kwargs['writer'])
+    return articles
 
   @staticmethod
   def find_by_filter_article(user):
@@ -72,3 +77,23 @@ class ProductFilterService():
   def get_detail_infor(article_pk):
     article = Article.objects.filter(pk=article_pk).first()
     return article
+
+
+class UserFilterService():
+
+  @staticmethod
+  def find_by_user(user_pk):
+    user = User.objects.filter(pk=user_pk).first()
+    return user
+
+
+class CategoryFilterService():
+
+  @staticmethod
+  def find_by_category_detail(pk):
+    category =  CategoryDetail.objects.filter(pk= pk).first() 
+    return category
+
+  @staticmethod
+  def find_by_filter_category(pk):
+    category = get_object_or_404(Category, pk = pk)
