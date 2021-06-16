@@ -64,8 +64,8 @@ class ProductFilterService():
     return articles
 
   @staticmethod
-  def find_by_category_detail(category_detail_pk):
-    category_detail = CategoryDetail.objects.filter(category__pk=category_detail_pk)
+  def find_by_category_detail(pk):
+    category_detail = CategoryDetail.objects.filter(category__pk = pk)
     return category_detail
 
   @staticmethod
@@ -74,16 +74,16 @@ class ProductFilterService():
     return category_pk
   
   @staticmethod
-  def get_detail_infor(article_pk):
-    article = Article.objects.filter(pk=article_pk).first()
+  def find_article_infor(pk):
+    article = get_object_or_404(Article, pk = pk)
     return article
 
 
 class UserFilterService():
 
   @staticmethod
-  def find_by_user(user_pk):
-    user = User.objects.filter(pk=user_pk).first()
+  def find_by_user(pk):
+    user = User.objects.filter(pk=pk).first()
     return user
 
 
@@ -97,3 +97,4 @@ class CategoryFilterService():
   @staticmethod
   def find_by_filter_category(pk):
     category = get_object_or_404(Category, pk = pk)
+    return category

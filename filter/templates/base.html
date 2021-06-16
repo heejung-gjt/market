@@ -35,7 +35,6 @@
             <ul class="menu-category-list-ul active">
               {% for category in category_list.all %}
               <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}">{{category.name}}</a></li>
-              <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}">{{category.name}}</a></li>
               {% endfor %}
               
             </ul>

@@ -1,15 +1,14 @@
-from user.models import Profile
-from filter.models import Category, CategoryDetail
+from filter.models import Category
 from social.models import Like,Comment
 from product.models import Article
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.views.generic import ListView,DetailView
 from django.views.generic import View
 from .models import Article
 from filter.services import ProductFilterService
 from .services import ProductService
 from .dto import ArticleDto, EditDto
-from django.http.response import JsonResponse
+from django.utils.datastructures import MultiValueDictKeyError
 
 import json
 
@@ -23,15 +22,16 @@ class ProductView(ListView):
     context = super().get_context_data(**kwargs)
     context['category_list'] = ProductFilterService.find_by_all_category()
     context['article_list'] = ProductFilterService.find_by_not_deleted_article()
-    
     return context
+
 
 # product detail page
 class DetailView(DetailView):
 
   def get(self, request, **kwargs):
+    article_pk = self.kwargs['pk']
     context={}
-    context['article'] = ProductFilterService.get_detail_infor(self.kwargs['pk'])
+    context['article'] = ProductFilterService.find_article_infor(article_pk)
     like = Like.objects.filter(article__pk = kwargs['pk']).first()
     comments = Comment.objects.filter(article__pk = kwargs['pk']).all()
     context['category_list'] = ProductFilterService.find_by_all_category()
@@ -48,7 +48,6 @@ class DetailView(DetailView):
 
   def post(self, request, **kwargs):
     pass
-  
 
 
 # create product
@@ -60,14 +59,24 @@ class ArticleCreateView(View):
     return render(request, 'upload_product.html',context)
 
   def post(self, request, *args, **kwargs):
-    category_detail_pk =request.POST['category_pk']
-    
-    article_dto = self._build_article_dto(request)
-    category_pk = ProductFilterService.find_by_category_pk_in_category_detail(category_detail_pk)
-    ProductService.create(article_dto)
+      try:
+        category_detail_pk =request.POST['category_pk']
+      except MultiValueDictKeyError:
+        categorys = ProductFilterService.find_by_all_category()
+        context = {'error':{'state':True,'msg':'카테고리를 선택해주세요 !'},'category_list':categorys}
+        return render(request, 'upload_product.html',context)
 
-    return redirect('filter:category-list',category_pk)
+      article_dto = self._build_article_dto(request)
+      category_pk = ProductFilterService.find_by_category_pk_in_category_detail(category_detail_pk)
+      context = ProductService.create(article_dto)
 
+      if context['error']['state']:
+        categorys = ProductFilterService.find_by_all_category()
+        context['category_list'] = categorys
+        return render(request, 'upload_product.html',context)
+
+      return redirect('filter:category-list',category_pk)
+      
   def _build_article_dto(self, request):
     return ArticleDto(
       name = request.POST['name'],
@@ -89,14 +98,14 @@ class SelectView(View):
     category_detail = ProductFilterService.find_by_category_detail(category_detail_pk)
     category = ProductFilterService.find_by_category_title(category_detail_pk)
     context = {'category_list':categorys,'category':category,'state':True,'category_detail':category_detail}
-    
     return render(request, 'upload_product.html',context)
 
 
 # product edit
 class EditView(View):
   def get(self, request, *args, **kwargs):
-    article = ProductFilterService.get_detail_infor(kwargs['pk'])
+    article_pk = kwargs['pk']
+    article = ProductFilterService.find_article_infor(article_pk)
     categorys = ProductFilterService.find_by_all_category()
     context = {'category_list':categorys,'article':article}
     return render(request, 'edit.html',context)
@@ -132,31 +141,3 @@ class DeleteView(View):
     
     return redirect('product:article')
 
-
-# class LikeView(View):
-  
-#   def post(self, request,**kwargs):
-#     if request.is_ajax():
-#       context = {'msg':'msg'}
-#       data = json.loads(request.body)
-#       article_pk = data.get('article_pk')
-#       article = get_object_or_404(Article,pk=article_pk)
-#       like = Like.objects.filter(article__pk=article_pk).first()
-#       if like is None:
-#         like = Like.objects.create(
-#           article = article
-#         )
-#       if request.user in like.users.all(): 
-#         Like.objects.filter(article__pk = article_pk).update(
-#           is_liked = False
-#         )
-#         like.users.remove(request.user)
-#         context['is_liked'] = False  
-#       else:
-#         like.users.add(request.user)
-#         Like.objects.filter(article__pk = article_pk).update(
-#           is_liked = True
-#         )
-#         context['is_liked'] = True  
-#       return JsonResponse(context)
-  

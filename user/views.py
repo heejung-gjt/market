@@ -83,7 +83,8 @@ class ProfileView(View):
         user_infor_dto = self._build_user_infor(request)
         result = UserService.update(user_infor_dto)
         if result['error']['state']:
-            context = {'state':True, 'msg':result['error']['msg']}
+            categories = ProductFilterService.find_by_all_category()
+            context = {'state':True, 'msg':result['error']['msg'],'category_list':categories}
             return render(request,'profile.html',context)
 
         return redirect('user:profile',profile_pk)
