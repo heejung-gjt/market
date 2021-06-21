@@ -7,6 +7,8 @@ from django.views.generic import View
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 import json
 
@@ -45,7 +47,10 @@ class LikeView(View):
       return JsonResponse(context)
 
 
-class CommentView(View):
+
+class CommentView(LoginRequiredMixin,generic.View):
+  login_url='/user/signin'
+  direct_field_name = None
   def get(self, request, **kwargs):
     return render(request,'detail.html')
   
@@ -84,7 +89,6 @@ class CommentView(View):
       context['comment']= content
       context['user'] = user
       context['new_comment'] = True
-      # context['image'] = json.dumps(str(image))
       return JsonResponse(context)
 
 
@@ -100,7 +104,7 @@ class ReCommentView(View):
       comment = Comment.objects.filter(pk = comment_pk).first()
       user = User.objects.filter(pk = user_pk).first().username
       recomment = ReComment.objects.filter(comment__pk=comment_pk).first()
-      context['article'] =article 
+      context['article'] = article 
       context['re_content']=re_content
       context['user'] = user
       context['comment_data'] = model_to_dict(comment)
@@ -115,16 +119,9 @@ class ReCommentView(View):
       for recomment in comment.re_comment.all():
         recomment_contents[recomment.id] = {'id':recomment.id,'created_at':recomment.created_at,'updated_at':recomment.updated_at, 'content':recomment.content,'writer_pk':recomment.writer.pk,'writer':recomment.writer.username,'user_img': recomment.writer.profile.image.url,'profile_nickname':profile_nickname}
       
-      context['user_img'] = recomment.writer.profile.image.url
       context['comment_user_img'] = comment.writer.profile.image.url
       context['recomment_obj'] = recomment_contents
       return JsonResponse(context)
-
-    article_pk = Comment.objects.filter(pk=kwargs['pk']).first().article.pk
-    comment = Comment.objects.filter(pk=kwargs['pk']).first()
-    recomment = ReComment.objects.filter(comment__pk = kwargs['pk']).first()
-
-    return redirect('product:detail',article_pk)
 
 
 class EditView(View):

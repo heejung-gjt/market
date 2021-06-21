@@ -37,11 +37,10 @@
       <img class="edit-user-img" src="{{photo.image.url}}" alt="">
       {% endfor %}
       </div>
-
+      {% if error.state %}
+      <strong class="upload_errmag">{{error.msg}}</strong>
+      {% endif %}
   <div class="image-price-div">
-    {% if error.state %}
-    {{error.msg}}
-    {% endif %}
     <label class="price-label" for="image-origin-price">가격 :</label>
     <input id="image-origin-price" class="image-price image-origin-price" type="text" name="origin_price"> <span
       class="won">원</span><br>

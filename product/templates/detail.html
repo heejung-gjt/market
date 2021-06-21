@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock head %}
 {% block content %}
-
+{% load humanize %}
 <section class="detail-section">
   <div class="detail-img">
     {% for photo in article.photo.all %}
@@ -23,7 +23,7 @@
         {% endif %}
         <span class="writer-nickname">{{article.writer.profile.nickname}} </span>
 
-        <span class="writer-region">{{article.created_at}}</span>
+        <span class="writer-region">{{article.created_at | naturaltime}}</span>
       </div>
       {% if user.is_authenticated %}
       <div class="writer-cheat">
@@ -64,23 +64,24 @@
     </p>
   </div>
   <div class="detail-comment">
-    <span>댓글</span><br>
+    {% if user.is_authenticated %}
     <form class="comment-form" action="" method="POST">
       {% csrf_token %}
       <input type="text" class="input-comment" name="comment" placeholder="댓글입력">
       <input class="comment-btn" type="submit" value="입력하기">
     </form>
+    {% endif %}
     <ul class="comment-ul">
       {% for comment in comments %}
       <li class="comment-li comment-li{{comment.pk}}">
         {% if article.writer == comment.writer %}
         <span class="comment-profile-span"><img class="user-img comment-profile-img"
             src="{{comment.writer.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`"><strong
-            class="owner">판매자</strong><span>{{comment.created_at}}</span></span>
+            class="owner">판매자</strong><span class="upload_time"> {{comment.created_at | naturaltime}}</span></span>
         {% else %}
         <span class="comment-profile-span"><img class="user-img comment-profile-img"
             src="{{comment.writer.profile.image.url}}" alt=""
-            onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer.profile.nickname}}<span>{{comment.created_at}}</span></span>
+            onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer.profile.nickname}}<span>{{comment.created_at | naturaltime}}</span></span>
         {% endif %}
         {% if user == comment.writer %}
         <span class="comment-content comment-content{{comment.pk}}">{{comment.content}}</span>
@@ -102,9 +103,10 @@
         <!-- 글 수정 폼 -->
         {% else %}
         <span class="comment-content">{{comment.content}}</span>
+        {% if user.is_authenticated %}
         <span class="comment-reply comment-reply{{comment.pk}}" onclick="commentReply('{{comment.pk}}')">답글</span>
         {% endif %}
-
+        {% endif %}
         <ul class="recomment-ul recomment-ul{{comment.pk}}">
           {% for recomment in comment.re_comment.all %}
           <li class="recomment-li recomment-li{{recomment.pk}}">
@@ -112,11 +114,11 @@
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
                 src="{{recomment.writer.profile.image.url}}" alt=""
                 onerror="this.src=`{% static 'img/감자.png' %}`"><strong class="owner">판매자</strong>
-              <span>{{recomment.created_at}}</span> </span>
+              <span>{{recomment.created_at|naturaltime}}</span> </span>
             {% else %}
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
                 src="{{recomment.writer.profile.image.url}}" alt=""
-                onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer}}<span>{{recomment.created_at}}</span></span>
+                onerror="this.src=`{% static 'img/감자.png' %}`">{{comment.writer}}<span>{{recomment.created_at |naturaltime}}</span></span>
             {% endif %}
             {% if user == recomment.writer %}
             <span class="comment-content">{{recomment.content}}</span>
@@ -127,7 +129,9 @@
             </form>
             {% else %}
             <span class="comment-content">{{recomment.content}}</span>
+            {% if user.is_authenticated %}
             <span class="comment-reply comment-reply{{comment.pk}}" onclick="commentReply('{{comment.pk}}')">답글</span>
+            {% endif %}
             {% endif %}
           </li>
           {% endfor %}
@@ -321,7 +325,6 @@
             </li>
             `
       }
- 
 
 
     }).catch((error) => {

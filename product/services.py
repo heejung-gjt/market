@@ -39,7 +39,7 @@ class ProductService():
       article = article,
       discount_rate = discount_rate 
     )
-    Like.objects.create(
+    like = Like.objects.create(
         article = article
         )
 
@@ -49,6 +49,8 @@ class ProductService():
         image = img
       )  
       photo.save()
+
+
     result = context(False, 'completed')
     return result
     

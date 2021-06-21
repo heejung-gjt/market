@@ -44,7 +44,7 @@ justify-content: space-around;
   /* position: absolute; */
   width: 700px;
   height: 450px;
-  object-fit:cover;
+  object-fit:contain;
   border-radius: 5px;
 }
 
@@ -422,4 +422,18 @@ width: 0px;
   border: none;
   font-size: 1.5em;
   cursor: pointer;
+}
+
+.upload_errmag{
+  display: block;
+  padding-bottom: 30px;
+  font-size: 1.2em;
+  letter-spacing: 3px;
+  color: rgb(248, 60, 60);
+}
+.no-product{
+  margin-left: 250px;
+  margin-top: 200px;
+  font-size: 1.4em;
+  letter-spacing: 4px;
 }

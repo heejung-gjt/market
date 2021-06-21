@@ -9,6 +9,8 @@ from filter.services import ProductFilterService
 from .services import ProductService
 from .dto import ArticleDto, EditDto
 from django.utils.datastructures import MultiValueDictKeyError
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic
 
 import json
 
@@ -42,16 +44,18 @@ class DetailView(DetailView):
           context['is_liked'] = True
         else:
           context['is_liked'] = False
-    # comment
+
+    article = Article.objects.filter(pk=article_pk).first()
+    print(article.created_at)
 
     return render(request,'detail.html',context)
 
-  def post(self, request, **kwargs):
-    pass
-
 
 # create product
-class ArticleCreateView(View):
+class ArticleCreateView(LoginRequiredMixin,generic.View):
+  login_url='/user/signin'
+  redirect_field_name=None
+  
   def get(self, request, *args, **kwargs):
     categorys = ProductFilterService.find_by_all_category()
     context = {'category_list':categorys}
