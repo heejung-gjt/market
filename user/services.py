@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from filter.services import UserFilterService
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -62,4 +63,18 @@ class UserService():
     return result
     
 
+class UserFilterService():
 
+  @staticmethod
+  def find_user_infor(pk):
+    result = get_object_or_404(User, pk = pk) 
+    return result
+
+  @staticmethod
+  def find_profile_infor(pk):
+    result = get_object_or_404(Profile, user__pk = pk)
+    return result 
+
+  def get_profile_infor(pk):
+    result = Profile.objects.get(user__pk = pk)
+    return result

@@ -3,7 +3,7 @@ from .models import Article,Price
 from social.models import Like
 from filter.services import CategoryFilterService, ProductFilterService
 from .models import Photo
-from .utils import calculate_price
+from utils import calculate_price
 from user.utils import context
 
 # product crud 

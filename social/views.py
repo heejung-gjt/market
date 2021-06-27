@@ -1,17 +1,19 @@
+from social.services import SocialFilterService, SocialService
 from user.models import Profile
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.http.response import JsonResponse
 from social.models import Like,Comment,ReComment
 from product.models import Article
 from django.views.generic import View
-from django.shortcuts import get_object_or_404
+from .dto import CommentDto,ReCommentDto
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from utils import get_time_passed
 
 import json
-
+import time
 # Create your views here.
 
 
@@ -25,12 +27,8 @@ class LikeView(View):
       context = {}
       data = json.loads(request.body)
       article_pk = data.get('article_pk')
-      article = get_object_or_404(Article,pk=article_pk)
       like = Like.objects.filter(article__pk=article_pk).first()
-      # if like is None:
-      #   like = Like.objects.create(
-      #     article = article
-      #   )
+
       if request.user in like.users.all(): 
         Like.objects.filter(article__pk = article_pk).update(
           is_liked = False
@@ -47,81 +45,56 @@ class LikeView(View):
       return JsonResponse(context)
 
 
+# post에서 ajax일때 데이터를 받아 dto형식으로 데이터를 넣어 service에 보내준다
+# 서비스에서는 해당 데이터를 가지고 comment를 create해주고 알맞은 데이터를 context에 넣어준다
+#이때 service에서 filter되는 것들은 filter,user라는 services에서 import해서 사용하자
+
+# view의 역할은 데이터를 받아 dto형식으로 데이터를 넣어주고 해당 데이터를 가지고 create해줄 Service에 
+# 전달하고, 결과값을 받아 해당 template에 뿌려주는 역할을 담당한다
 
 class CommentView(LoginRequiredMixin,generic.View):
+  
   login_url='/user/signin'
   direct_field_name = None
+
   def get(self, request, **kwargs):
     return render(request,'detail.html')
   
   def post(self, request,**kwargs):
     if request.is_ajax():
-      context = {}
       data = json.loads(request.body)
-      article_pk = data.get('article_pk')
-      content = data.get('content')
-      article = Article.objects.filter(pk=article_pk).first()
-      user_pk = data.get('user_pk')
-      owner_pk = data.get('owner_pk')
-      owner = User.objects.filter(pk = owner_pk).first()
-      user = User.objects.filter(pk = user_pk).first().username
-      comment = Comment.objects.filter(article__pk = article_pk).create(
-        article = article,
-        writer = request.user,
-        owner = owner,
-        content = content,
-
-      )
-
-      profile_nickname = Profile.objects.filter(user__pk=user_pk).first().nickname
-      context['profile_nickname'] = profile_nickname
-      user_img = Profile.objects.filter(user__pk = user_pk).first().image.url
-      context['user_img'] = user_img
-      
-      comment_user_img = Profile.objects.get(user__pk = user_pk)
-      comment_user_img= comment_user_img.__dict__
-      del comment_user_img['_state']
-
-      context['comment_user_img'] = comment_user_img
-      comment_writer_pk = Comment.objects.filter(pk = comment.pk).first().writer.pk
-      context['writer_pk'] = comment_writer_pk
-      context['comment_obj'] = model_to_dict(comment)
-      context['comment']= content
-      context['user'] = user
-      context['new_comment'] = True
+      comment_dto = self._build_comment_dto(data)
+      context = SocialService.create_comment(comment_dto)
       return JsonResponse(context)
-
+  
+  @staticmethod
+  def _build_comment_dto(data):
+    return CommentDto(
+      article_pk = data.get('article_pk'),
+      content = data.get('content'),
+      writer_pk = data.get('user_pk'),
+      owner_pk = data.get('owner_pk')
+    )
+    
 
 class ReCommentView(View):
-  def post(self, request, **kwargs):
+  def post(self, request):
     if request.is_ajax():
-      context = {}
       data = json.loads(request.body)
-      user_pk = data.get('user_pk')
-      comment_pk = data.get('comment_pk')
-      re_content = data.get('re_comment')
-      article = Article.objects.filter(pk=comment_pk).first()
-      comment = Comment.objects.filter(pk = comment_pk).first()
-      user = User.objects.filter(pk = user_pk).first().username
-      recomment = ReComment.objects.filter(comment__pk=comment_pk).first()
-      context['article'] = article 
-      context['re_content']=re_content
-      context['user'] = user
-      context['comment_data'] = model_to_dict(comment)
-      profile_nickname = Profile.objects.filter(user__pk=user_pk).first().nickname
-      
-      recomment=ReComment.objects.filter(comment__pk=comment_pk).create(
-      content = re_content,
+      recomment_dto = self._build_recomment_dto(request,data)      
+      context = SocialService.create_recomment(recomment_dto)
+    return JsonResponse(context)
+
+  @staticmethod
+  def _build_recomment_dto(request,data):
+    return ReCommentDto(
+      content = data.get('re_comment'),
       writer = request.user,
+      created_at = time.time(),
+      user_pk = data.get('user_pk'),
+      comment_pk = data.get('comment_pk'),
+      article_pk = data.get('article_pk')
       )
-      recomment.comment.add(comment)
-      recomment_contents = {}
-      for recomment in comment.re_comment.all():
-        recomment_contents[recomment.id] = {'id':recomment.id,'created_at':recomment.created_at,'updated_at':recomment.updated_at, 'content':recomment.content,'writer_pk':recomment.writer.pk,'writer':recomment.writer.username,'user_img': recomment.writer.profile.image.url,'profile_nickname':profile_nickname}
-      
-      context['comment_user_img'] = comment.writer.profile.image.url
-      context['recomment_obj'] = recomment_contents
-      return JsonResponse(context)
 
 
 class EditView(View):
