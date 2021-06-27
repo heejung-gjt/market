@@ -1,6 +1,5 @@
 from django.db import models
-from datetime import datetime 
-
+import time
 
 class Nameable(models.Model):
   name = models.CharField(max_length=64)
@@ -10,8 +9,8 @@ class Nameable(models.Model):
 
 
 class TimeStampable(models.Model):
-  created_at = models.DateTimeField(default=datetime.now(), blank=True)
-  updated_at = models.TextField(null=True, blank=True)
+  created_at = models.TextField(default=time.time(), blank=True)
+  updated_at = models.TextField(null=True, blank=True, default=time.time())
 
   class Meta:
     abstract = True
