@@ -4,7 +4,7 @@ from product.models import Article
 from django.shortcuts import redirect, render
 from django.views.generic import ListView,DetailView
 from django.views.generic import View
-from django.contrib.auth.models import User
+from user.models import User
 from .models import Article
 from filter.services import ProductFilterService
 from .services import ProductService
@@ -12,7 +12,6 @@ from .dto import ArticleDto, EditDto
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
-from django.contrib.auth.models import User
 import json
 
 
@@ -41,10 +40,10 @@ class DetailView(DetailView):
       {
         'writer':comment.writer,
         'pk':comment.pk,
-        'username':User.objects.get(pk=comment.writer.pk).profile.nickname,
+        'username':User.objects.get(pk=comment.writer.pk).nickname,
         'content':comment.content,
-        'image_url':comment.writer.profile.image.url,
-        'writer_nickname':comment.writer.profile.nickname,
+        'image_url':comment.writer.image,
+        'writer_nickname':comment.writer.nickname,
         're_comment':comment.re_comment.all(),
         'comment_obj':comment
       } for comment in Comment.objects.filter(article__pk = article_pk)

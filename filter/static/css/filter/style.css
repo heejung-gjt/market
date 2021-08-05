@@ -100,9 +100,9 @@ a{
   }
   
   .footer{
-    margin-top: 220px;
+    margin-top: 300px;
     background-color: #495057;
-    min-height: 800px;
+    min-height: 250px;
   }
   
   
@@ -137,7 +137,7 @@ a{
     border: 1px solid #eee;
     background-color: rgb(255, 255, 255);
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     position: absolute;
     top: 70px;
     left: 50%;

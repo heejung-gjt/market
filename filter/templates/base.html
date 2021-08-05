@@ -45,10 +45,10 @@
       <div class="nav-link">
         {% if user.is_authenticated %}
         <article class="nav-user">
-          <img class="user-img user-img{{user.pk}}" src="{{user.profile.image.url}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`" >
-          <span class="user-name">{{user.profile.nickname}}님</span>
+          <img class="user-img user-img{{user.pk}}" src="{{user.image}}" alt="" onerror="this.src=`{% static 'img/감자.png' %}`" >
+          <span class="user-name">{{user.nickname}}님</span>
         </article>
-        <a href="{% url 'user:profile' user.profile.pk %}">마이페이지</a>
+        <a href="{% url 'user:profile' user.pk %}">마이페이지</a>
         <a href="{% url 'user:logout' %}">로그아웃</a>
         {% else %}
         <a href="{% url 'user:signin' %}">로그인</a>

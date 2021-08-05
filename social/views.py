@@ -1,5 +1,5 @@
-from social.services import SocialFilterService, SocialService
-from user.models import Profile
+from social.services import SocialService
+from user.models import User
 from django.shortcuts import render
 from django.http.response import JsonResponse
 from social.models import Like,Comment,ReComment
@@ -26,9 +26,14 @@ class LikeView(View):
     if request.is_ajax():
       context = {}
       data = json.loads(request.body)
+      print('헤헤헤헤소셜스')
       article_pk = data.get('article_pk')
       like = Like.objects.filter(article__pk=article_pk).first()
 
+      # Like.objects.create(
+      #   article = Article.objects.filter(pk=article_pk).first()
+      # )
+        
       if request.user in like.users.all(): 
         Like.objects.filter(article__pk = article_pk).update(
           is_liked = False
@@ -63,6 +68,8 @@ class CommentView(LoginRequiredMixin,generic.View):
   def post(self, request,**kwargs):
     if request.is_ajax():
       data = json.loads(request.body)
+      print(request.body)
+      print(type(data.get('article_pk')))
       comment_dto = self._build_comment_dto(data)
       context = SocialService.create_comment(comment_dto)
       return JsonResponse(context)

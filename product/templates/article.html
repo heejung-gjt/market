@@ -26,15 +26,17 @@
     {% for article in article_list %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
       <div class="product-writer">
-        <span> <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.profile.nickname}}</strong></span>
+        <span> 
+          <img src="{{article.writer.image}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`">
+          <strong>{{article.writer.profile.nickname}}</strong></span>
     </div>
-      <div class="product-imgs">
-        {% for photo in article.photo.all %}
-        <img class="product-img" src="{{photo.image.url}}" alt="">
-        {% endfor %}
-      </div>
+   
+    <div class="product-imgs">
+      <img class="product-img" src="{{article.image}}" alt="">
+    </div>
+
       <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
-      <span class="product-title">{{article.name}} </span>
+      <span class="product-title">{{article.name}}</span>
       <strong class="product-price">{{article.price}} 원</strong>
       <div class="social">
         {#% for comment in article.comment.all %#} 

@@ -30,6 +30,8 @@ def get_time_passed(object):
 
 # product sale percentage function
 def calculate_price(origin_price, sale_price):
+  print('가격ㄱㄱㄱㄱ')
+  print(origin_price, sale_price)
   try:
     price = sale_price
     price_gap = int(origin_price) - int(price)

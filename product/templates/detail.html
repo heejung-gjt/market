@@ -8,20 +8,18 @@
 {% load humanize %}
 <section class="detail-section">
   <div class="detail-img">
-    {% for photo in article.photo.all %}
-    <img class="detail-user-img" src="{{photo.image.url}}" alt="">
-    {% endfor %}
-  </div>
+    <img class="detail-user-img" src="{{article.image}}" alt="">
+</div>
   <div class="detail-writer">
     <div class="writer">
       <div class="writer-infor">
-        {% if article.writer.profile.image.url %}
-        <img src="{{article.writer.profile.image.url}}" alt="" class="product-user-image"
+        {% if article.writer.image %}
+        <img src="{{article.writer.image}}" alt="" class="product-user-image"
           onerror="this.src=`{% static 'img/감자.png' %}`">
         {% else %}
         <i class="product-icon fas fa-user-circle"></i>
         {% endif %}
-        <span class="writer-nickname">{{article.writer.profile.nickname}} </span>
+        <span class="writer-nickname">{{article.writer.nickname}} </span>
 
         <span class="writer-region">{{article.created_at | naturaltime}}</span>
       </div>
@@ -170,6 +168,7 @@
     let param = {
       'article_pk': article_pk,
     }
+    
     fetch("{% url 'social:like' %}", {
       method: 'POST',
       headers: {

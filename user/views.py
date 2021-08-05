@@ -23,6 +23,7 @@ class RegisterView(View):
     def post(self, request):
         user_dto = self._build_user_dto(request)
         context = UserService.signup(user_dto)
+        print(context)
         if not context['error']['state']:
             auth.login(request, context['user'])
             return redirect('product:article')
@@ -91,7 +92,7 @@ class ProfileView(View):
 	
     def _build_user_infor(self,request):
         return UpdateUserDto(
-            image = request.FILES.getlist('image'),
+            image = request.FILES.get('image'),
             nickname = request.POST['nickname'],
             user_pk = request.user.pk 
         )

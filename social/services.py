@@ -2,7 +2,6 @@ from django.shortcuts import get_object_or_404
 from social.dto import CommentDto, ReCommentDto
 from social.models import Like, ReComment
 from social.models import Comment
-from user.models import Profile
 from utils import context_infor,get_time_passed
 from django.forms.models import model_to_dict
 from filter.services import ProductFilterService
@@ -23,7 +22,7 @@ class SocialService():
   def create_comment(dto:CommentDto):
     article = ProductFilterService.find_article_infor(dto.article_pk)
     owner = UserFilterService.find_user_infor(dto.owner_pk)
-    user = UserFilterService.find_user_infor(dto.writer_pk).username
+    user = UserFilterService.find_user_infor(dto.writer_pk).email
     writer = UserFilterService.find_user_infor(dto.writer_pk)
 
     comment = Comment.objects.filter(article__pk = dto.article_pk).create(
@@ -36,7 +35,7 @@ class SocialService():
     profile_nickname = UserFilterService.find_profile_infor(dto.writer_pk).nickname
     comment_user_img = UserFilterService.get_profile_infor(dto.writer_pk)
     comment_writer_pk = SocialFilterService.find_by_comment_infor(comment.pk).writer.pk
-    user_img = UserFilterService.find_profile_infor(dto.writer_pk).image.url
+    user_img = UserFilterService.find_profile_infor(dto.writer_pk).image
     
     # img dict로 변환하는 방법
     comment_user_img= comment_user_img.__dict__

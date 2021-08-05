@@ -1,6 +1,5 @@
-from django.contrib.auth.models import User
 from django.db import models
-from django.contrib.auth.models import User
+from user.models import User
 from behaviors import Nameable, TimeStampable, Deleteable
 from filter.models import CategoryDetail, Category
 # Create your models here.
@@ -13,6 +12,7 @@ class Article(Nameable, TimeStampable, Deleteable):
   origin_price = models.IntegerField(null=True)
   price = models.IntegerField(default=0)
   writer = models.ForeignKey(User, on_delete=models.SET_NULL,null=True, related_name='article')
+  image = models.TextField(null=True, blank=True)
   
 
 class Price(models.Model):
