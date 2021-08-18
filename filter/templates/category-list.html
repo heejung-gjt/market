@@ -30,14 +30,58 @@
   </section>
 
 </form>
-
+<div class="product-main-flex">
+<section class="product-filter">
+  <p class="product-filter-title">PRICE RANGE</p>
+  <form action="">
+    {% csrf_token %}
+    <p class="product-filter-start">Price from</p>
+    <select name="product-price-start" id="">
+      <option value="money">전체금액</option>
+      <option value="money">0원</option>
+      <option value="money">1000원</option>
+      <option value="money">5000원</option>
+      <option value="money">10000원</option>
+      <option value="money">20000원</option>
+      <option value="money">50000원</option>
+    </select>
+    <p class="product-filter-end">Price to</p>
+    <select name="product-price-end" id="">
+      <option value="money">전체금액</option>
+      <option value="money">10000원</option>
+      <option value="money">20000원</option>
+      <option value="money">50000원</option>
+      <option value="money">100000원</option>
+      <option value="money">100000원 이상</option>
+    </select>
+    <p class="product-category">상세상품</p>
+    <select class="category_detail_select" name="sub_menu_pk">
+      <option value="0">전체보기</option>
+      {% for sub_menu in category_sub_list.all %}
+      <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
+      {% endfor %}
+    </select>
+    <p class="product-category-sort">상품정렬</p>
+    <select class="category_sort_select" name="sub_menu_pk">
+      <option value="0">정렬없음</option>
+      <option value="0">낮은 가격순</option>
+      <option value="0">높은 가격순</option>
+      <option value="0">찜 많은 순</option>
+      <option value="0">댓글 많은 순</option>
+    </select>
+    <div class="product-filter-btn">
+    <button class="product-filter-reset">초기화</button>
+    <button class="product-filter-send" type="submit">검색</button>
+  </div>
+  </form>
+</section>
 {% if sub_state and not is_deleted %}
 <section class="product-section">
   <ul class="product-list">
     {% for article in articles.all %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
       <div class="product-writer">
-        <span> <img src="{{article.writer.profile.image_beta}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.profile.nickname}}</strong></span>
+        <span> <img src="{{article.writer.image_beta}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
     </div>
       <div class="product-imgs">
         <img class="product-img" src="{{article.image}}" alt="">
@@ -61,11 +105,12 @@
     {% if not article.is_deleted %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
       <div class="product-writer">
-        <span> <img src="{{article.writer.image}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.profile.nickname}}</strong></span>
+        <span> <img src="{{article.writer.image}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
     </div>
       <div class="product-imgs">
         <img class="product-img" src="{{article.image}}" alt="">
       </div>
+      <div class="product-main-page">
       <span class="product-title">{{article.name}}</span>
       <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
       <strong class="product-price">{{article.price}} 원</strong>
@@ -73,6 +118,7 @@
         <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
         <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
       </div>
+    </div>
     </li>
   </a>
   {% endif %}
@@ -80,6 +126,7 @@
   </ul>
 </section>
 {% endif %}
+</div>
 {% endblock product-main-content %}
 
 

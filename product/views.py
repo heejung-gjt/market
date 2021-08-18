@@ -12,6 +12,8 @@ from .dto import ArticleDto, EditDto
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
+from django.db.models import Q
+from django.db.models import Count
 import json
 
 
@@ -113,6 +115,35 @@ class SelectView(View):
     context = {'category_list':categorys,'category':category,'state':True,'category_detail':category_detail}
     return render(request, 'upload_product.html',context)
 
+  def post(self, request, *args, **kwargs):
+    category = request.POST.get('sub_menu_pk', None)
+    price_from = request.POST.get('product-price-start',0)
+    price_to = request.POST.get('product-price-end', 10000000)
+    product_sort = request.POST.get('product-sort', None)
+    price_from = int(price_from)
+    price_to = int(price_to)
+    articles = None
+    print(product_sort)
+    q = Q()
+    
+    if category:
+      q &= Q(category = category)
+    q &= Q(price__range =(price_from, price_to))
+
+    if product_sort:
+      if product_sort == '1':
+        articles = Article.objects.filter(q).order_by('price')
+      elif product_sort == '2':
+        articles = Article.objects.filter(q).order_by('-price')
+      elif product_sort == '3':
+        articles = Article.objects.filter(is_deleted=False).annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
+      elif product_sort == '4':
+        articles = Article.objects.filter(q,is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
+    else:
+      articles = Article.objects.filter(q).all()
+    print('articles',articles)
+    context = {'article_list':articles}
+    return render(request, 'article.html', context)
 
 # product edit
 class EditView(View):

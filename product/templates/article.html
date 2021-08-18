@@ -6,52 +6,100 @@
 {% endblock head %}
 {% block content %}
 
-<h1 class="product-main">전체 제품</h1>
+<h1 class="product-main">ALL</h1>
 <form class="select-filter-form" action="{% url 'filter:category-filter-list' %}" method="GET">
-<section class="product-social">
+  <section class="product-social">
+    <select name="social-clicked_pk"style="display: none;">
+      <option value="" selected>필터링보기</option>
+      <option value="1">최신순</option>
+      <option value="2">댓글 많은 순</option>
+      <option value="3">찜 많은 순</option>
+      <option value="4">내가 쓴 글</option>
+    </select>
+  </section>
+</form>
+<div class="product-main-flex">
+<section class="product-filter">
+  <p class="product-filter-title">PRICE RANGE</p>
+  <form action="{% url 'product:select' %}" method="POST">
+    {% csrf_token %}
+    <p class="product-category">category</p>
+    <select class="category_detail_select" name="sub_menu_pk">
+      <option value="">전체보기</option>
+      {% for sub_menu in category_list.all %}
+      <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
+      {% endfor %}
+    </select>
+    <p class="product-filter-start">Price from</p>
+    <select name="product-price-start" id="">
+      <option value="0">전체금액</option>
+      <option value="0">0원</option>
+      <option value="1000">1000원</option>
+      <option value="5000">5000원</option>
+      <option value="10000">10000원</option>
+      <option value="20000">20000원</option>
+      <option value="50000">50000원</option>
+    </select>
+    <p class="product-filter-end">Price to</p>
+    <select name="product-price-end" id="">
+      <option value="10000000">전체금액</option>
+      <option value="10000">10000원</option>
+      <option value="20000">20000원</option>
+      <option value="50000">50000원</option>
+      <option value="100000">100000원</option>
+      <option value="100001">100000원 이상</option>
+    </select>
+    <p class="product-category-sort">상품정렬</p>
+    <select class="category_sort_select" name="product-sort">
+      <option value="">정렬없음</option>
+      <option value="1">낮은 가격순</option>
+      <option value="2">높은 가격순</option>
+      <option value="3">찜 많은 순</option>
+      <option value="4">댓글 많은 순</option>
+    </select>
+    <div class="product-filter-btn">
+    <button class="product-filter-reset">초기화</button>
+    <button class="product-filter-send" type="submit">검색</button>
+  </div>
+  </form>
   <div class="product-add">
     <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
   </div>
-  <select name="social-clicked_pk">
-    <option value=""selected>필터링보기</option>
-    <option value="1">최신순</option>
-    <option value="2">댓글 많은 순</option>
-    <option value="3">찜 많은 순</option>
-    <option value="4">내가 쓴 글</option>
-  </select>
 </section>
-</form>
 <section class="product-section">
   <ul class="product-list">
     {% for article in article_list %}
-    <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
-      <div class="product-writer">
-        <span> 
-          <img src="{{article.writer.image}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`">
-          <strong>{{article.writer.profile.nickname}}</strong></span>
-    </div>
-   
-    <div class="product-imgs">
-      <img class="product-img" src="{{article.image}}" alt="">
-    </div>
+    <a class="product-link" href="{% url 'product:detail' article.pk %}">
+      <li class="product">
+        <div class="product-writer">
+          <span>
+            <img src="{{article.writer.image}}" alt="" class="product-user-image"
+              onerror="this.src=`{% static 'img/감자.png' %}`">
+            <strong>{{article.writer.nickname}}</strong></span>
+        </div>
 
-      <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
-      <span class="product-title">{{article.name}}</span>
-      <strong class="product-price">{{article.price}} 원</strong>
-      <div class="social">
-        {#% for comment in article.comment.all %#} 
-        
-        <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
-        <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
-        {#{comment.re_comment.all|length|add:article.comment.all|length}#}
+        <div class="product-imgs">
+          <img class="product-img" src="{{article.image}}" alt="">
+        </div>
+        <div class="product-main-page">
+          <span class="product-title">{{article.name}}</span>
+          <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
+        <strong class="product-price">{{article.price}} 원</strong>
+        <div class="social">
+          {#% for comment in article.comment.all %#}
+
+          <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
+          <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+          {#{comment.re_comment.all|length|add:article.comment.all|length}#}
+        </div>
       </div>
         {#% endfor %#}
-    </li>
-  </a>
-  {% endfor %}
+      </li>
+    </a>
+    {% endfor %}
   </ul>
 </section>
-
+</div>
 {% endblock content %}
 
 {% block script %}
