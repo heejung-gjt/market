@@ -9,123 +9,114 @@
 {% include 'product-nav.html' %}
 
 {% block product-main-title %}
-<h1 class="product-main">{{category_title.name}} 제품</h1>
 {% endblock product-main-title %}
 
 {% block product-main-content %}
 
-<form class="select-sub-form" action="{% url 'filter:category-sub-list' category_title.pk %}" method="GET">
-  <section class="product-social">
-    <div class="product-add">
-      <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
-    </div>
-
-    <select class="category_detail_select" name="sub_menu_pk">
-      <option value="">필터링보기</option>
-      <option value="0">전체보기</option>
-      {% for sub_menu in category_sub_list.all %}
-      <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
-      {% endfor %}
-    </select>
-  </section>
-
-</form>
 <div class="product-main-flex">
-<section class="product-filter">
-  <p class="product-filter-title">PRICE RANGE</p>
-  <form action="">
-    {% csrf_token %}
-    <p class="product-filter-start">Price from</p>
-    <select name="product-price-start" id="">
-      <option value="money">전체금액</option>
-      <option value="money">0원</option>
-      <option value="money">1000원</option>
-      <option value="money">5000원</option>
-      <option value="money">10000원</option>
-      <option value="money">20000원</option>
-      <option value="money">50000원</option>
-    </select>
-    <p class="product-filter-end">Price to</p>
-    <select name="product-price-end" id="">
-      <option value="money">전체금액</option>
-      <option value="money">10000원</option>
-      <option value="money">20000원</option>
-      <option value="money">50000원</option>
-      <option value="money">100000원</option>
-      <option value="money">100000원 이상</option>
-    </select>
-    <p class="product-category">상세상품</p>
-    <select class="category_detail_select" name="sub_menu_pk">
-      <option value="0">전체보기</option>
-      {% for sub_menu in category_sub_list.all %}
-      <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
+  <section class="product-filter">
+    <p class="product-filter-title">PRICE RANGE</p>
+    <form action="">
+      {% csrf_token %}
+      <p class="product-filter-start">Price from</p>
+      <select name="product-price-start" class="product-price-start" id="">
+        <option value="0">전체금액</option>
+        <option value="0">0원</option>
+        <option value="1000">1000원</option>
+        <option value="5000">5000원</option>
+        <option value="10000">10000원</option>
+        <option value="20000">20000원</option>
+        <option value="50000">50000원</option>
+      </select>
+      <p class="product-filter-end">Price to</p>
+      <select name="product-price-end" class="product-price-end" id="">
+        <option value="10000000">전체금액</option>
+        <option value="10000">10000원</option>
+        <option value="20000">20000원</option>
+        <option value="50000">50000원</option>
+        <option value="100000">100000원</option>
+        <option value="10000000">100000원 이상</option>
+      </select>
+      <p class="product-category">상세상품</p>
+      <select class="category-detail-select" name="sub_menu_pk">
+        <option value="">전체보기</option>
+        {% for sub_menu in category_sub_list.all %}
+        <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
+        {% endfor %}
+      </select>
+      <p class="product-category-sort">상품정렬</p>
+      <select class="category-sort-select" name="sub_menu_pk">
+        <option value="">정렬선택</option>
+        <option value="1">낮은 가격순</option>
+        <option value="2">높은 가격순</option>
+        <option value="3">찜 많은 순</option>
+        <option value="4">댓글 많은 순</option>
+      </select>
+      <div class="product-filter-btn">
+        <button class="product-filter-reset" onclick="productFilterReset(event)">초기화</button>
+        <button class="product-filter-send" type="submit" onclick="filter_product('{{category_title.pk}}')">검색</button>
+      </div>
+    </form>
+  </section>
+  {% if sub_state and not is_deleted %}
+  <section class="product-section">
+    <ul class="product-list">
+      <!-- <h1 class="product-main">{{category_title.name}} 제품</h1> -->
+      {% for article in articles.all %}
+      <a class="product-link" href="{% url 'product:detail' article.pk %}">
+        <li class="product">
+          <div class="product-writer">
+            <span> <img src="{{article.writer.image_beta}}" alt="" class="product-user-image"
+                onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
+          </div>
+          <div class="product-imgs">
+            <img class="product-img" src="{{article.image}}" alt="">
+          </div>
+          <span class="product-title">{{article.name}}</span>
+          <span class="product-discount">{{article.article_price.discount_rate}}% <i
+              class="fas fa-sort-down"></i></span>
+          <strong class="product-price">{{article.price}} 원</strong>
+          <div class="social">
+            <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
+            <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+          </div>
+        </li>
+      </a>
       {% endfor %}
-    </select>
-    <p class="product-category-sort">상품정렬</p>
-    <select class="category_sort_select" name="sub_menu_pk">
-      <option value="0">정렬없음</option>
-      <option value="0">낮은 가격순</option>
-      <option value="0">높은 가격순</option>
-      <option value="0">찜 많은 순</option>
-      <option value="0">댓글 많은 순</option>
-    </select>
-    <div class="product-filter-btn">
-    <button class="product-filter-reset">초기화</button>
-    <button class="product-filter-send" type="submit">검색</button>
-  </div>
-  </form>
-</section>
-{% if sub_state and not is_deleted %}
-<section class="product-section">
-  <ul class="product-list">
-    {% for article in articles.all %}
-    <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
-      <div class="product-writer">
-        <span> <img src="{{article.writer.image_beta}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
-    </div>
-      <div class="product-imgs">
-        <img class="product-img" src="{{article.image}}" alt="">
-      </div>
-      <span class="product-title">{{article.name}}</span>
-      <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
-      <strong class="product-price">{{article.price}} 원</strong>
-      <div class="social">
-        <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
-        <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
-      </div>
-    </li>
-  </a>
-    {% endfor %}
-  </ul>
-</section>
-{% else %}
-<section class="product-section">
-  <ul class="product-list">
-    {% for article in category_articles.all %}
-    {% if not article.is_deleted %}
-    <a class="product-link" href="{% url 'product:detail' article.pk %}"><li class="product">
-      <div class="product-writer">
-        <span> <img src="{{article.writer.image}}" alt="" class="product-user-image" onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
-    </div>
-      <div class="product-imgs">
-        <img class="product-img" src="{{article.image}}" alt="">
-      </div>
-      <div class="product-main-page">
-      <span class="product-title">{{article.name}}</span>
-      <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
-      <strong class="product-price">{{article.price}} 원</strong>
-      <div class="social">
-        <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
-        <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
-      </div>
-    </div>
-    </li>
-  </a>
+    </ul>
+  </section>
+  {% else %}
+  <section class="product-section">
+    <ul class="product-list">
+      <h1 class="product-main">{{category_title.name}} 제품</h1>
+      {% for article in category_articles.all %}
+      {% if not article.is_deleted %}
+      <a class="product-link" href="{% url 'product:detail' article.pk %}">
+        <li class="product">
+          <div class="product-writer">
+            <span> <img src="{{article.writer.image}}" alt="" class="product-user-image"
+                onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
+          </div>
+          <div class="product-imgs">
+            <img class="product-img" src="{{article.image}}" alt="">
+          </div>
+          <div class="product-main-page">
+            <span class="product-title">{{article.name}}</span>
+            <span class="product-discount">{{article.article_price.discount_rate}}% <i
+                class="fas fa-sort-down"></i></span>
+            <strong class="product-price">{{article.price}} 원</strong>
+            <div class="social">
+              <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
+              <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+            </div>
+          </div>
+        </li>
+      </a>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </section>
   {% endif %}
-    {% endfor %}
-  </ul>
-</section>
-{% endif %}
 </div>
 {% endblock product-main-content %}
 
@@ -134,16 +125,113 @@
 
 
 {% block script %}
-<script src="/static/filter/script.js" type="text/javascript"></script>
 
 <script>
 
   document.querySelector('.menu-all').classList.remove('checked');
   document.querySelector('.menu-category').classList.add('checked');
 
-document.querySelector('.select-sub-form').onchange = (e) => {
-$selectForm = document.querySelector('.select-sub-form');
-$selectForm.submit();
+
+
+  function filter_product(category_pk) {
+    event.preventDefault();
+    categorySelect = document.querySelector('.category-detail-select');
+    priceStartSelect = document.querySelector('.product-price-start');
+    priceEndSelect = document.querySelector('.product-price-end');
+    productSortSelect = document.querySelector('.category-sort-select');
+    categoryOption = categorySelect.options[categorySelect.selectedIndex].value;
+    priceStart = priceStartSelect.options[priceStartSelect.selectedIndex].value;
+    priceEnd = priceEndSelect.options[priceEndSelect.selectedIndex].value;
+    productSort = productSortSelect.options[productSortSelect.selectedIndex].value;
+
+    let param = {
+      'sub-menu-pk': categoryOption,
+      'product-price-start': priceStart,
+      'product-price-end': priceEnd,
+      'product-sort': productSort,
+      'category_pk': category_pk
+
+    }
+    let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    console.log(category_pk)
+    // ajax통신
+    fetch("{% url 'product:select_detail' %}", {
+      method: 'POST',
+      headers: {
+        "X-CSRFToken": csrfValue,
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify(param),
+    }).then(function (response) {
+      return response.json()
+    }).then(function (data) {
+      console.log(data)
+      document.querySelector('.product-list').innerHTML = '';
+      document.querySelector('.product-list').innerHTML += `
+        <h1 class="product-main">${data['category_name']} 제품</h1>`
+      for (let i = 0; i < data['articles'].length; i++) {
+        // discount 가격 계산
+        origin_price = data['articles'][i]['origin_price'];
+        sale_price = data['articles'][i]['price'];
+        price_gap = Number(origin_price) - Number(sale_price)
+        real_sale = Number(price_gap) / Number(origin_price) * 100
+        discount_rate = real_sale.toFixed(1)
+        if (discount_rate < 0) {
+          discount_rate = -1
+        }
+        document.querySelector('.product-list').innerHTML += `
+      <a class="product-link" href="http://127.0.0.1:8000/product/detail/${data['articles'][i]['id']}">
+      <li class="product">
+        <div class="product-writer">
+          <span>
+            <img src="${data['writer_image'][i][0]}" alt="" class="product-user-image"
+              onerror="this.src='static/'img/감자.png'/">
+            <strong>${data['writer_image'][i][1]}</strong></span>
+        </div>
+
+        <div class="product-imgs">
+          <img class="product-img" src="${data['articles'][i]['image']}" alt="">
+        </div>
+        <div class="product-main-page">
+          <span class="product-title">${data['articles'][i]['name']}</span>
+          <span class="product-discount">${discount_rate}%<i class="fas fa-sort-down"></i></span>
+        <strong class="product-price">${data['articles'][i]['price']} 원</strong>
+        <div class="social">
+
+          <span class="social-comment">댓글 +${data['comment_cnt'][i]} </span>
+          <span class="social-like"> 찜 +${data['like_cnt'][i]}</span>
+        </div>
+      </div>
+      </li>
+    </a>
+    `
+  }
+//  document.querySelector('.product-main').innerText='';
+ console.log(document.querySelector('.product-main'),data['category_name'] )
+  // document.querySelector('.product-main').innerText = `${data['category_name']}`
+  if (document.querySelector('.product-list').innerHTML == false) {
+    console.log('없어')
+    document.querySelector('.product-list').innerHTML = `
+  <p class="no-detail-product">찾으시는 제품이 없으세요 !</p>
+  `
+  }
+
+    }).catch((error) => {
+      console.log('error', error);
+    })
+  }
+
+// 정렬 초기화
+function productFilterReset(e){
+  event.preventDefault();
+    categorySelect = document.querySelector('.category-detail-select');
+    priceStartSelect = document.querySelector('.product-price-start');
+    priceEndSelect = document.querySelector('.product-price-end');
+    productSortSelect = document.querySelector('.category-sort-select');
+    categorySelect.options[0].selected = true
+    priceStartSelect.options[0].selected = true
+    priceEndSelect.options[0].selected = true
+    productSortSelect.options[0].selected = true
 }
 
 </script>

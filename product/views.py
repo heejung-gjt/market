@@ -1,3 +1,4 @@
+from django.http.response import JsonResponse
 from filter.models import Category
 from social.models import Like,Comment
 from product.models import Article
@@ -116,6 +117,7 @@ class SelectView(View):
     return render(request, 'upload_product.html',context)
 
   def post(self, request, *args, **kwargs):
+    categorys = ProductFilterService.find_by_all_category()
     category = request.POST.get('sub_menu_pk', None)
     price_from = request.POST.get('product-price-start',0)
     price_to = request.POST.get('product-price-end', 10000000)
@@ -136,14 +138,65 @@ class SelectView(View):
       elif product_sort == '2':
         articles = Article.objects.filter(q).order_by('-price')
       elif product_sort == '3':
-        articles = Article.objects.filter(is_deleted=False).annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
+        articles = Article.objects.filter(q, is_deleted=False).annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
       elif product_sort == '4':
-        articles = Article.objects.filter(q,is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
+        articles = Article.objects.filter(q, is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
     else:
       articles = Article.objects.filter(q).all()
     print('articles',articles)
-    context = {'article_list':articles}
+    context = {'article_list':articles,'category_list':categorys}
     return render(request, 'article.html', context)
+
+
+class SelectDetailView(View):
+    def get(self, request, *args, **kwargs):
+        pass
+    
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = json.loads(request.body)
+            categorys = ProductFilterService.find_by_all_category()
+            price_from = data.get('product-price-start',0)
+            price_to = data.get('product-price-end', 10000000)
+            product_sort = data.get('product-sort', None)
+            category = data.get('category_pk', None)
+            category_detail = data.get('sub-menu-pk', None)
+            price_from = int(price_from)
+            price_to = int(price_to)
+            articles = None
+            q = Q()
+
+            q &= Q(category = category)
+            if category_detail:
+                q &= Q(category_detail = category_detail)
+            q &= Q(price__range =(price_from, price_to))
+
+            if product_sort:
+                if product_sort == '1':
+                    articles = Article.objects.filter(q).order_by('price')
+                elif product_sort == '2':
+                    articles = Article.objects.filter(q).order_by('-price')
+                elif product_sort == '3':
+                    articles = Article.objects.filter(q, is_deleted=False).annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
+                elif product_sort == '4':
+                    articles = Article.objects.filter(q, is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
+            else:
+                articles = Article.objects.filter(q).all()
+            
+            comment_cnt = []
+            like_cnt = []
+            writer_profile = []
+            category_name = Category.objects.filter(pk = category).first().name
+            for article in articles:
+                comment_cnt.append(article.comment.all().count())
+                like_cnt.append(article.like.users.all().count())
+                writer_profile.append([article.writer.image, article.writer.nickname])
+                print(writer_profile)
+
+            articles = list(articles.values())
+            context = {'articles':articles, 'comment_cnt':comment_cnt,'like_cnt':like_cnt,'writer_image':writer_profile,'category_name':category_name}
+            return JsonResponse(context)
+
 
 # product edit
 class EditView(View):
