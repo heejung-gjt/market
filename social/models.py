@@ -1,5 +1,5 @@
 from django.db import models
-from behaviors import Nameable, TimeStampable
+from behaviors import TimeStampable
 from user.models import User
 from product.models import Article
 

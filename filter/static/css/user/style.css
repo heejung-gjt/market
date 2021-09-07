@@ -35,6 +35,13 @@
   box-sizing: border-box;
   border-radius: 5px;
   border: none;
+  cursor: pointer;
+}
+.login-kakao,
+.register-kakao{
+  background-color:#FEF01B ;
+  font-size: 1.2rem;
+  font-weight:bold;
 }
 .login-id,.register-nickname,.login-pwd,
 .register-id,.register-pwd,.register-pwd-chk{
@@ -48,7 +55,9 @@
   font-size: 1.3em;
 }
 .login-submit:hover,
-.register-submit:hover{
+.register-submit:hover,
+.login-kakao:hover,
+.register-kakao:hover{
   background-color: rgba(0, 0, 0, 0.671);
   color: #eee;
   transition: all 200ms;

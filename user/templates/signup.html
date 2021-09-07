@@ -22,7 +22,7 @@
     <input class="register-pwd-chk" type="password" name="password_chk" placeholder="PASSWORD CHECK">
     <input class="register-submit" type="submit" value="회원가입하기"></input>
   </form>
-  <button class="register-kakao" type="submit">카카오톡으로 로그인하기</button>
+  <a class="login-kakao" href="{% url 'user:kakao_login' %}">카카오톡으로 로그인하기</a>
   <small class="register-infor"><a href="{% url 'user:signin' %}">로그인</a></small>
   
 </section>
