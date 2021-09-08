@@ -70,10 +70,12 @@
         <li class="product">
           <div class="product-writer">
             <span> <img src="{{article.writer.image_beta}}" alt="" class="product-user-image"
-                onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
+                onerror="this.src=`{% static 'img/potato.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
           </div>
           <div class="product-imgs">
-            <img class="product-img" src="{{article.image}}" alt="">
+            {% for photo in article.photo.all %}
+            <img class="product-img" src="{{photo.image.url}}" alt="">
+          {% endfor %}
           </div>
           <span class="product-title">{{article.name}}</span>
           <span class="product-discount">{{article.article_price.discount_rate}}% <i
@@ -98,10 +100,12 @@
         <li class="product">
           <div class="product-writer">
             <span> <img src="{{article.writer.image}}" alt="" class="product-user-image"
-                onerror="this.src=`{% static 'img/감자.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
+                onerror="this.src=`{% static 'img/potato.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
           </div>
           <div class="product-imgs">
-            <img class="product-img" src="{{article.image}}" alt="">
+            {% for photo in article.photo.all %}
+            <img class="product-img" src="{{photo.image.url}}" alt="">
+          {% endfor %}
           </div>
           <div class="product-main-page">
             <span class="product-title">{{article.name}}</span>
@@ -109,9 +113,12 @@
                 class="fas fa-sort-down"></i></span>
             <strong class="product-price">{{article.price}} 원</strong>
             <div class="social">
+              {#% for comment in article.comment.all %#}
               <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
               <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+              {#{comment.re_comment.all|length|add:article.comment.all|length}#}
             </div>
+            <span class="product-address">{{article.address}}</span>
           </div>
         </li>
       </a>
@@ -164,7 +171,7 @@
     }).then(function (response) {
       return response.json()
     }).then(function (data) {
-      console.log(data)
+      console.log(data['image'][0])
       document.querySelector('.product-list').innerHTML = '';
       document.querySelector('.product-list').innerHTML += `
         <h1 class="product-main">${data['category_name']} 제품</h1>`
@@ -184,12 +191,12 @@
         <div class="product-writer">
           <span>
             <img src="${data['writer_image'][i][0]}" alt="" class="product-user-image"
-              onerror="this.src='static/'img/감자.png'/">
+              onerror="this.src='static/'img/potato.png'/">
             <strong>${data['writer_image'][i][1]}</strong></span>
         </div>
 
         <div class="product-imgs">
-          <img class="product-img" src="${data['articles'][i]['image']}" alt="">
+          <img class="product-img" src="/media/${data['image'][i]}" alt="">
         </div>
         <div class="product-main-page">
           <span class="product-title">${data['articles'][i]['name']}</span>

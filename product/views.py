@@ -1,7 +1,7 @@
 from django.http.response import JsonResponse
 from filter.models import Category
 from social.models import Like,Comment
-from product.models import Article
+from product.models import Article, Photo
 from django.shortcuts import redirect, render
 from django.views.generic import ListView,DetailView
 from django.views.generic import View
@@ -70,7 +70,7 @@ class ArticleCreateView(LoginRequiredMixin,generic.View):
   
   def get(self, request, *args, **kwargs):
     categorys = ProductFilterService.find_by_all_category()
-    context = {'category_list':categorys}
+    context = {'category_list':categorys,'state':False}
 
     return render(request, 'upload_product.html',context)
 
@@ -113,6 +113,7 @@ class SelectView(View):
     category_detail_pk = request.GET.get('category_pk')
     category_detail = ProductFilterService.find_by_category_detail(category_detail_pk)
     category = ProductFilterService.find_by_category_title(category_detail_pk)
+    print(category)
     context = {'category_list':categorys,'category':category,'state':True,'category_detail':category_detail}
     return render(request, 'upload_product.html',context)
 
@@ -155,7 +156,6 @@ class SelectDetailView(View):
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
             data = json.loads(request.body)
-            categorys = ProductFilterService.find_by_all_category()
             price_from = data.get('product-price-start',0)
             price_to = data.get('product-price-end', 10000000)
             product_sort = data.get('product-sort', None)
@@ -185,6 +185,7 @@ class SelectDetailView(View):
             
             comment_cnt = []
             like_cnt = []
+            main_img = []
             writer_profile = []
             category_name = Category.objects.filter(pk = category).first().name
             for article in articles:
@@ -192,9 +193,13 @@ class SelectDetailView(View):
                 like_cnt.append(article.like.users.all().count())
                 writer_profile.append([article.writer.image, article.writer.nickname])
                 print(writer_profile)
-
+            
+            for article in articles:
+              photo = Photo.objects.filter(article__pk = article.pk).first()
+              print('dddddddddddddddd',photo.__dict__)
+              main_img.append(photo.image.__dict__['name'])
             articles = list(articles.values())
-            context = {'articles':articles, 'comment_cnt':comment_cnt,'like_cnt':like_cnt,'writer_image':writer_profile,'category_name':category_name}
+            context = {'image':main_img, 'articles':articles, 'comment_cnt':comment_cnt,'like_cnt':like_cnt,'writer_image':writer_profile,'category_name':category_name}
             return JsonResponse(context)
 
 

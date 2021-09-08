@@ -1,16 +1,23 @@
 
 /* login & logout*/
-.login-section,.register-section{
+.login-section{
   margin-top:50px;
   text-align: center;
+}
+.register-section{
+  margin-top:150px;
+  text-align: center;
+}
+.register-section .register-logo > span{
+  margin-bottom: 100px;
 }
 .login-img{
   width: 300px;
   height: 300px;
 }
 .register-img{
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
 }
 .login-section span,.register-section span{
   display: block;
@@ -28,8 +35,49 @@
   justify-content: center;
 }
 .login-id,.login-pwd,.login-submit,.login-kakao,
-.register-id,.register-nickname,.register-pwd,.register-pwd-chk,.register-submit,.register-kakao{
+.register-submit,.register-kakao{
   width: 300px;
+  margin-bottom:15px;
+  padding:15px 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+.register-kakao{
+  width: 500px;
+}
+.register-id-label,
+.register-pwd-label,
+.register-pwd-chk-label,
+.register-nickname-label{
+  display: block;
+  align-self: center;
+  text-align: left;
+  width: 500px;
+  margin-bottom: 5px;
+  padding-left: 3px;
+  font-size: 1.0rem;
+}
+.register-id,.register-nickname,.register-pwd,.register-pwd-chk{
+  width: 500px;
+  margin-bottom:15px;
+  padding:15px 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+.register-address-p{
+  display: block;
+  font-size: 1.4rem;
+  width: 500px;
+  margin: 20px 0px 40px 0px;
+  align-self: center;
+  text-align: left;
+}
+.address, .address-detail{
+  width: 500px;
   margin-bottom:15px;
   padding:15px 10px;
   box-sizing: border-box;
@@ -44,8 +92,8 @@
   font-weight:bold;
 }
 .login-id,.register-nickname,.login-pwd,
-.register-id,.register-pwd,.register-pwd-chk{
-  box-shadow: 0px 0px 5px 0px rgb(150, 147, 147);
+.register-id,.register-pwd,.register-pwd-chk, .address, .address-detail{
+  box-shadow: 0px 0px 4px 0px rgb(199, 199, 199);
 }
 .login-submit,.register-submit{
   cursor: pointer;
@@ -53,6 +101,10 @@
   color: white;
   font-weight: bold;
   font-size: 1.3em;
+}
+.register-submit{
+  margin-top: 60px;
+  width: 500px;
 }
 .login-submit:hover,
 .register-submit:hover,
@@ -331,7 +383,7 @@ option{
   font-size: 1.5em;
   font-weight: bold;
   padding: 10px 0px 0px 0px;
-  margin: 5px auto;
+  margin: 10px 0px 30px 0px;
   white-space: nowrap; 
   overflow: hidden; 
   /* position: absolute; */
@@ -362,15 +414,25 @@ option{
   display: block;
   padding: 0px 10px;
   position: absolute;
-  bottom:9px;
+  bottom:10px;
+}
+.product-address{
+  font-size: 1.0em;
+  text-align: left;
+  display: block;
+  padding: 0px 10px;
+  position: absolute;
+  bottom:-10px;
 }
 
 .social{
   font-size: 0.7em;
-  padding: 10px 10px;
+  padding: 0px 10px;
   display: flex;
   justify-content: flex-end;
   margin-top: 25px;
+  bottom: -10px;
+  position: relative;
 }
 
 .social-comment,

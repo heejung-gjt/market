@@ -7,6 +7,8 @@ class SignupDto():
   nickname:str
   password:str
   password_chk:str
+  address:str
+  address_detail:str
 
 
 @dataclass 

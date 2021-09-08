@@ -71,7 +71,7 @@ function submitComment(e) {
       document.querySelector('.comment-ul').innerHTML += `
         <li class="comment-li comment-li${data_id}">
           <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
-          src="{{article.writer.profile.image.url}}" alt="" onerror="this.src='{% static 'img/감자.png' %}'">
+          src="{{article.writer.profile.image.url}}" alt="" onerror="this.src='{% static 'img/potato.png' %}'">
           <strong class="owner">판매자</strong>
           <span>${data.comment_created}</span>
           </span>
@@ -94,7 +94,7 @@ function submitComment(e) {
       document.querySelector('.comment-ul').innerHTML += `
         <li class="comment-li comment-li${data_id}">
           <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img" src="${data.user_img}" 
-          onerror="this.src='{% static 'img/감자.png' %}'">${data.profile_nickname}
+          onerror="this.src='{% static 'img/potato.png' %}'">${data.profile_nickname}
           <span>${data.comment_created}</span></span>
           <span class="comment-content ">${data.comment_obj.content}</span>
           <form class="delete-comment-form" action="" method="POST">
@@ -106,7 +106,7 @@ function submitComment(e) {
       document.querySelector('.comment-ul').innerHTML += `
         <li class="comment-li comment-li${data_id}">
           <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"src="${data.user_img}"
-            onerror="this.src='{% static 'img/감자.png' %}'">${data.profile_nickname }
+            onerror="this.src='{% static 'img/potato.png' %}'">${data.profile_nickname }
             <span>${data.comment_created}</span>
           </span>
           <span class="comment-content comment-content${data_id}">${data.comment_obj.content}</span>
@@ -186,14 +186,14 @@ function recommentForm(comment_pk) {
       if ('{{article.writer.pk}}' == data.recomment_obj[key]['writer_pk']) {
         recommentLi += `<li class="recomment-li recomment-li${key}">
         <span class="comment-profile-span">
-        <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']}" src="${data.recomment_obj[key]['user_img']}"  onerror="this.src='{% static 'img/감자.png' %}'"><strong
+        <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']}" src="${data.recomment_obj[key]['user_img']}"  onerror="this.src='{% static 'img/potato.png' %}'"><strong
               class="owner">판매자</strong> <span>${data.recomment_obj[key]['created_at']}</span></span><br>
               `
       }
       else {
         recommentLi += `<li class="recomment-li recomment-li${key}">
         <span class="comment-profile-span">
-        <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']} "  src="${data.recomment_obj[key]['user_img']}" onerror="this.src='{% static 'img/감자.png' %}'">
+        <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']} "  src="${data.recomment_obj[key]['user_img']}" onerror="this.src='{% static 'img/potato.png' %}'">
         ${data.recomment_obj[key]['profile_nickname']} <span>${data.recomment_obj[key]['created_at']}</span></span>
               <br>
               `

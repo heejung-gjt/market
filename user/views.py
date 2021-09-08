@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.views.generic import View
-from .models import User
+from .models import User, Address
 from django.contrib import auth
 from filter.services import ProductFilterService
 from .services import UserService
@@ -38,7 +38,9 @@ class RegisterView(View):
             userid = request.POST['userid'],
             nickname = request.POST['nickname'],
             password = request.POST['password'],
-            password_chk = request.POST['password_chk']
+            password_chk = request.POST['password_chk'],
+            address = request.POST['address'],
+            address_detail = request.POST['address-detail']
         )
 
 
@@ -106,10 +108,35 @@ def kakao_login_callback(request):
         user.is_active = True
         user.save()
         auth.login(request, user)
+        if user.is_address == False:
+            return redirect('user:kakao-address')
         return redirect("/")
     
     auth.login(request, user)
+    if user.is_address == False:
+        return redirect('user:kakao-address')
     return redirect("/")
+
+
+class SignupAddressView(View):
+    def get(self, request, **kwargs):
+        print('여기에 도착은 합니다')
+        return render(request, 'kakao-address.html')
+        
+    def post(self, request, **kwargs):
+        print('카카오톡으로 회원가입 한 사람들의 주소 데이터가 여기로 옵니다')
+        address = request.POST['address']
+        address_detail = request.POST['address-detail']
+        user_pk = request.user.pk
+        user = User.objects.filter(pk = request.user.pk).update(
+            is_address = True
+        )
+        Address.objects.create(
+            user = User.objects.filter(pk = user_pk).first(),
+            address = address,
+            address_detail = address_detail
+        )
+        return redirect('/')
 
 
 # logout

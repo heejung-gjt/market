@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.contrib import auth
-from user.models import User
+from user.models import User, Address
 from .dto import SignupDto, SigninDto, UpdateUserDto
 from datetime import datetime
 from market.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME,AWS_S3_REGION_NAME
@@ -47,7 +47,12 @@ class UserService():
   def signup(dto:SignupDto):
     result = signup_error_chk(userid= dto.userid,nickname=dto.nickname, password=dto.password, password_chk=dto.password_chk)
     if not result['error']['state']:
-      user = User.objects.create_user(email=dto.userid, nickname=dto.nickname, password=dto.password,image = "감자.png")
+      user = User.objects.create_user(email=dto.userid, nickname=dto.nickname, password=dto.password,image = "potato.png", is_address=True)
+      Address.objects.create(
+        user = user,
+        address = dto.address,
+        address_detail = dto.address_detail,
+      )
       result = context(False,'completed',user)
     return result
 

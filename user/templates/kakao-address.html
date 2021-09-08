@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
+{% block content %}
+<section class="register-section">
+  <div class="register-logo">
+    <span></span>
+  </div>
+  {% if error.state %}
+  <strong class="register-errmsg">{{error.msg}}</strong>
+  {% endif %}
+  <form class="register-form" action="{% url 'user:kakao-address' %}" method="POST">
+    {% csrf_token %}
+    <p class="register-address-p">주소를 입력해주세요<strong>*</strong><small>(입력하시는 주소로 제품이 등록돼요 !)</small></p>
+    <input type="text" name="address" placeholder="주소를 입력해주세요" class="address" readonly>
+    <input type="text" name="address-detail" placeholder="상세주소를 입력해주세요" class="address-detail">
+    <input class="register-submit" type="submit" value="회원가입하기"></input>
+  </form>
+
+</section>
+
+{% block footer %}
+<footer></footer>
+{% endblock footer %}
+
+{% endblock content %}
+
+{% block script %}
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+  window.onload = function () {
+    document.querySelector(".address").addEventListener("click", function () { 
+      new daum.Postcode({
+        oncomplete: function (data) { 
+          document.querySelector(".address").value = data.address; 
+          document.querySelector("input[name=address-detail]").focus();
+        }
+      }).open();
+    });
+  }
+</script>
+{% endblock script %}

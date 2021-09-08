@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
-  <title>감자마켓</title>
+  <title>potato마켓</title>
   {% block head %}
   {% endblock head %}
 </head>
@@ -24,7 +24,7 @@
 
   <nav class="nav">
     <div class="nav-logo">
-      <img class="logo-img" src="{% static 'img/감자.png' %}" alt="">
+      <img class="logo-img" src="{% static 'img/potato.png' %}" alt="">
       <h1><a href="{% url 'home' %}">감자마켓</a></h1>
     </div>
     <div class="nav-menu">
@@ -51,7 +51,7 @@
       {% if user.is_authenticated %}
       <article class="nav-user">
         <img class="user-img user-img{{user.pk}}" src="{{user.image}}" alt=""
-          onerror="this.src=`{% static 'img/감자.png' %}`">
+          onerror="this.src=`{% static 'img/potato.png' %}`">
         <span class="user-name">{{user.nickname}}님</span>
       </article>
       <a href="{% url 'user:profile' user.pk %}">마이페이지</a>

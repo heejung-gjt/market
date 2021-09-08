@@ -8,7 +8,7 @@
 {% block content %}
 <section class="register-section">
   <div class="register-logo">
-    <img class="register-img" src="{% static 'img/감자register.png' %}" alt="">
+    <!-- <img class="register-img" src="{% static 'img/potatoregister.png' %}" alt=""> -->
     <span>REGISTER</span>
   </div>
   {% if error.state %}
@@ -16,17 +16,39 @@
   {% endif %}
   <form class="register-form" action="{% url 'user:signup' %}" method="POST">
     {% csrf_token %}
+    <label for="register-id" class="register-id-label">이메일<strong>*</strong></label>
     <input class="register-id" type="email" name="userid" placeholder="EMAIL">
+    <label for="register-nickname" class="register-nickname-label">닉네임<strong>*</strong></label>
     <input class="register-nickname" type="text" name="nickname" placeholder="NICKNAME">
+    <label for="register-pwd" class="register-pwd-label">비밀번호<strong>*</strong></label>
     <input class="register-pwd" type="password" name="password" placeholder="PASSWORD">
+    <label for="register-pwd-chk" class="register-pwd-chk-label">비밀번호 확인<strong>*</strong></label>
     <input class="register-pwd-chk" type="password" name="password_chk" placeholder="PASSWORD CHECK">
+    <p class="register-address-p">주소를 입력해주세요<strong>*</strong><small>(입력하시는 주소로 제품이 등록돼요 !)</small></p>
+    <input type="text" name="address" placeholder="주소를 입력해주세요" class="address" readonly>
+    <input type="text" name="address-detail" placeholder="상세주소를 입력해주세요" class="address-detail">
     <input class="register-submit" type="submit" value="회원가입하기"></input>
   </form>
-  <a class="login-kakao" href="{% url 'user:kakao_login' %}">카카오톡으로 로그인하기</a>
-  <small class="register-infor"><a href="{% url 'user:signin' %}">로그인</a></small>
+  <a class="register-kakao" href="{% url 'user:kakao_login' %}">카카오톡으로 로그인하기</a>
   
 </section>
 {% block footer %}
 <footer></footer>
 {% endblock footer %}
 {% endblock content %}
+{% block script %}
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+  window.onload = function(){
+    document.querySelector(".address").addEventListener("click", function(){ //주소입력칸을 클릭하면
+        //카카오 지도 발생
+        new daum.Postcode({
+            oncomplete: function(data) { //선택시 입력값 세팅
+                document.querySelector(".address").value = data.address; // 주소 넣기
+                document.querySelector("input[name=address-detail]").focus(); //상세입력 포커싱
+            }
+        }).open();
+    });
+}
+</script>
+{% endblock script %}

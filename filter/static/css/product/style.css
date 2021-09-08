@@ -74,6 +74,9 @@ justify-content: space-around;
   font-weight: bold;
   color: #495057;
 }
+.writer-address{
+  font-size: 0.9rem;
+}
 .writer-region{
   color: #495057;
   font-size: 0.8em;
@@ -109,16 +112,17 @@ justify-content: space-around;
 
 }
 .detail-product-name{
-  margin-bottom: 5px;
-  font-size: 1.6em;
+  margin-bottom: 10px;
+  font-size: 2.3em;
+  
   font-weight: bold;
 }
 .detail-product-price{
-  font-size: 1.6em;
+  font-size: 1.3em;
   font-weight: bold;
 }
 .detail-product-origin-price{
-  font-size: 1.1em;
+  font-size: 1.0em;
   text-decoration: line-through;
 }
 
@@ -126,7 +130,7 @@ justify-content: space-around;
   border-bottom: 1px solid #eee;
   padding: 0px 15px 20px 0px;
   text-align: left;
-  font-size: 1.3em;
+  font-size: 1.5em;
   /* background-color: red; */
   min-height: 100px;
 }
@@ -301,11 +305,11 @@ width: 0px;
   text-align: center;
 }
 .image-select{
-  font-size: 1.5em;
+  font-size: 1.3em;
     margin: 20px;
     display: inline-block;
     width: 600px;
-    padding: 19px 10px;
+    /* padding: 19px 10px; */
     font-family: inherit;
     background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg) no-repeat 95% 50%;
     -webkit-appearance: none;

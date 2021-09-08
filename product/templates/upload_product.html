@@ -10,10 +10,12 @@
 
   <form class="select-form" action="{% url 'product:select' %}" method="GET">
     <select class="image-select select02" name="category_pk">
+      <option value="" selected>흠</option>
       {% for category in category_list %}
       <option value="{{category.pk}}">{{category}}</option>
       {% endfor %}
     {% if state %}
+    {{category}}
       <option value=""selected>{{category}}</option>
       {% else %}
       <option value=""selected>카테고리선택</option>

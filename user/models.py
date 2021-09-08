@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampable, Deleteable):
     is_staff = models.BooleanField(verbose_name=('Is staff'), default=False)
     is_agreed = models.BooleanField(verbose_name=('Is agreed'), default=False)
     is_detailed = models.BooleanField(verbose_name=('Is detailed'), default=False)
-    is_liked = models.BooleanField(verbose_name=('Is_liked'), default=False)
+    is_address = models.BooleanField(verbose_name=('Is address'), default=False)    
     auth = models.CharField(max_length=50,blank=True,null=True)
     objects = UserManager()
     
@@ -48,6 +48,12 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampable, Deleteable):
     def __str__(self):
         return self.nickname
 
-  
 
+class Address(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True,  related_name='address')
+    address = models.TextField()
+    address_detail = models.TextField()
+    
+    def __str__(self):
+        return self.address
 

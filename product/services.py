@@ -1,3 +1,4 @@
+from django.http import request
 from .dto import ArticleDto, EditDto
 from .models import Article,Price
 from social.models import Like
@@ -5,6 +6,8 @@ from filter.services import CategoryFilterService, ProductFilterService
 from .models import Photo
 from utils import calculate_price
 from user.utils import context
+import time
+
 
 # product crud 
 class ProductService():
@@ -31,7 +34,9 @@ class ProductService():
       content = dto.content,
       origin_price = dto.origin_price,
       price = dto.price,
-      writer = dto.writer
+      writer = dto.writer,
+      address = dto.writer.address,
+      created_at = time.time()
     )
     article.category_detail.add(category_detail_name)
     
@@ -39,7 +44,7 @@ class ProductService():
       article = article,
       discount_rate = discount_rate 
     )
-    like = Like.objects.create(
+    Like.objects.create(
         article = article
         )
 
@@ -67,7 +72,8 @@ class ProductService():
       content = dto.content,
       origin_price = dto.origin_price,
       price = dto.price,
-      writer = dto.writer
+      writer = dto.writer,
+      
     )
     discount_rate = calculate_price(dto.origin_price, dto.price)
     if discount_rate == -1:
