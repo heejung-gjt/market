@@ -7,7 +7,7 @@
 {% block content %}
 <section class="login-section">
   <div class="login-logo">
-    <img class="login-img" src="{% static 'img/감자.png' %}" alt="">
+    <img class="login-img" src="{% static 'img/potato.png' %}" alt="">
     <span>LOGIN</span>
   </div>
   {% if error.state %}
@@ -19,7 +19,7 @@
     <input class="login-pwd" type="password" name="password" placeholder="PASSWORD">
     <button class="login-submit" type="submit">로그인하기</button>
   </form>
-  <button class="login-kakao" type="submit">카카오톡으로 로그인하기</button>
+  <a class="login-kakao" href="{% url 'user:kakao_login' %}">카카오톡으로 로그인하기</a>
   <small class="login-infor"><a href="#">회원가입</a> / <a href="#">비밀번호찾기</a></small>
   
 </section>

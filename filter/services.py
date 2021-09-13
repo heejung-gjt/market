@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from user.models import User
 from product.models import Article
 from django.shortcuts import get_object_or_404
 from filter.models import Category,CategoryDetail
@@ -83,6 +83,7 @@ class UserFilterService():
 
   @staticmethod
   def find_by_user(pk):
+    print('접근은함')
     user = User.objects.filter(pk=pk).first()
     return user
 

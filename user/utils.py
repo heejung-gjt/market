@@ -1,5 +1,6 @@
-from django.contrib.auth.models import User
-from .models import Profile
+from social.models import Like
+from user.models import User
+from .models import User
 
 
 def context(state,msg=None,user=None):
@@ -15,8 +16,8 @@ def context(state,msg=None,user=None):
 
 # user signup utils
 def signup_error_chk(**kwargs):
-  user = User.objects.filter(username = kwargs['userid'])
-  nickname = Profile.objects.filter(nickname = kwargs['nickname'])
+  user = User.objects.filter(email = kwargs['userid'])
+  nickname = User.objects.filter(nickname = kwargs['nickname'])
 
   if not kwargs['userid'] or not kwargs['password'] or not kwargs['password_chk'] or not kwargs['nickname']:
       result = context(True,'모든 내용을 입력해주세요')
@@ -50,8 +51,13 @@ def signin_error_chk(**kwargs):
 
 # user profile utils - Posts the user clicked on the like button
 def find_user_liked_article(request,articles,lists):
-
+    
   for article in articles.all():
+    if not Like.objects.filter(article=article).first():
+      Like.objects.create(
+        article = article,
+        is_liked = False
+      )
     if request.user in article.like.users.all():
       lists.append(article)
   return lists
@@ -70,7 +76,7 @@ def check_profile_infor_empty(like_articles, user_articles):
 
 # user profile utils - Check if the nickname of the current user is the same
 def chk_user_profile_nickname(**kwargs):
-  if Profile.objects.filter(user__pk=kwargs['user_pk']).first().nickname == kwargs['nickname']:
+  if User.objects.filter(pk=kwargs['user_pk']).first().nickname == kwargs['nickname']:
     is_exist = True
   else:
     is_exist = False
@@ -79,7 +85,7 @@ def chk_user_profile_nickname(**kwargs):
 
 # user profile utils - Check if the user's nickname already exists
 def chk_nickname_exist(**kwargs):
-  if len(Profile.objects.filter(nickname=kwargs['nickname'])) > 0:
+  if len(User.objects.filter(nickname=kwargs['nickname'])) > 0:
     result = context(True,'닉네임이 이미 존재합니다')
   else:
     result = context(False,'completed')

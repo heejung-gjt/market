@@ -1,6 +1,6 @@
 from django.db import models
-from behaviors import Nameable, TimeStampable
-from django.contrib.auth.models import User
+from behaviors import TimeStampable
+from user.models import User
 from product.models import Article
 
 import time
