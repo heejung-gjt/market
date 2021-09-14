@@ -19,20 +19,38 @@ import json
 
 
 # main page 
-class ProductView(ListView):
-  model = Article
-  template_name = 'article.html'
+class ProductView(View):
 
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
+  def get(self, request, *args, **kwargs):
+    if request.is_ajax():
+      try:
+        product = json.loads(request.GET.get('param'))
+        print(product)
+        articles = Article.objects.filter(Q(name__icontains=product) | Q(content__icontains=product) | Q(category__name__icontains=product)).distinct()
+      except:
+        articles = ProductFilterService.find_by_not_deleted_article()
+      comment_cnt = []
+      like_cnt = []
+      main_img = []
+      writer_profile = []
+      for article in articles:
+        comment_cnt.append(article.comment.all().count())
+        like_cnt.append(article.like.users.all().count())
+        writer_profile.append([article.writer.image, article.writer.nickname])
+        photo = Photo.objects.filter(article__pk=article.pk).first()
+        main_img.append(photo.image.__dict__['name'])
+      articles = list(articles.values())
+      context = {'image':main_img, 'articles':articles, 'comment_cnt':comment_cnt,'like_cnt':like_cnt,'writer_image':writer_profile}
+      return JsonResponse(context, status=200)
+
+    context = {}
     context['category_list'] = ProductFilterService.find_by_all_category()
     context['article_list'] = ProductFilterService.find_by_not_deleted_article()
-    return context
+    return render(request, 'article.html', context)
 
 
 # product detail page
 class DetailView(DetailView):
-
   def get(self, request, **kwargs):
     article_pk = self.kwargs['pk']
     context={}
@@ -52,14 +70,11 @@ class DetailView(DetailView):
       } for comment in Comment.objects.filter(article__pk = article_pk)
     ]
     context['comment_list'] = comment_list
-    
     if like is not None:
         if request.user in like.users.all(): 
           context['is_liked'] = True
         else:
           context['is_liked'] = False
-    
-
     return render(request,'detail.html',context)
 
 
@@ -71,7 +86,6 @@ class ArticleCreateView(LoginRequiredMixin,generic.View):
   def get(self, request, *args, **kwargs):
     categorys = ProductFilterService.find_by_all_category()
     context = {'category_list':categorys,'state':False}
-
     return render(request, 'upload_product.html',context)
 
   def post(self, request, *args, **kwargs):
@@ -85,12 +99,10 @@ class ArticleCreateView(LoginRequiredMixin,generic.View):
       article_dto = self._build_article_dto(request)
       category_pk = ProductFilterService.find_by_category_pk_in_category_detail(category_detail_pk)
       context = ProductService.create(article_dto)
-
       if context['error']['state']:
         categorys = ProductFilterService.find_by_all_category()
         context['category_list'] = categorys
         return render(request, 'upload_product.html',context)
-
       return redirect('filter:category-list',category_pk)
       
   def _build_article_dto(self, request):
@@ -113,7 +125,6 @@ class SelectView(View):
     category_detail_pk = request.GET.get('category_pk')
     category_detail = ProductFilterService.find_by_category_detail(category_detail_pk)
     category = ProductFilterService.find_by_category_title(category_detail_pk)
-    print(category)
     context = {'category_list':categorys,'category':category,'state':True,'category_detail':category_detail}
     return render(request, 'upload_product.html',context)
 
@@ -126,13 +137,10 @@ class SelectView(View):
     price_from = int(price_from)
     price_to = int(price_to)
     articles = None
-    print(product_sort)
     q = Q()
-    
     if category:
       q &= Q(category = category)
     q &= Q(price__range =(price_from, price_to))
-
     if product_sort:
       if product_sort == '1':
         articles = Article.objects.filter(q).order_by('price')
@@ -144,7 +152,6 @@ class SelectView(View):
         articles = Article.objects.filter(q, is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
     else:
       articles = Article.objects.filter(q).all()
-    print('articles',articles)
     context = {'article_list':articles,'category_list':categorys}
     return render(request, 'article.html', context)
 
@@ -182,7 +189,6 @@ class SelectDetailView(View):
                     articles = Article.objects.filter(q, is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
             else:
                 articles = Article.objects.filter(q).all()
-            
             comment_cnt = []
             like_cnt = []
             main_img = []
@@ -192,11 +198,8 @@ class SelectDetailView(View):
                 comment_cnt.append(article.comment.all().count())
                 like_cnt.append(article.like.users.all().count())
                 writer_profile.append([article.writer.image, article.writer.nickname])
-                print(writer_profile)
-            
             for article in articles:
               photo = Photo.objects.filter(article__pk = article.pk).first()
-              print('dddddddddddddddd',photo.__dict__)
               main_img.append(photo.image.__dict__['name'])
             articles = list(articles.values())
             context = {'image':main_img, 'articles':articles, 'comment_cnt':comment_cnt,'like_cnt':like_cnt,'writer_image':writer_profile,'category_name':category_name}
@@ -240,6 +243,5 @@ class DeleteView(View):
     Article.objects.filter(pk=kwargs['pk']).update(
       is_deleted = True
     )
-    
     return redirect('product:article')
 

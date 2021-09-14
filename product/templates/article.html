@@ -75,7 +75,7 @@
         <div class="product-writer">
           <span>
             <img src="{{article.writer.image}}" alt="" class="product-user-image"
-              onerror="this.src=`{% static 'img/potato.png' %}`">
+              onerror="this.src='/static/img/potato.png'">
             <strong>{{article.writer.nickname}}</strong></span>
         </div>
 
@@ -103,22 +103,32 @@
 {% endblock content %}
 
 {% block script %}
-<!-- <script src="/static/js/product/script.js" type="text/javascript"></script> -->
 <script>
-function productFilterReset(e){
+productFilterReset = (e) => {
   event.preventDefault();
-    categorySelect = document.querySelector('.category-select');
-    priceStartSelect = document.querySelector('.product-price-start');
-    priceEndSelect = document.querySelector('.product-price-end');
-    productSortSelect = document.querySelector('.category-sort-select');
-    categorySelect.options[0].selected = true
-    priceStartSelect.options[0].selected = true
-    priceEndSelect.options[0].selected = true
-    productSortSelect.options[0].selected = true
-    // priceStart = priceStartSelect.options[priceStartSelect.selectedIndex].value;
-    // priceEnd = priceEndSelect.options[priceEndSelect.selectedIndex].value;
-    // productSort = productSortSelect.options[productSortSelect.selectedIndex].value;
+    let $categorySelect = document.querySelector('.category-select');
+    let $priceStartSelect = document.querySelector('.product-price-start');
+    let $priceEndSelect = document.querySelector('.product-price-end');
+    let $productSortSelect = document.querySelector('.category-sort-select');
+    $categorySelect.options[0].selected = true;
+    $priceStartSelect.options[0].selected = true;
+    $priceEndSelect.options[0].selected = true;
+    $productSortSelect.options[0].selected = true;
 }
+window.addEventListener('DOMContentLoaded', function(){
+  document.querySelector('.nav-menu').innerHTML += `
+  <div class="nav-search">
+        <form action="" class="nav-search-form">
+          <input class="nav-search-input" type="text" placeholder="찾으시는 제품을 입력해주세요 !">
+          <button type="submit" class="nav-search-btn" onclick="SearchProject(event)"><i
+              class="fas fa-search nav-search-icon"></i></button>
+        </form>
+      </div>`
+
+})
 </script>
 
 {% endblock script %}
+
+
+

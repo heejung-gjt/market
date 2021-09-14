@@ -70,7 +70,7 @@
         <li class="product">
           <div class="product-writer">
             <span> <img src="{{article.writer.image_beta}}" alt="" class="product-user-image"
-                onerror="this.src=`{% static 'img/potato.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
+                onerror="this.src='/static/img/potato.png'"><strong>{{article.writer.nickname}}</strong></span>
           </div>
           <div class="product-imgs">
             {% for photo in article.photo.all %}
@@ -100,7 +100,7 @@
         <li class="product">
           <div class="product-writer">
             <span> <img src="{{article.writer.image}}" alt="" class="product-user-image"
-                onerror="this.src=`{% static 'img/potato.png' %}`"><strong>{{article.writer.nickname}}</strong></span>
+                onerror="this.src='/static/img/potato.png'"><strong>{{article.writer.nickname}}</strong></span>
           </div>
           <div class="product-imgs">
             {% for photo in article.photo.all %}
@@ -191,7 +191,7 @@
         <div class="product-writer">
           <span>
             <img src="${data['writer_image'][i][0]}" alt="" class="product-user-image"
-              onerror="this.src='static/'img/potato.png'/">
+              onerror="this.src='/static/img/potato.png'">
             <strong>${data['writer_image'][i][1]}</strong></span>
         </div>
 
@@ -239,6 +239,16 @@ function productFilterReset(e){
     priceEndSelect.options[0].selected = true
     productSortSelect.options[0].selected = true
 }
+window.addEventListener('DOMContentLoaded', function(){
+  document.querySelector('.nav-menu').innerHTML += `
+  <div class="nav-search">
+        <form action="" class="nav-search-form">
+          <input class="nav-search-input" type="text" placeholder="찾으시는 제품을 입력해주세요 !">
+          <button type="submit" class="nav-search-btn" onclick="SearchProject(event)"><i
+              class="fas fa-search nav-search-icon"></i></button>
+        </form>
+      </div>`
 
+})
 </script>
 {% endblock script %}
