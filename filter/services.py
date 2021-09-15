@@ -9,8 +9,10 @@ class ProductFilterService():
 
   @staticmethod
   def find_by_product_list(category_pk):
-    category_articles = get_object_or_404(Category, pk = category_pk).article
-    return category_articles
+    articles = get_object_or_404(Category, pk = category_pk).article
+    articles = Category.objects.get(pk=category_pk).article.all()
+    print(articles)
+    return articles
   
   @staticmethod
   def find_by_category_title(category_pk):
@@ -50,7 +52,7 @@ class ProductFilterService():
 
   @staticmethod
   def find_by_not_deleted_article():
-    article_list = Article.objects.filter(is_deleted = False)
+    article_list = Article.objects.filter(is_deleted = False).order_by('-created_at')
     return article_list
   
   @staticmethod

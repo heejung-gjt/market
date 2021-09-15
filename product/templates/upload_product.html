@@ -8,9 +8,8 @@
 
 <section class="image-section">
 
-  <form class="select-form" action="{% url 'product:select' %}" method="GET">
+  <form class="select-form" action="{% url 'product:upload_category' %}" method="GET">
     <select class="image-select select02" name="category_pk">
-      <option value="" selected>흠</option>
       {% for category in category_list %}
       <option value="{{category.pk}}">{{category}}</option>
       {% endfor %}

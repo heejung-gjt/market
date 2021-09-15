@@ -5,10 +5,11 @@
 {% load filter_number %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock head %}
-{% block content %}
 
-<form class="select-filter-form" action="{% url 'filter:category-filter-list' %}" method="GET">
-  <section class="product-social">
+
+{% block content %}
+<!-- <form class="select-filter-form" action="{% url 'filter:category-filter-list' %}" method="GET"> -->
+  <!-- <section class="product-social">
     <select name="social-clicked_pk"style="display: none;">
       <option value="" selected>필터링보기</option>
       <option value="1">최신순</option>
@@ -16,22 +17,21 @@
       <option value="3">찜 많은 순</option>
       <option value="4">내가 쓴 글</option>
     </select>
-  </section>
-</form>
+  </section> -->
+<!-- </form> -->
 <div class="product-main-flex">
 <section class="product-filter">
   <p class="product-filter-title">PRODUCT RANGE</p>
-  <form action="{% url 'product:select' %}" method="POST">
-    {% csrf_token %}
+  <form action="{% url 'product:select' %}" method="GET">
     <p class="product-category">category</p>
-    <select class="category-select" name="sub_menu_pk">
+    <select class="category-select" name="sub-menu-pk">
       <option value="" selected>전체보기</option>
       {% for sub_menu in category_list.all %}
       <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
       {% endfor %}
     </select>
     <p class="product-filter-start">Price from</p>
-    <select class="product-price-start" name="product-price-start" id="">
+    <select class="product-price-start" name="price-start" id="">
       <option value="0" selected>전체금액</option>
       <option value="0">0원</option>
       <option value="1000">1000원</option>
@@ -41,7 +41,7 @@
       <option value="50000">50000원</option>
     </select>
     <p class="product-filter-end">Price to</p>
-    <select class="product-price-end" name="product-price-end" id="">
+    <select class="product-price-end" name="price-end" id="">
       <option value="10000000" selected>전체금액</option>
       <option value="10000">10000원</option>
       <option value="20000">20000원</option>
@@ -50,12 +50,14 @@
       <option value="100001">100000원 이상</option>
     </select>
     <p class="product-category-sort">상품정렬</p>
-    <select class="category-sort-select" name="product-sort">
+    <select class="category-sort-select" name="sort">
       <option value="" selected>정렬선택</option>
-      <option value="1">낮은 가격순</option>
-      <option value="2">높은 가격순</option>
-      <option value="3">찜 많은 순</option>
-      <option value="4">댓글 많은 순</option>
+      <option value="1">최신순</option>
+      <option value="2">과거순</option>
+      <option value="3">낮은 가격순</option>
+      <option value="4">높은 가격순</option>
+      <option value="5">찜 많은 순</option>
+      <option value="6">댓글 많은 순</option>
     </select>
     <div class="product-filter-btn">
     <button class="product-filter-reset" onclick="productFilterReset(event)">초기화</button>
@@ -100,6 +102,9 @@
   </ul>
 </section>
 </div>
+
+{% include 'pagination.html' %}
+
 {% endblock content %}
 
 {% block script %}
@@ -115,16 +120,18 @@ productFilterReset = (e) => {
     $priceEndSelect.options[0].selected = true;
     $productSortSelect.options[0].selected = true;
 }
-window.addEventListener('DOMContentLoaded', function(){
-  document.querySelector('.nav-menu').innerHTML += `
-  <div class="nav-search">
-        <form action="" class="nav-search-form">
-          <input class="nav-search-input" type="text" placeholder="찾으시는 제품을 입력해주세요 !">
-          <button type="submit" class="nav-search-btn" onclick="SearchProject(event)"><i
-              class="fas fa-search nav-search-icon"></i></button>
-        </form>
-      </div>`
 
+
+
+
+// 페이징 번호 선택한 버튼에 색상 포커스 주기
+let page_url = window.location.href
+page_lis = document.querySelectorAll('.page-li > a')
+page_lis.forEach(function(a){
+  if(page_url == a['href']){
+    console.log('haha')
+    a.classList.add('page-active')
+  }
 })
 </script>
 

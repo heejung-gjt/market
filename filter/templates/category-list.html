@@ -7,7 +7,6 @@
 {% endblock head %}
 
 {% include 'product-nav.html' %}
-
 {% block product-main-title %}
 {% endblock product-main-title %}
 
@@ -16,10 +15,12 @@
 <div class="product-main-flex">
   <section class="product-filter">
     <p class="product-filter-title">PRODUCT RANGE</p>
-    <form action="">
-      {% csrf_token %}
+    <form action="{% url 'product:select_detail' %}" method="GET">
+      <select name="category" id="category" class="product-category">
+        <option value="{{category_title.pk}}" selected>{{category_title}}</option>
+      </select>
       <p class="product-filter-start">Price from</p>
-      <select name="product-price-start" class="product-price-start" id="">
+      <select name="price-start" class="product-price-start" id="">
         <option value="0">전체금액</option>
         <option value="0">0원</option>
         <option value="1000">1000원</option>
@@ -29,7 +30,7 @@
         <option value="50000">50000원</option>
       </select>
       <p class="product-filter-end">Price to</p>
-      <select name="product-price-end" class="product-price-end" id="">
+      <select name="price-end" class="product-price-end" id="">
         <option value="10000000">전체금액</option>
         <option value="10000">10000원</option>
         <option value="20000">20000원</option>
@@ -38,14 +39,14 @@
         <option value="10000000">100000원 이상</option>
       </select>
       <p class="product-category">상세상품</p>
-      <select class="category-detail-select" name="sub_menu_pk">
+      <select class="category-detail-select" name="sub-menu">
         <option value="">전체보기</option>
         {% for sub_menu in category_sub_list.all %}
         <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
         {% endfor %}
       </select>
       <p class="product-category-sort">상품정렬</p>
-      <select class="category-sort-select" name="sub_menu_pk">
+      <select class="category-sort-select" name="sort">
         <option value="">정렬선택</option>
         <option value="1">낮은 가격순</option>
         <option value="2">높은 가격순</option>
@@ -54,7 +55,7 @@
       </select>
       <div class="product-filter-btn">
         <button class="product-filter-reset" onclick="productFilterReset(event)">초기화</button>
-        <button class="product-filter-send" type="submit" onclick="filter_product('{{category_title.pk}}')">검색</button>
+        <button class="product-filter-send" type="submit">검색</button>
       </div>
     </form>
     <div class="product-add">
@@ -94,7 +95,7 @@
   <section class="product-section">
     <ul class="product-list">
       <h1 class="product-main">{{category_title.name}} 제품</h1>
-      {% for article in category_articles.all %}
+      {% for article in articles %}
       {% if not article.is_deleted %}
       <a class="product-link" href="{% url 'product:detail' article.pk %}">
         <li class="product">
@@ -113,10 +114,8 @@
                 class="fas fa-sort-down"></i></span>
             <strong class="product-price">{{article.price}} 원</strong>
             <div class="social">
-              {#% for comment in article.comment.all %#}
-              <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
+              <span class="social-comment">댓글 +{{article.comment.all| length}} </span>
               <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
-              {#{comment.re_comment.all|length|add:article.comment.all|length}#}
             </div>
             <span class="product-address">{{article.address}}</span>
           </div>
@@ -128,6 +127,44 @@
   </section>
   {% endif %}
 </div>
+
+<!-- 페이징처리 시작 -->
+<ul class="page-ul">
+  <!-- 이전페이지 -->
+  {% if articles.has_previous %}
+  <li class="page-li">
+      <a class="page-link" href="?sub-menu-pk={{pk}}&price-start={{start}}&price-end={{end}}&sort={{sort}}&page={{ articles.previous_page_number}}"><i class="page-icon fas fa-chevron-left"></i>이전</a>
+  </li>
+  {% else %}
+  <li class="page-li disabled">
+      <a class="page-link" tabindex="-1" aria-disabled="true" href="#"><i class="page-icon fas fa-chevron-left"></i>이전</a>
+  </li>
+  {% endif %}
+  <!-- 페이지리스트 -->
+  {% for page_number in page_range %}
+      {% if page_number == question_list.number %}
+      <li class="page-li active" aria-current="page">
+          <a class="page-link" href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ page_number }}">{{ page_number }}</a>
+      </li>
+      {% else %}
+      <li class="page-li">
+          <a class="page-link" href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ page_number }}">{{ page_number }}</a>
+      </li>
+      {% endif %}
+  {% endfor %}
+  <!-- 다음페이지 -->
+  {% if articles.has_next %}
+  <li class="page-li">
+      <a class="page-link" href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ articles.next_page_number }}">다음<i class="page-icon fas fa-chevron-right"></i></a>
+  </li>
+  {% else %}
+  <li class="page-li disabled">
+      <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음<i class="page-icon fas fa-chevron-right"></i></a>
+  </li>
+  {% endif %}
+</ul>
+<!-- 페이징처리 끝 -->
+
 {% endblock product-main-content %}
 
 {% block script %}
@@ -137,95 +174,6 @@
   document.querySelector('.menu-all').classList.remove('checked');
   document.querySelector('.menu-category').classList.add('checked');
 
-
-
-  function filter_product(category_pk) {
-    event.preventDefault();
-    categorySelect = document.querySelector('.category-detail-select');
-    priceStartSelect = document.querySelector('.product-price-start');
-    priceEndSelect = document.querySelector('.product-price-end');
-    productSortSelect = document.querySelector('.category-sort-select');
-    categoryOption = categorySelect.options[categorySelect.selectedIndex].value;
-    priceStart = priceStartSelect.options[priceStartSelect.selectedIndex].value;
-    priceEnd = priceEndSelect.options[priceEndSelect.selectedIndex].value;
-    productSort = productSortSelect.options[productSortSelect.selectedIndex].value;
-
-    let param = {
-      'sub-menu-pk': categoryOption,
-      'product-price-start': priceStart,
-      'product-price-end': priceEnd,
-      'product-sort': productSort,
-      'category_pk': category_pk
-
-    }
-    let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-    console.log(category_pk)
-    // ajax통신
-    fetch("{% url 'product:select_detail' %}", {
-      method: 'POST',
-      headers: {
-        "X-CSRFToken": csrfValue,
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      body: JSON.stringify(param),
-    }).then(function (response) {
-      return response.json()
-    }).then(function (data) {
-      console.log(data['image'][0])
-      document.querySelector('.product-list').innerHTML = '';
-      document.querySelector('.product-list').innerHTML += `
-        <h1 class="product-main">${data['category_name']} 제품</h1>`
-      for (let i = 0; i < data['articles'].length; i++) {
-        // discount 가격 계산
-        origin_price = data['articles'][i]['origin_price'];
-        sale_price = data['articles'][i]['price'];
-        price_gap = Number(origin_price) - Number(sale_price)
-        real_sale = Number(price_gap) / Number(origin_price) * 100
-        discount_rate = real_sale.toFixed(1)
-        if (discount_rate < 0) {
-          discount_rate = -1
-        }
-        document.querySelector('.product-list').innerHTML += `
-      <a class="product-link" href="http://127.0.0.1:8000/product/detail/${data['articles'][i]['id']}">
-      <li class="product">
-        <div class="product-writer">
-          <span>
-            <img src="${data['writer_image'][i][0]}" alt="" class="product-user-image"
-              onerror="this.src='/static/img/potato.png'">
-            <strong>${data['writer_image'][i][1]}</strong></span>
-        </div>
-
-        <div class="product-imgs">
-          <img class="product-img" src="/media/${data['image'][i]}" alt="">
-        </div>
-        <div class="product-main-page">
-          <span class="product-title">${data['articles'][i]['name']}</span>
-          <span class="product-discount">${discount_rate}%<i class="fas fa-sort-down"></i></span>
-        <strong class="product-price">${data['articles'][i]['price']} 원</strong>
-        <div class="social">
-
-          <span class="social-comment">댓글 +${data['comment_cnt'][i]} </span>
-          <span class="social-like"> 찜 +${data['like_cnt'][i]}</span>
-        </div>
-      </div>
-      </li>
-    </a>
-    `
-  }
-//  document.querySelector('.product-main').innerText='';
- console.log(document.querySelector('.product-main'),data['category_name'] )
-  // document.querySelector('.product-main').innerText = `${data['category_name']}`
-  if (document.querySelector('.product-list').innerHTML == false) {
-    console.log('없어')
-    document.querySelector('.product-list').innerHTML = `
-  <p class="no-detail-product">찾으시는 제품이 없으세요 !</p>
-  `
-  }
-
-    }).catch((error) => {
-      console.log('error', error);
-    })
-  }
 
 // 정렬 초기화
 function productFilterReset(e){
@@ -239,16 +187,16 @@ function productFilterReset(e){
     priceEndSelect.options[0].selected = true
     productSortSelect.options[0].selected = true
 }
-window.addEventListener('DOMContentLoaded', function(){
-  document.querySelector('.nav-menu').innerHTML += `
-  <div class="nav-search">
-        <form action="" class="nav-search-form">
-          <input class="nav-search-input" type="text" placeholder="찾으시는 제품을 입력해주세요 !">
-          <button type="submit" class="nav-search-btn" onclick="SearchProject(event)"><i
-              class="fas fa-search nav-search-icon"></i></button>
-        </form>
-      </div>`
 
+// 페이징 번호 선택한 버튼에 색상 포커스 주기 // 자바스크립트 파일 만들어서 작성하기
+let page_url = window.location.href
+page_lis = document.querySelectorAll('.page-li > a')
+page_lis.forEach(function(a){
+  if(page_url == a['href']){
+    console.log('haha')
+    a.classList.add('page-active')
+  }
 })
+
 </script>
 {% endblock script %}

@@ -27,7 +27,13 @@
     <h1><a href="{% url 'home' %}">감자마켓</a></h1>
   </div>
   <div class="nav-menu">
-
+    <div class="nav-search">
+      <form action="{% url 'product:filter' %}" class="nav-search-form" method="GET">
+        <input name="search" class="nav-search-input" type="text" placeholder="찾으시는 제품을 입력해주세요 !">
+        <button type="submit" class="nav-search-btn"><i
+            class="fas fa-search nav-search-icon"></i></button>
+      </form>
+    </div>
     <ul class="menu-ul">
       <li><a class="menu-all checked" href="{% url 'home' %}">모든제품</a></li>
       <li class="menu-category-li"><a class="menu-category" href="#"> 카테고리별</a>
@@ -71,71 +77,6 @@
   </footer>
   {% endblock footer %}
 
-  <script>
-    SearchProject = (e) => {
-
-      e.preventDefault();
-      let signupCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-      let $SearchProduct = document.querySelector('.nav-search-input').value;
-      console.log($SearchProduct == '')
-      if ($SearchProduct == '') {
-        return
-      }
-      $product = JSON.stringify($SearchProduct)
-      fetch(`/?param=${$product}`, {
-        method: 'GET',
-        headers: {
-          "X-CSRFToken": signupCsrfValue,
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      }).then(function (response) {
-        return response.json()
-      }).then(function (data) {
-
-        document.querySelector('.product-list').innerHTML = '';
-        document.querySelector('.product-list').innerHTML += `
-        <h1 class="product-main"> ${$SearchProduct} 관련제품</h1>`
-        for (let i = 0; i < data['articles'].length; i++) {
-          // discount 가격 계산
-          origin_price = data['articles'][i]['origin_price'];
-          sale_price = data['articles'][i]['price'];
-          price_gap = Number(origin_price) - Number(sale_price)
-          real_sale = Number(price_gap) / Number(origin_price) * 100
-          discount_rate = real_sale.toFixed(1)
-          if (discount_rate < 0) {
-            discount_rate = -1
-          }
-          document.querySelector('.product-list').innerHTML += `
-      <a class="product-link" href="http://127.0.0.1:8000/product/detail/${data['articles'][i]['id']}">
-      <li class="product">
-        <div class="product-writer">
-          <span>
-            <img src="${data['writer_image'][i][0]}" alt="" class="product-user-image"
-              onerror="this.src='/static/img/potato.png'">
-            <strong>${data['writer_image'][i][1]}</strong></span>
-        </div>
-
-        <div class="product-imgs">
-          <img class="product-img" src="/media/${data['image'][i]}" alt="">
-        </div>
-        <div class="product-main-page">
-          <span class="product-title">${data['articles'][i]['name']}</span>
-          <span class="product-discount">${discount_rate}%<i class="fas fa-sort-down"></i></span>
-        <strong class="product-price">${data['articles'][i]['price']} 원</strong>
-        <div class="social">
-          <span class="social-comment">댓글 +${data['comment_cnt'][i]} </span>
-          <span class="social-like"> 찜 +${data['like_cnt'][i]}</span>
-          </div>
-      </div>
-      </li>
-    </a>
-    ` }
-    document.querySelector('.nav-search-input').value='';
-      }).catch((error) => {
-        console.log('error', error);
-      })
-    }
-  </script>
   {% block script %}
   {% endblock script %}
 
