@@ -14,7 +14,7 @@
 <div class="product-main-flex">
 <section class="product-section">
   <ul class="product-list product-list-filter">
-    <h1 class="product-main">총 {{article_sum}}개의 {{keyword}} 검색됨</h1>
+    <h1 class="product-main">총 {{article_sum}}개의 "{{keyword}}" 검색됨</h1>
     {% for article in article_list %}
     <a class="product-link" href="{% url 'product:detail' article.pk %}">
       <li class="product">
