@@ -1,5 +1,5 @@
 import time
-
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # context 정보 넣기
 def context_infor(**kwargs):
@@ -59,3 +59,24 @@ def calculate_price(origin_price, sale_price):
     discount_rate = -1
     return discount_rate
 
+# 페이징 처리 함수
+
+def paginator(product_list, page, p):
+  paginator = Paginator(product_list, p)
+  try:
+    article_obj = paginator.page(page)
+  except PageNotAnInteger:
+    article_obj = paginator.page(1)
+  except EmptyPage:
+    article_obj = paginator.page(paginator.num_pages)
+  
+  index = article_obj.number
+  max_index = len(paginator.page_range)
+  page_size = 5
+  current_page = int(index) if index else 1
+  start_index = int((current_page - 1) / page_size) * page_size
+  end_index = start_index + page_size
+  if end_index >= max_index:
+      end_index = max_index
+  page_range = paginator.page_range[start_index:end_index]
+  return article_obj, page_range

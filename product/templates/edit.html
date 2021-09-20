@@ -16,7 +16,7 @@
     {% csrf_token %}
     <div class="edit-upload-img upload-img">
       <input class="image-file upload-img-input" type="file" name="image" multiple><br>
-        <img src="#" alt="이미지 미리보기" class="upload-preview-img" onerror="this.src=`{% static 'img/img5.png' %}`">
+        <img src="#" alt="이미지 미리보기" class="upload-preview-img" onerror="this.src='/static/img/img5.png'">
     </div>
 
   <div class="image-price-div">

@@ -87,7 +87,7 @@ a{
     align-items: center;
     margin-left: 25px;
     text-align: center;
-    width: 350px;
+    width: 250px;
   }
   .menu-ul li a{
     font-family: 'Libre Franklin', sans-serif;
@@ -176,6 +176,32 @@ a{
     font-weight: bold;
     letter-spacing: 3px;
   }
+
+  /* 페이징 처리 레이아웃 */
+  /* page 레이아웃 */
+.page-ul{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-left: 140px;
+} 
+.page-li{
+  padding: 25px 8px;
+  /* width: 5%; */
+}
+.page-link{
+  font-size: 1.3rem;
+  padding: 5px 10px;
+}
+.page-icon{
+  margin: 5px;
+}
+.page-active{
+  padding: 5px 10px;
+  border-radius: 8px;
+  background-color:#319e455b;
+}
+
   
   /* category nav */
   .menu-category-list-ul{

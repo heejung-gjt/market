@@ -321,6 +321,7 @@ option{
 .product-section,
 .product-section-all{
   margin-top: 10px;
+  margin-left: 80px;
   /* margin: 0 auto; */
 }
 .product-list{
@@ -328,6 +329,9 @@ option{
   max-width: 1200px;
   text-align: left;
   margin: 0px 0px 0px 70px;
+}
+.product-list-filter{
+  max-width: 1250px;
 }
 .product-link{
   margin: 50px 10px;

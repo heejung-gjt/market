@@ -4,8 +4,8 @@ from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView
 from .models import Category, CategoryDetail
 from filter.services import ProductFilterService
+from utils import paginator
 # Create your views here.
-
 
 
 class CategoryView(ListView):
@@ -15,11 +15,14 @@ class CategoryView(ListView):
 
   
 class CategoryListView(DetailView):
-
   def get(self, request, **kwargs):
     context = {}
+    articles = ProductFilterService.find_by_product_list(self.kwargs['pk'])
     context['sub_state'] = False
-    context['category_articles'] = ProductFilterService.find_by_product_list(self.kwargs['pk'])
+    page = request.GET.get('page', '1')
+    articles, page_range = paginator(articles, page, 9) 
+    context['articles'] = articles
+    context['page_range'] = page_range
     context['category_title'] = ProductFilterService.find_by_category_title(self.kwargs['pk'])
     context['category_list'] = ProductFilterService.find_by_all_category()
     context['category_sub_list'] = CategoryDetail.objects.filter(category__pk = self.kwargs['pk'])

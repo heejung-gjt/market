@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+{% load filter_number %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
+{% block nav %}
+{% include 'search-input.html' %}
+{% endblock nav %}
+
+{% block content %}
+
+<div class="product-main-flex">
+<section class="product-section">
+  <ul class="product-list product-list-filter">
+    <h1 class="product-main">총 {{article_sum}}개의 "{{keyword}}" 검색됨</h1>
+    {% for article in article_list %}
+    <a class="product-link" href="{% url 'product:detail' article.pk %}">
+      <li class="product">
+        <div class="product-writer">
+          <span>
+            <img src="{{article.writer.image}}" alt="" class="product-user-image"
+              onerror="this.src='/static/img/potato.png'">
+            <strong>{{article.writer.nickname}}</strong></span>
+        </div>
+
+        <div class="product-imgs">
+          {% for photo in article.photo.all %}
+          <img class="product-img" src="{{photo.image.url}}" alt="">
+        {% endfor %}
+        </div>
+        <div class="product-main-page">
+          <span class="product-title">{{article.name}}</span>
+          <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
+        <strong class="product-price">{{article.price}} 원</strong>
+        <div class="social">
+          <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
+          <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+        </div>
+        <span class="product-address">{{ article.address | filter_numbers }}</span>
+      </div>
+      </li>
+    </a>
+    {% endfor %}
+  </ul>
+</section>
+</div>
+
+{% include 'search-pagination.html' %}
+{% endblock content %}
+
+{% block script %}
+<script>
+productFilterReset = (e) => {
+  event.preventDefault();
+    let $categorySelect = document.querySelector('.category-select');
+    let $priceStartSelect = document.querySelector('.product-price-start');
+    let $priceEndSelect = document.querySelector('.product-price-end');
+    let $productSortSelect = document.querySelector('.category-sort-select');
+    $categorySelect.options[0].selected = true;
+    $priceStartSelect.options[0].selected = true;
+    $priceEndSelect.options[0].selected = true;
+    $productSortSelect.options[0].selected = true;
+}
+
+  document.querySelector('.page-ul').style.margin='0px';
+// }
+  // document.querySelector('.nav-search-input').value = '{{keyword}}'
+
+
+
+
+// 페이징 번호 선택한 버튼에 색상 포커스 주기
+let page_url = window.location.href
+page_lis = document.querySelectorAll('.page-li > a')
+page_lis.forEach(function(a){
+  if(page_url == a['href']){
+    console.log('haha')
+    a.classList.add('page-active')
+  }
+})
+</script>
+
+{% endblock script %}
+
+
+

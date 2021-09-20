@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock head %}
@@ -18,7 +19,7 @@
       <div class="writer-infor">
         {% if article.writer.image %}
         <img src="{{article.writer.image}}" alt="" class="product-user-image"
-          onerror="this.src=`{% static 'img/potato.png' %}`">
+        onerror="this.src='/static/img/potato.png'">
         {% else %}
         <i class="product-icon fas fa-user-circle"></i>
         {% endif %}
@@ -77,12 +78,12 @@
       <li class="comment-li comment-li{{comment.pk}}">
         {% if article.writer == comment.writer %}
         <span class="comment-profile-span"><img class="user-img comment-profile-img"
-            src="{{comment.image_url}}" alt="" onerror="this.src=`{% static 'img/potato.png' %}`"><strong
+            src="{{comment.image_url}}" alt="" onerror="this.src='/static/img/potato.png'"><strong
             class="owner">판매자</strong><span class="upload_time"> {{comment.comment_obj.created_string}}</span></span>
         {% else %}
         <span class="comment-profile-span"><img class="user-img comment-profile-img"
             src="{{comment.image_url}}" alt=""
-            onerror="this.src=`{% static 'img/potato.png' %}`">{{comment.writer_nickname}}<span>{{comment.comment_obj.created_string}}</span></span>
+            onerror="this.src='/static/img/potato.png'">{{comment.writer_nickname}}<span>{{comment.comment_obj.created_string}}</span></span>
         {% endif %}
         {% if user == comment.writer %}
         <span class="comment-content comment-content{{comment.pk}}">{{comment.content}}</span>
@@ -114,12 +115,12 @@
             {% if article.writer == recomment.writer %}
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
                 src="{{recomment.writer.profile.image.url}}" alt=""
-                onerror="this.src=`{% static 'img/potato.png' %}`"><strong class="owner">판매자</strong>
+                onerror="this.src='/static/img/potato.png'"><strong class="owner">판매자</strong>
               <span>{{recomment.created_string}}</span> </span>
             {% else %}
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
                 src="{{recomment.writer.profile.image.url}}" alt=""
-                onerror="this.src=`{% static 'img/potato.png' %}`">{{recomment.writer.profile.nickname}}<span>{{recomment.created_string}}</span></span>
+                onerror="this.src='/static/img/potato.png'">{{recomment.writer.profile.nickname}}<span>{{recomment.created_string}}</span></span>
             {% endif %}
             {% if user == recomment.writer %}
             <span class="comment-content">{{recomment.content}}</span>
@@ -234,7 +235,7 @@
         document.querySelector('.comment-ul').innerHTML += `
           <li class="comment-li comment-li${data_id}">
             <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
-            src="{{article.writer.profile.image.url}}" alt="" onerror="this.src='{% static 'img/potato.png' %}'">
+            src="{{article.writer.profile.image.url}}" alt="" onerror="this.src='/static/img/potato.png'">
             <strong class="owner">판매자</strong>
             <span>${data.comment_created}</span>
             </span>
@@ -257,7 +258,7 @@
         document.querySelector('.comment-ul').innerHTML += `
           <li class="comment-li comment-li${data_id}">
             <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img" src="${data.user_img}" 
-            onerror="this.src='{% static 'img/potato.png' %}'">${data.profile_nickname}
+              onerror="this.src='/static/img/potato.png'">${data.profile_nickname}
             <span>${data.comment_created}</span></span>
             <span class="comment-content ">${data.comment_obj.content}</span>
             <form class="delete-comment-form" action="" method="POST">
@@ -269,7 +270,7 @@
         document.querySelector('.comment-ul').innerHTML += `
           <li class="comment-li comment-li${data_id}">
             <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"src="${data.user_img}"
-              onerror="this.src='{% static 'img/potato.png' %}'">${data.profile_nickname }
+              onerror="this.src='/static/img/potato.png'">${data.profile_nickname }
               <span>${data.comment_created}</span>
             </span>
             <span class="comment-content comment-content${data_id}">${data.comment_obj.content}</span>
@@ -350,14 +351,14 @@
         if ('{{article.writer.pk}}' == data.recomment_obj[key]['writer_pk']) {
           recommentLi += `<li class="recomment-li recomment-li${key}">
           <span class="comment-profile-span">
-          <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']}" src="${data.recomment_obj[key]['user_img']}"  onerror="this.src='{% static 'img/potato.png' %}'"><strong
+          <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']}" src="${data.recomment_obj[key]['user_img']}"  onerror="this.src='/static/img/potato.png'"><strong
                 class="owner">판매자</strong> <span>${data.recomment_obj[key]['created_at']}</span></span><br>
                 `
         }
         else {
           recommentLi += `<li class="recomment-li recomment-li${key}">
           <span class="comment-profile-span">
-          <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']} "  src="${data.recomment_obj[key]['user_img']}" onerror="this.src='{% static 'img/potato.png' %}'">
+          <img class="user-img comment-profile-img img${data.recomment_obj[key]['id']} "  src="${data.recomment_obj[key]['user_img']}" onerror="this.src='/static/img/potato.png'">
           ${data.recomment_obj[key]['profile_nickname']} <span>${data.recomment_obj[key]['created_at']}</span></span>
                 <br>
                 `

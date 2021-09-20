@@ -15,28 +15,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
-  <title>potato마켓</title>
+  <title>감자마켓</title>
   {% block head %}
   {% endblock head %}
 </head>
 
 <body>
-
-  <nav class="nav">
-    <div class="nav-logo">
-      <img class="logo-img" src="{% static 'img/potato.png' %}" alt="">
-      <h1><a href="{% url 'home' %}">감자마켓</a></h1>
+<nav class="nav">
+  <div class="nav-logo">
+    <img class="logo-img" src="/static/img/potato.png" alt="">
+    <h1><a href="{% url 'home' %}">감자마켓</a></h1>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-search">
+      <form action="{% url 'product:filter' %}" class="nav-search-form" method="GET">
+        <input name="search" class="nav-search-input" type="text" placeholder="찾으시는 제품을 입력해주세요 !">
+        <button type="submit" class="nav-search-btn"><i
+            class="fas fa-search nav-search-icon"></i></button>
+      </form>
     </div>
-    <div class="nav-menu">
-      <div class="nav-search">
-        <form action="" class="nav-search-form">
-          <input class="nav-search-input" type="text" placeholder="찾으시는 제품을 입력해주세요 !">
-          <button type="submit" class="nav-search-btn"><i class="fas fa-search nav-search-icon"></i></button>
-        </form>
-      </div>
-      <ul class="menu-ul">
-        <li><a class="menu-all checked" href="{% url 'home' %}">모든제품</a></li>
-        <li class="menu-category-li"><a class="menu-category" href="#"> 카테고리별</a>
+    <ul class="menu-ul">
+      <li><a class="menu-all checked" href="{% url 'home' %}">모든제품</a></li>
+      <li class="menu-category-li"><a class="menu-category" href="#"> 카테고리별</a>
         <div class="menu-category-list">
           <ul class="menu-category-list-ul active">
             {% for category in category_list.all %}
@@ -44,25 +44,25 @@
             {% endfor %}
           </ul>
         </div>
-        </li>
-      </ul>
-    </div>
-    <div class="nav-link">
-      {% if user.is_authenticated %}
-      <article class="nav-user">
-        <img class="user-img user-img{{user.pk}}" src="{{user.image}}" alt=""
-          onerror="this.src=`{% static 'img/potato.png' %}`">
-        <span class="user-name">{{user.nickname}}님</span>
-      </article>
-      <a href="{% url 'user:profile' user.pk %}">마이페이지</a>
-      <a href="{% url 'user:logout' %}">로그아웃</a>
-      {% else %}
-      <a href="{% url 'user:signin' %}">로그인</a>
-      <a href="{% url 'user:signup' %}">회원가입</a>
+      </li>
+    </ul>
+  </div>
+  <div class="nav-link">
+    {% if user.is_authenticated %}
+    <article class="nav-user">
+      <img class="user-img user-img{{user.pk}}" src="{{user.image}}" alt=""
+        onerror="this.src='/static/img/potato.png'">
+      <span class="user-name">{{user.nickname}}님</span>
+    </article>
+    <a href="{% url 'user:profile' user.pk %}">마이페이지</a>
+    <a href="{% url 'user:logout' %}">로그아웃</a>
+    {% else %}
+    <a href="{% url 'user:signin' %}">로그인</a>
+    <a href="{% url 'user:signup' %}">회원가입</a>
 
-      {% endif %}
-    </div>
-  </nav>
+    {% endif %}
+  </div>
+</nav>
   <div class="container">
     {% block content %}
     {% endblock content %}
@@ -79,8 +79,6 @@
 
   {% block script %}
   {% endblock script %}
-
-
 
 </body>
 
