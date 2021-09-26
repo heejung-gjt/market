@@ -1,7 +1,8 @@
+from utils import context_infor
 from django.shortcuts import get_object_or_404
 from django.contrib import auth
 from user.models import User, Address
-from .dto import SignupDto, SigninDto, UpdateUserDto
+from .dto import SignupDto, SigninDto, UpdateUserAddressDto, UpdateUserDto
 from datetime import datetime
 from market.settings import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME,AWS_S3_REGION_NAME
 from boto3.session import Session
@@ -10,13 +11,8 @@ from .utils import signup_error_chk, signin_error_chk, context,chk_user_profile_
 
 # update user profile infor 
 def update_profile(**kwargs):
-  print('여기로 오기ㄹ는 함',kwargs['user_pk'])
-
   if kwargs['image'] is None:
-    User.objects.filter(pk=kwargs['user_pk']).update(
-      nickname = kwargs['nickname'],
-      )
-
+    User.objects.filter(pk=kwargs['user_pk']).update(nickname = kwargs['nickname'])
   else:
     file = kwargs['image']
     if file is not None:
@@ -27,11 +23,10 @@ def update_profile(**kwargs):
       )
       s3 = session.resource('s3')
       now = datetime.now().strftime('%Y%H%M%S')
-      img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+      s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
         Key = now+file.name,
         Body = file
       )
-      # 환경변수로 빼준다
       s3_url = "https://django-s3-practices.s3.ap-northeast-2.amazonaws.com/"
       User.objects.filter(pk=kwargs['user_pk']).update(
         image = s3_url+now+file.name,
@@ -39,15 +34,25 @@ def update_profile(**kwargs):
       )
 
 
-
 # crud user infor
 class UserService():
 
   @staticmethod
   def signup(dto:SignupDto):
-    result = signup_error_chk(userid= dto.userid,nickname=dto.nickname, password=dto.password, password_chk=dto.password_chk)
+    result = signup_error_chk(
+        userid = dto.userid,
+        nickname=dto.nickname, 
+        password=dto.password, 
+        password_chk=dto.password_chk
+        )
     if not result['error']['state']:
-      user = User.objects.create_user(email=dto.userid, nickname=dto.nickname, password=dto.password,image = "potato.png", is_address=True)
+      user = User.objects.create_user(
+          email=dto.userid, 
+          nickname=dto.nickname, 
+          password=dto.password,
+          image = "potato.png", 
+          is_address=True
+          )
       Address.objects.create(
         user = user,
         address = dto.address,
@@ -64,25 +69,52 @@ class UserService():
 
   @staticmethod
   def update(dto:UpdateUserDto):
-    print('dto 유저 pk',dto.user_pk)
     if dto.nickname == '':
       result = context(True,'변경할 닉네임을 입력해주세요')
       return result
-
     nickname_is_exist = chk_user_profile_nickname(user_pk =dto.user_pk, nickname = dto.nickname)
-    
     if nickname_is_exist:
       update_profile(user_pk = dto.user_pk, nickname=dto.nickname, image=dto.image)
-
       result = context(False,'completed')  
       return result
-
     else:
       result = chk_nickname_exist(nickname = dto.nickname)
       if not result['error']['state']:
          update_profile(user_pk = dto.user_pk, nickname=dto.nickname, image=dto.image)
     return result
     
+  @staticmethod
+  def input_address(dto:UpdateUserAddressDto):
+    if not dto.user or not dto.address or not dto.address_detail:
+        result = context(True, '주소를 입력해주세요 !')
+        return result
+    User.objects.filter(pk = dto.user).update(
+        is_address = True
+    )
+    Address.objects.create(
+        user = User.objects.filter(pk = dto.user).first(),
+        address = dto.address,
+        address_detail = dto.address_detail
+    )
+    result = context(False,'comeplted')
+    return result
+
+  @staticmethod
+  def create_kakao_user(profile_request):
+    profile_json = profile_request.json()
+    kakao_account = profile_json.get("kakao_account")
+    profile = kakao_account.get("profile")
+    nickname = profile.get("nickname", None)
+    email = kakao_account.get("email", None)
+    user, created = User.objects.get_or_create(email=email)
+    if created:
+        user.set_password(None)
+        user.nickname = nickname
+        user.is_active = True
+        user.save()  
+    context = context_infor(state=True, user=user)
+    return context
+
 
 class UserFilterService():
 
@@ -98,7 +130,6 @@ class UserFilterService():
 
   @staticmethod
   def find_by_user(pk):
-    print('접근은함')
     user = User.objects.filter(pk=pk).first()
     return user
 

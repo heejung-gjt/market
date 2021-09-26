@@ -10,7 +10,9 @@
       <li class="writer-product">
         <div class="writer-product-infor">
           <div class="writer-product-imgs">
-            <img class="writer-product-img" src="{{article.image}}" alt="">
+            {% for photo in article.photo.all %}
+            <img class="writer-product-img" src="{{photo.image.url}}" alt="">
+            {% endfor %}
           </div>
           <a class="writer-product-link" href="{% url 'product:detail' article.pk %}">
             <span class="writer-product-title">{{article.name}}</span>

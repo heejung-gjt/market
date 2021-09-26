@@ -59,8 +59,8 @@ def calculate_price(origin_price, sale_price):
     discount_rate = -1
     return discount_rate
 
-# 페이징 처리 함수
 
+# 페이징 처리 함수
 def paginator(product_list, page, p):
   paginator = Paginator(product_list, p)
   try:
@@ -80,3 +80,5 @@ def paginator(product_list, page, p):
       end_index = max_index
   page_range = paginator.page_range[start_index:end_index]
   return article_obj, page_range
+
+
