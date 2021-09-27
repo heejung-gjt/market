@@ -1,4 +1,4 @@
-# market v1.0
+# market v2.0
 
 ## 기획의도
 자신이 가지고 있는 제품들을 사고 팔 수 있는 웹 어플리케이션입니다.
@@ -13,9 +13,19 @@
 - JavaScript
 - Django 3.2.6
 - Sqlite3
-- github
+- OAuth
+- Github
 
-## 구현기능
+## 1. Sequence Diagram
+<p align="center"><img src="https://user-images.githubusercontent.com/64240637/134929474-c0e39c91-fcb8-49b2-8462-bc47d4ce71b9.png" width=800 height=700></p>
+
+
+## 2. ERD
+<p align="center"><img src="https://user-images.githubusercontent.com/64240637/134930266-fc5ddc21-ce41-485b-9d33-3553fb4f7bbd.png" width=800 height=700></p>
+
+
+## 3. 구현기능
+
 - user 기능
   - 로그인/회원가입 기능
   - 프로필기능(사용자 정보 수정 가능, 내가 쓴 글, 찜 한 제품 보기)
