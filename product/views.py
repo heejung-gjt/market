@@ -44,31 +44,22 @@ class ProductCreateView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         categorys = ProductFilterService.find_by_all_category()
-        context = context_infor(category_list = categorys, state = False)
+        context = context_infor(category_list = categorys, state = True)
         return render(request, 'upload_product.html',context)
 
     def post(self, request, *args, **kwargs):
         try:
-            category_detail_pk =request.POST['category_pk']
+            data = self._build_article_dto(request)
+            context = ProductService.create(data)
+            if context['state']:
+                categorys = ProductFilterService.find_by_all_category()
+                context = context_infor(category_list = categorys)
+                return render(request, 'upload_product.html',context)
         except MultiValueDictKeyError:
-            categorys = ProductFilterService.find_by_all_category()
-            context = {
-                'error':{
-                'state':True,
-                'msg':'카테고리를 선택해주세요 !'
-                },
-                'category_list':categorys
-                }
+            category_list = ProductFilterService.find_by_all_category()
+            context = context_infor(state = True, msg = '카테고리를 선택해주세요 !', category_list = category_list)
             return render(request, 'upload_product.html',context)
-
-        data = self._build_article_dto(request)
-        category_pk = ProductFilterService.find_by_category_pk_in_category_detail(category_detail_pk)
-        context = ProductService.create(data)
-        if context['error']['state']:
-            categorys = ProductFilterService.find_by_all_category()
-            context['category_list'] = categorys
-            return render(request, 'upload_product.html',context)
-        return redirect('filter:category-list',category_pk)
+        return redirect('filter:category-list',context['category_pk'])
         
     def _build_article_dto(self, request):
         return ProductDto(
@@ -176,8 +167,11 @@ class ProductEditView(View):
 # article delete
 class DeleteView(View):
     def get(self, request, *args, **kwargs):
-        Article.objects.filter(pk=kwargs['pk']).update(
-            is_deleted = True
-        )
+        data = self._build_product_delete_dto()
+        context = ProductService.delete(data)
         return redirect('product:article')
 
+    def _build_product_delete_dto(self):
+        return ProductPkDto(
+            article_pk = self.kwargs['pk']
+        )

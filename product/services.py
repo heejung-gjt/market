@@ -6,6 +6,7 @@ from user.models import User
 from filter.services import CategoryFilterService, ProductFilterService
 from .models import Photo
 from utils import calculate_price, context_infor, paginator
+from django.utils.datastructures import MultiValueDictKeyError
 from user.utils import context
 from django.db.models import Q
 
@@ -17,17 +18,25 @@ class ProductService():
 
     @staticmethod
     def create(dto:ProductDto):
+        try:
+            category_detail_pk = dto.category_detail_pk
+        except MultiValueDictKeyError:
+            categorys = ProductFilterService.find_by_all_category()
+            result = context_infor(state = True, msg = '카테고리를 선택해주세요 !', category_list = categorys)
+            return result
+
+        category_pk = ProductFilterService.find_by_category_pk_in_category_detail(category_detail_pk)
         category_detail_name = CategoryFilterService.find_by_category_detail(dto.category_detail_pk)
         category_pk = CategoryFilterService.find_by_category_detail(dto.category_pk).category.pk
         category = CategoryFilterService.find_by_filter_category(category_pk)
         discount_rate = calculate_price(dto.origin_price, dto.price)
 
         if not dto.content or not dto.image or not dto.price or not dto.origin_price or not dto.name:
-            result = context(True, '모든 내용을 작성해주세요 !')
+            result = context_infor(state = True, msg = '모든 내용을 작성해주세요 !')
             return result
             
         if discount_rate == -1:
-            result = context(True, '정상적인 금액을 입력해주세요 !')
+            result = context_infor(state = True, msg = '정상적인 금액을 입력해주세요 !')
             return result
 
         article = Article.objects.create(
@@ -55,7 +64,7 @@ class ProductService():
             image = img
             )  
             photo.save()
-        result = context(False, 'completed')
+        result = context_infor(state = False, msg = 'completed', category_pk = category_pk)
         return result
 
     @staticmethod
@@ -89,6 +98,14 @@ class ProductService():
                     image = img
                     )  
         return False
+
+    @staticmethod
+    def delete(dto:ProductPkDto):
+        Article.objects.filter(pk = dto.article_pk).update(
+            is_deleted = True
+        )
+        result = context_infor(state = 'success')
+        return result
     
     @staticmethod
     def get_product_infor(request, articles):
@@ -148,7 +165,7 @@ class ProductService():
     @staticmethod
     def get_search_product_infor(request, dto:ProductSearchDto):
         categorys = ProductFilterService.find_by_all_category()
-        articles = Article.objects.filter(Q(name__icontains=dto.search_keyword) | Q(content__icontains=dto.search_keyword) | Q(category__name__icontains=dto.search_keyword)).distinct().order_by('-created_at')
+        articles = Article.objects.filter(Q(name__icontains=dto.search_keyword) | Q(content__icontains=dto.search_keyword) | Q(category__name__icontains=dto.search_keyword), is_deleted = False).distinct().order_by('-created_at')
         article_sum = articles.count()
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 12)

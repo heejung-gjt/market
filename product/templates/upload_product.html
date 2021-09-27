@@ -14,10 +14,9 @@
       <option value="{{category.pk}}">{{category}}</option>
       {% endfor %}
     {% if state %}
-    {{category}}
-      <option value=""selected>{{category}}</option>
+    <option value=""selected>카테고리선택</option>
       {% else %}
-      <option value=""selected>카테고리선택</option>
+      <option value=""selected>{{category}}</option>
       {% endif %}
   </select><br>
   </form>
@@ -38,8 +37,8 @@
       <img class="edit-user-img" src="{{photo.image.url}}" alt="">
       {% endfor %}
       </div>
-      {% if error.state %}
-      <strong class="upload_errmag">{{error.msg}}</strong>
+      {% if state %}
+      <strong class="upload_errmag">{{msg}}</strong>
       {% endif %}
   <div class="image-price-div">
     <label class="price-label" for="image-origin-price">가격 :</label>

@@ -50,14 +50,16 @@ def upload_get_time_passed(create_time):
 # product sale percentage function
 def calculate_price(origin_price, sale_price):
   try:
-    price = sale_price
-    price_gap = int(origin_price) - int(price)
-    real_sale = int(price_gap)/int(origin_price)*100
+    price_gap = int(origin_price) - int(sale_price)
+    real_sale = int(price_gap) / int(origin_price) * 100
     discount_rate = round(real_sale, 1)
+    if discount_rate >= 100:
+        return 100
+    elif discount_rate <= -1:
+        return 0
     return discount_rate
   except:
-    discount_rate = -1
-    return discount_rate
+    return -1
 
 
 # 페이징 처리 함수

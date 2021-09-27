@@ -1,9 +1,11 @@
+from filter.dto import CategoryProductDto
 from user.models import User
 from product.models import Article
 from django.shortcuts import get_object_or_404
 from filter.models import Category,CategoryDetail
 from django.db.models import Count
 from product.dto import ProductFilterDto, ProductSubFilterDto
+from filter.dto import CategoryProductDto
 from django.db.models import Q
 from utils import context_infor, paginator
 
@@ -11,8 +13,7 @@ class ProductFilterService():
 
     @staticmethod
     def find_by_product_list(category_pk):
-        articles = get_object_or_404(Category, pk = category_pk).article
-        articles = Category.objects.get(pk=category_pk).article.all()
+        articles = Article.objects.filter(category__pk = category_pk, is_deleted = False)
         return articles
 
     @staticmethod
@@ -169,6 +170,27 @@ class ProductFilterService():
     def find_by_user(pk):
         user = User.objects.filter(pk=pk).first()
         return user
+
+    @staticmethod
+    def get_product(request, dto:CategoryProductDto):
+        articles = ProductFilterService.find_by_product_list(dto.category_pk)
+        print(articles)
+        page = request.GET.get('page', '1')
+        articles, page_range = paginator(articles, page, 9) 
+        print(page_range)
+        category_title = ProductFilterService.find_by_category_title(dto.category_pk)
+        category_list = ProductFilterService.find_by_all_category()
+        category_sub_list = CategoryDetail.objects.filter(category__pk = dto.category_pk)
+        sub_state = False
+        context = context_infor(
+            articles = articles, 
+            category_title = category_title,
+            page_range = page_range, 
+            category_list = category_list, 
+            category_sub_list = category_sub_list, 
+            sub_state = sub_state
+            )
+        return context
 
 
 class CategoryFilterService():

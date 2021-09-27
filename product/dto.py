@@ -11,7 +11,7 @@ class ProductDto():
     origin_price:int
     price:int
     writer:User
-    category_detail_pk:str
+    category_detail_pk:int
 
 
 @dataclass
@@ -56,3 +56,4 @@ class ProductSubFilterDto():
 @dataclass
 class ProductSearchDto():
     search_keyword:str
+

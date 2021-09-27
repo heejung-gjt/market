@@ -228,14 +228,15 @@
     }).then(function (response) {
       return response.json()
     }).then(function (data) {
-      let data_id = data.comment_obj.id
+      let data_id = data.comment_obj.id;
+      console.log(data)
       $commentForm.reset()
 
       if ('{{article.writer.pk}}' == data.writer_pk || '{{article.writer.pk}}' == '{{request.user.pk}}') {
         document.querySelector('.comment-ul').innerHTML += `
           <li class="comment-li comment-li${data_id}">
             <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
-            src="{{article.writer.profile.image.url}}" alt="" onerror="this.src='/static/img/potato.png'">
+            src="${data.user_img}" alt="" onerror="this.src='/static/img/potato.png'">
             <strong class="owner">판매자</strong>
             <span>${data.comment_created}</span>
             </span>
