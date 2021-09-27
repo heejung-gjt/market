@@ -13,13 +13,13 @@
     {% for photo in article.photo.all %}
     <img class="detail-user-img" src="{{photo.image.url}}" alt="">
     {% endfor %}
-</div>
+  </div>
   <div class="detail-writer">
     <div class="writer">
       <div class="writer-infor">
         {% if article.writer.image %}
         <img src="{{article.writer.image}}" alt="" class="product-user-image"
-        onerror="this.src='/static/img/potato.png'">
+          onerror="this.src='/static/img/potato.png'">
         {% else %}
         <i class="product-icon fas fa-user-circle"></i>
         {% endif %}
@@ -77,12 +77,11 @@
       {% for comment in comment_list %}
       <li class="comment-li comment-li{{comment.pk}}">
         {% if article.writer == comment.writer %}
-        <span class="comment-profile-span"><img class="user-img comment-profile-img"
-            src="{{comment.image_url}}" alt="" onerror="this.src='/static/img/potato.png'"><strong
-            class="owner">판매자</strong><span class="upload_time"> {{comment.comment_obj.created_string}}</span></span>
+        <span class="comment-profile-span"><img class="user-img comment-profile-img" src="{{comment.image_url}}" alt=""
+            onerror="this.src='/static/img/potato.png'"><strong class="owner">판매자</strong><span class="upload_time">
+            {{comment.comment_obj.created_string}}</span></span>
         {% else %}
-        <span class="comment-profile-span"><img class="user-img comment-profile-img"
-            src="{{comment.image_url}}" alt=""
+        <span class="comment-profile-span"><img class="user-img comment-profile-img" src="{{comment.image_url}}" alt=""
             onerror="this.src='/static/img/potato.png'">{{comment.writer_nickname}}<span>{{comment.comment_obj.created_string}}</span></span>
         {% endif %}
         {% if user == comment.writer %}
@@ -90,14 +89,15 @@
         <form class="delete-comment-form delete-comment-form{{comment.pk}}" action="" method="POST">
           {% csrf_token %}
           <input type="submit" class="comment-delete comment-delete{{comment.pk}}"
-            onclick="commentDelete('{{comment.pk}}')"value="삭제"></input>
-            <button type="submit" class="comment-content-edit comment-content-edit{{comment.pk}}"
+            onclick="commentDelete('{{comment.pk}}')" value="삭제"></input>
+          <button type="submit" class="comment-content-edit comment-content-edit{{comment.pk}}"
             onclick="commentContentEditBtn('{{comment.pk}}')">수정</button>
         </form><br>
         <!-- 글 수정 폼 -->
         <form method="POST" class="edit-comment-form edit-comment-form{{comment.pk}} non-display">
           {% csrf_token %}
-          <input type="text" class="edit-comment edit_comment{{comment.pk}}" name="edit_text" value="{{comment.content}}">
+          <input type="text" class="edit-comment edit_comment{{comment.pk}}" name="edit_text"
+            value="{{comment.content}}">
           <input type="submit" class="edit-comment-btn" value="수정하기" onclick="commentEditBtn('{{comment.pk}}')"></input>
           <button type="submit" class="comment-edit-cancel comment-edit-cancel{{comment.pk}}"
             onclick="commentEditCancelBtn('{{comment.pk}}')">취소하기</button>
@@ -114,8 +114,8 @@
           <li class="recomment-li recomment-li{{recomment.pk}}">
             {% if article.writer == recomment.writer %}
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
-                src="{{recomment.writer.profile.image.url}}" alt=""
-                onerror="this.src='/static/img/potato.png'"><strong class="owner">판매자</strong>
+                src="{{recomment.writer.profile.image.url}}" alt="" onerror="this.src='/static/img/potato.png'"><strong
+                class="owner">판매자</strong>
               <span>{{recomment.created_string}}</span> </span>
             {% else %}
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
@@ -125,9 +125,9 @@
             {% if user == recomment.writer %}
             <span class="comment-content">{{recomment.content}}</span>
             <form class="delete-recomment-form delete-recomment-form{{recomment.pk}}" action="" method="POST">
-            {% csrf_token %}
+              {% csrf_token %}
               <span class="recomment-delete recomment-delete{{recomment.pk}}"
-              onclick="reCommentDelete('{{recomment.pk}}')">삭제</span>
+                onclick="reCommentDelete('{{recomment.pk}}')">삭제</span>
             </form>
             {% else %}
             <span class="comment-content">{{recomment.content}}</span>
@@ -160,19 +160,19 @@
 {% block script %}
 <script>
   // <script src="{% static 'js/product/script.js' %}">
-  
+
   function commentReply(comment_pk) {
     document.querySelector(`.recomment-form${comment_pk}`).classList.remove('non-display');
   }
-  
-  
+
+
   function likeBtn(article_pk) {
-  
+
     let likeCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
     let param = {
       'article_pk': article_pk,
     }
-    
+
     fetch("{% url 'social:like' %}", {
       method: 'POST',
       headers: {
@@ -191,17 +191,17 @@
       else {
         likedIcon.classList.remove('liked');
       }
-  
+
     }).catch((error) => {
       console.log('error', error);
     })
   }
-  
+
   // comment ajax
   let $commentForm = document.querySelector('.comment-form');
-  
+
   $commentForm.addEventListener('submit', submitComment);
-  
+
   function submitComment(e) {
     e.preventDefault();
     let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
@@ -212,11 +212,11 @@
       'user_pk': '{{request.user.pk}}',
       'owner_pk': '{{article.writer.pk}}'
     }
-    
+
     if (content == '') {
       return
     }
-    
+
     // comment ajax통신
     fetch("{% url 'social:comment' %}", {
       method: 'POST',
@@ -228,14 +228,15 @@
     }).then(function (response) {
       return response.json()
     }).then(function (data) {
-      let data_id = data.comment_obj.id
+      let data_id = data.comment_obj.id;
+      console.log(data)
       $commentForm.reset()
-  
+
       if ('{{article.writer.pk}}' == data.writer_pk || '{{article.writer.pk}}' == '{{request.user.pk}}') {
         document.querySelector('.comment-ul').innerHTML += `
           <li class="comment-li comment-li${data_id}">
             <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"
-            src="{{article.writer.profile.image.url}}" alt="" onerror="this.src='/static/img/potato.png'">
+            src="${data.user_img}" alt="" onerror="this.src='/static/img/potato.png'">
             <strong class="owner">판매자</strong>
             <span>${data.comment_created}</span>
             </span>
@@ -266,11 +267,11 @@
             </form>
           </li>`
       }
-      else if(data.writer_pk == '{{request.user.pk}}' && '{{article.writer.pk}}' !== data.writer_pk){
+      else if (data.writer_pk == '{{request.user.pk}}' && '{{article.writer.pk}}' !== data.writer_pk) {
         document.querySelector('.comment-ul').innerHTML += `
           <li class="comment-li comment-li${data_id}">
             <span class="comment-profile-span"><img class="user-img user_img${data_id} comment-profile-img"src="${data.user_img}"
-              onerror="this.src='/static/img/potato.png'">${data.profile_nickname }
+              onerror="this.src='/static/img/potato.png'">${data.profile_nickname}
               <span>${data.comment_created}</span>
             </span>
             <span class="comment-content comment-content${data_id}">${data.comment_obj.content}</span>
@@ -298,26 +299,26 @@
         <input class="re-comment-btn re-comment-cancel-btn${data_id}" type="submit" value="취소하기" onclick="reCommentCancelBtn('${data_id}')">
         </div>
         </form>`
-  
-  
+
+
     }).catch((error) => {
       console.log('error', error);
     })
-  
-  
+
+
   }
-  
+
   // 재댓글 취소하기 버튼
   function reCommentCancelBtn(comment_pk) {
     event.preventDefault();
     document.querySelector(`.recomment-form${comment_pk}`).classList.add('non-display');
   }
-  
-  
+
+
   function recommentForm(comment_pk) {
     event.preventDefault();
     document.querySelector(`.recomment-form${comment_pk}`).classList.add('non-display');
-    
+
     let recommentCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
     let recomment = document.querySelector(`.input-re-comment${comment_pk}`).value;
     let param = {
@@ -325,14 +326,14 @@
       'writer_pk': '{{article.writer.pk}}',
       'comment_pk': comment_pk,
       're_comment': recomment,
-      'article_pk':'{{article.pk}}'
-      
+      'article_pk': '{{article.pk}}'
+
     }
-    
+
     if (document.querySelector(`.input-re-comment${comment_pk}`).value == '') {
       return
     }
-    
+
     fetch("{% url 'social:re_comment' %}", {
       method: 'POST',
       headers: {
@@ -344,9 +345,9 @@
       return response.json()
     }).then(function (data) {
       document.querySelector(`.recomment-form${comment_pk}`).reset();
-  
+
       let recommentLi = '';
-  
+
       for (let key in data.recomment_obj) {
         if ('{{article.writer.pk}}' == data.recomment_obj[key]['writer_pk']) {
           recommentLi += `<li class="recomment-li recomment-li${key}">
@@ -378,87 +379,87 @@
         <span class="comment-content">${data.recomment_obj[key]['content']}</span>
               <span class="comment-reply comment-reply${data.comment_data.pk}" onclick="commentReply('${data.comment_data.id}')">답글</span></li>
         `
-            }
+        }
       }
-  
+
       document.querySelector(`.recomment-ul${comment_pk}`).innerHTML = recommentLi
-  
+
     }).catch((error) => {
       console.log('error', error);
     })
   }
-  
-  
+
+
   // 수정 ajax
-  
-  function commentEditCancelBtn(comment_pk){
-  event.preventDefault();
-  document.querySelector(`.edit-comment-form${comment_pk}`).classList.add('non-display');
-  document.querySelector(`.comment-content${comment_pk}`).classList.remove('non-display');
-  document.querySelector(`.delete-comment-form${comment_pk}`).classList.remove('non-display');
-  console.log('d')
+
+  function commentEditCancelBtn(comment_pk) {
+    event.preventDefault();
+    document.querySelector(`.edit-comment-form${comment_pk}`).classList.add('non-display');
+    document.querySelector(`.comment-content${comment_pk}`).classList.remove('non-display');
+    document.querySelector(`.delete-comment-form${comment_pk}`).classList.remove('non-display');
+    console.log('d')
   }
-  function commentContentEditBtn(comment_pk){
-  event.preventDefault();
-  document.querySelector(`.edit-comment-form${comment_pk}`).classList.remove('non-display');
-  document.querySelector(`.comment-content${comment_pk}`).classList.add('non-display');
-  document.querySelector(`.delete-comment-form${comment_pk}`).classList.add('non-display');
-  
+  function commentContentEditBtn(comment_pk) {
+    event.preventDefault();
+    document.querySelector(`.edit-comment-form${comment_pk}`).classList.remove('non-display');
+    document.querySelector(`.comment-content${comment_pk}`).classList.add('non-display');
+    document.querySelector(`.delete-comment-form${comment_pk}`).classList.add('non-display');
+
   }
-  
-  function commentEditBtn(comment_pk){
-  event.preventDefault();
-  document.querySelector(`.edit-comment-form${comment_pk}`).addEventListener('submit',EditCommentForm(comment_pk));
+
+  function commentEditBtn(comment_pk) {
+    event.preventDefault();
+    document.querySelector(`.edit-comment-form${comment_pk}`).addEventListener('submit', EditCommentForm(comment_pk));
   }
-  
-  function EditCommentForm(comment_pk){
-  event.preventDefault();
-  edit_comment = document.querySelector(`.edit_comment${comment_pk}`).value;
-  document.querySelector(`.edit-comment-form${comment_pk}`).classList.add('non-display');
-  document.querySelector(`.comment-content${comment_pk}`).classList.remove('non-display');
-  document.querySelector(`.delete-comment-form${comment_pk}`).classList.remove('non-display');
-  
-  let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-  let param = {
-    'edit_comment': edit_comment,
-    'comment_pk': comment_pk
+
+  function EditCommentForm(comment_pk) {
+    event.preventDefault();
+    edit_comment = document.querySelector(`.edit_comment${comment_pk}`).value;
+    document.querySelector(`.edit-comment-form${comment_pk}`).classList.add('non-display');
+    document.querySelector(`.comment-content${comment_pk}`).classList.remove('non-display');
+    document.querySelector(`.delete-comment-form${comment_pk}`).classList.remove('non-display');
+
+    let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    let param = {
+      'edit_comment': edit_comment,
+      'comment_pk': comment_pk
+    }
+
+    if (edit_comment == '') {
+      return
+    }
+
+    // comment edit ajax통신
+    fetch("{% url 'social:edit' %}", {
+      method: 'POST',
+      headers: {
+        "X-CSRFToken": csrfValue,
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify(param),
+    }).then(function (response) {
+      console.log('reass', response)
+      return response.json()
+    }).then(function (data) {
+      console.log(data)
+      console.log(edit_comment = document.querySelector(`.edit_comment${comment_pk}`).value)
+      document.querySelector(`.comment-content${comment_pk}`).innerText = edit_comment
+
+    }).catch((error) => {
+      console.log('error', error);
+    })
   }
-  
-  if (edit_comment == '') {
-    return
-  }
-  
-  // comment edit ajax통신
-  fetch("{% url 'social:edit' %}", {
-    method: 'POST',
-    headers: {
-      "X-CSRFToken": csrfValue,
-      "X-Requested-With": "XMLHttpRequest"
-    },
-    body: JSON.stringify(param),
-  }).then(function (response) {
-    console.log('reass', response)
-    return response.json()
-  }).then(function (data) {
-    console.log(data)
-    console.log(edit_comment = document.querySelector(`.edit_comment${comment_pk}`).value)
-    document.querySelector(`.comment-content${comment_pk}`).innerText = edit_comment
-  
-  }).catch((error) => {
-    console.log('error', error);
-  })
-  }
-  
-  
+
+
   // comment delete ajax
   function commentDelete(comment_pk) {
     document.querySelector('.delete-comment-form').addEventListener('submit', deleteComment(comment_pk));
   }
-  
+
   function deleteComment(comment_pk) {
     event.preventDefault();
     document.querySelector(`.comment-li${comment_pk}`).classList.add('non-display');
-  
+
     let param = {
       'article_pk': '{{article.pk}}',
       'user_pk': '{{request.user.pk}}',
@@ -466,7 +467,7 @@
       'comment_pk': comment_pk
     }
     let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-    
+
     // ajax통신
     fetch("{% url 'social:delete' %}", {
       method: 'POST',
@@ -478,26 +479,26 @@
     }).then(function (response) {
       return response.json()
     }).then(function (data) {
-     
+
     }).catch((error) => {
       console.log('error', error);
     })
   }
-  
+
   // recomment delete ajax 통신
-  function reCommentDelete(recomment_pk){
-  document.querySelector(`.delete-recomment-form${recomment_pk}`).addEventListener('submit', deleteReComment(recomment_pk));
+  function reCommentDelete(recomment_pk) {
+    document.querySelector(`.delete-recomment-form${recomment_pk}`).addEventListener('submit', deleteReComment(recomment_pk));
   }
   function deleteReComment(recomment_pk) {
     event.preventDefault();
     document.querySelector(`.recomment-li${recomment_pk}`).classList.add('non-display');
-  
+
     let csrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
     let param = {
       'recomment_pk': recomment_pk,
-      'msg':'recomment_delete',
+      'msg': 'recomment_delete',
     }
-    
+
     fetch("{% url 'social:delete' %}", {
       method: 'POST',
       headers: {
@@ -508,11 +509,11 @@
     }).then(function (response) {
       return response.json()
     }).then(function (data) {
-     
+
     }).catch((error) => {
       console.log('error', error);
     })
   }
-  
-  </script>
+
+</script>
 {% endblock script %}

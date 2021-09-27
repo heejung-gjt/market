@@ -51,7 +51,6 @@ def signin_error_chk(**kwargs):
 
 # user profile utils - Posts the user clicked on the like button
 def find_user_liked_article(request,articles,lists):
-    
   for article in articles.all():
     if not Like.objects.filter(article=article).first():
       Like.objects.create(

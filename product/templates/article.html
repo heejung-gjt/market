@@ -8,99 +8,90 @@
 
 
 {% block content %}
-<!-- <form class="select-filter-form" action="{% url 'filter:category-filter-list' %}" method="GET"> -->
-  <!-- <section class="product-social">
-    <select name="social-clicked_pk"style="display: none;">
-      <option value="" selected>필터링보기</option>
-      <option value="1">최신순</option>
-      <option value="2">댓글 많은 순</option>
-      <option value="3">찜 많은 순</option>
-      <option value="4">내가 쓴 글</option>
-    </select>
-  </section> -->
-<!-- </form> -->
-<div class="product-main-flex">
-<section class="product-filter">
-  <p class="product-filter-title">PRODUCT RANGE</p>
-  <form action="{% url 'product:select' %}" method="GET">
-    <p class="product-category">category</p>
-    <select class="category-select" name="sub-menu-pk">
-      <option value="" selected>전체보기</option>
-      {% for sub_menu in category_list.all %}
-      <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
-      {% endfor %}
-    </select>
-    <p class="product-filter-start">Price from</p>
-    <select class="product-price-start" name="price-start" id="">
-      <option value="0" selected>전체금액</option>
-      <option value="0">0원</option>
-      <option value="1000">1000원</option>
-      <option value="5000">5000원</option>
-      <option value="10000">10000원</option>
-      <option value="20000">20000원</option>
-      <option value="50000">50000원</option>
-    </select>
-    <p class="product-filter-end">Price to</p>
-    <select class="product-price-end" name="price-end" id="">
-      <option value="10000000" selected>전체금액</option>
-      <option value="10000">10000원</option>
-      <option value="20000">20000원</option>
-      <option value="50000">50000원</option>
-      <option value="100000">100000원</option>
-      <option value="100001">100000원 이상</option>
-    </select>
-    <p class="product-category-sort">상품정렬</p>
-    <select class="category-sort-select" name="sort">
-      <option value="" selected>정렬선택</option>
-      <option value="1">최신순</option>
-      <option value="2">과거순</option>
-      <option value="3">낮은 가격순</option>
-      <option value="4">높은 가격순</option>
-      <option value="5">찜 많은 순</option>
-      <option value="6">댓글 많은 순</option>
-    </select>
-    <div class="product-filter-btn">
-    <button class="product-filter-reset" onclick="productFilterReset(event)">초기화</button>
-    <button class="product-filter-send" type="submit">검색</button>
-  </div>
-  </form>
-  <div class="product-add">
-    <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
-  </div>
-</section>
-<section class="product-section">
-  <ul class="product-list">
-    <h1 class="product-main">모든 제품</h1>
-    {% for article in article_list %}
-    <a class="product-link" href="{% url 'product:detail' article.pk %}">
-      <li class="product">
-        <div class="product-writer">
-          <span>
-            <img src="{{article.writer.image}}" alt="" class="product-user-image"
-              onerror="this.src='/static/img/potato.png'">
-            <strong>{{article.writer.nickname}}</strong></span>
-        </div>
 
-        <div class="product-imgs">
-          {% for photo in article.photo.all %}
-          <img class="product-img" src="{{photo.image.url}}" alt="">
+<div class="product-main-flex">
+  <section class="product-filter">
+    <p class="product-filter-title">PRODUCT RANGE</p>
+    <form action="{% url 'product:select' %}" method="GET">
+      <p class="product-category">category</p>
+      <select class="category-select" name="sub-menu-pk">
+        <option value="" selected>전체보기</option>
+        {% for sub_menu in category_list.all %}
+        <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
         {% endfor %}
-        </div>
-        <div class="product-main-page">
-          <span class="product-title">{{article.name}}</span>
-          <span class="product-discount">{{article.article_price.discount_rate}}% <i class="fas fa-sort-down"></i></span>
-        <strong class="product-price">{{article.price}} 원</strong>
-        <div class="social">
-          <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
-          <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
-        </div>
-        <span class="product-address">{{ article.address | filter_numbers }}</span>
+      </select>
+      <p class="product-filter-start">Price from</p>
+      <select class="product-price-start" name="price-start" id="">
+        <option value="0" selected>전체금액</option>
+        <option value="0">0원</option>
+        <option value="1000">1000원</option>
+        <option value="5000">5000원</option>
+        <option value="10000">10000원</option>
+        <option value="20000">20000원</option>
+        <option value="50000">50000원</option>
+      </select>
+      <p class="product-filter-end">Price to</p>
+      <select class="product-price-end" name="price-end" id="">
+        <option value="10000000" selected>전체금액</option>
+        <option value="10000">10000원</option>
+        <option value="20000">20000원</option>
+        <option value="50000">50000원</option>
+        <option value="100000">100000원</option>
+        <option value="100001">100000원 이상</option>
+      </select>
+      <p class="product-category-sort">상품정렬</p>
+      <select class="category-sort-select" name="sort">
+        <option value="" selected>정렬선택</option>
+        <option value="1">최신순</option>
+        <option value="2">과거순</option>
+        <option value="3">낮은 가격순</option>
+        <option value="4">높은 가격순</option>
+        <option value="5">찜 많은 순</option>
+        <option value="6">댓글 많은 순</option>
+      </select>
+      <div class="product-filter-btn">
+        <button class="product-filter-reset" onclick="productFilterReset(event)">초기화</button>
+        <button class="product-filter-send" type="submit">검색</button>
       </div>
-      </li>
-    </a>
-    {% endfor %}
-  </ul>
-</section>
+    </form>
+    <div class="product-add">
+      <span class="product-add-link"><a href="{% url 'product:upload_product' %}">글쓰기</a></span>
+    </div>
+  </section>
+  <section class="product-section">
+    <ul class="product-list">
+      <h1 class="product-main">모든 제품</h1>
+      {% for article in article_list %}
+      <a class="product-link" href="{% url 'product:detail' article.pk %}">
+        <li class="product">
+          <div class="product-writer">
+            <span>
+              <img src="{{article.writer.image}}" alt="" class="product-user-image"
+                onerror="this.src='/static/img/potato.png'">
+              <strong>{{article.writer.nickname}}</strong></span>
+          </div>
+
+          <div class="product-imgs">
+            {% for photo in article.photo.all %}
+            <img class="product-img" src="{{photo.image.url}}" alt="">
+            {% endfor %}
+          </div>
+          <div class="product-main-page">
+            <span class="product-title">{{article.name}}</span>
+            <span class="product-discount">{{article.article_price.discount_rate}}% <i
+                class="fas fa-sort-down"></i></span>
+            <strong class="product-price">{{article.price}} 원</strong>
+            <div class="social">
+              <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
+              <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+            </div>
+            <span class="product-address">{{ article.address | filter_numbers }}</span>
+          </div>
+        </li>
+      </a>
+      {% endfor %}
+    </ul>
+  </section>
 </div>
 
 {% include 'pagination.html' %}
@@ -109,8 +100,8 @@
 
 {% block script %}
 <script>
-productFilterReset = (e) => {
-  event.preventDefault();
+  productFilterReset = (e) => {
+    event.preventDefault();
     let $categorySelect = document.querySelector('.category-select');
     let $priceStartSelect = document.querySelector('.product-price-start');
     let $priceEndSelect = document.querySelector('.product-price-end');
@@ -119,23 +110,20 @@ productFilterReset = (e) => {
     $priceStartSelect.options[0].selected = true;
     $priceEndSelect.options[0].selected = true;
     $productSortSelect.options[0].selected = true;
-}
-
-
-
-
-// 페이징 번호 선택한 버튼에 색상 포커스 주기
-let page_url = window.location.href
-page_lis = document.querySelectorAll('.page-li > a')
-page_lis.forEach(function(a){
-  if(page_url == a['href']){
-    console.log('haha')
-    a.classList.add('page-active')
   }
-})
+
+
+
+
+  // 페이징 번호 선택한 버튼에 색상 포커스 주기
+  let page_url = window.location.href
+  page_lis = document.querySelectorAll('.page-li > a')
+  page_lis.forEach(function (a) {
+    if (page_url == a['href']) {
+      console.log('haha')
+      a.classList.add('page-active')
+    }
+  })
 </script>
 
 {% endblock script %}
-
-
-

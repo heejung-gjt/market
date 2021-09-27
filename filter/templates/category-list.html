@@ -76,7 +76,7 @@
           <div class="product-imgs">
             {% for photo in article.photo.all %}
             <img class="product-img" src="{{photo.image.url}}" alt="">
-          {% endfor %}
+            {% endfor %}
           </div>
           <span class="product-title">{{article.name}}</span>
           <span class="product-discount">{{article.article_price.discount_rate}}% <i
@@ -106,7 +106,7 @@
           <div class="product-imgs">
             {% for photo in article.photo.all %}
             <img class="product-img" src="{{photo.image.url}}" alt="">
-          {% endfor %}
+            {% endfor %}
           </div>
           <div class="product-main-page">
             <span class="product-title">{{article.name}}</span>
@@ -133,33 +133,40 @@
   <!-- 이전페이지 -->
   {% if articles.has_previous %}
   <li class="page-li">
-      <a class="page-link" href="?sub-menu-pk={{pk}}&price-start={{start}}&price-end={{end}}&sort={{sort}}&page={{ articles.previous_page_number}}"><i class="page-icon fas fa-chevron-left"></i>이전</a>
+    <a class="page-link"
+      href="?sub-menu-pk={{pk}}&price-start={{start}}&price-end={{end}}&sort={{sort}}&page={{ articles.previous_page_number}}"><i
+        class="page-icon fas fa-chevron-left"></i>이전</a>
   </li>
   {% else %}
   <li class="page-li disabled">
-      <a class="page-link" tabindex="-1" aria-disabled="true" href="#"><i class="page-icon fas fa-chevron-left"></i>이전</a>
+    <a class="page-link" tabindex="-1" aria-disabled="true" href="#"><i class="page-icon fas fa-chevron-left"></i>이전</a>
   </li>
   {% endif %}
   <!-- 페이지리스트 -->
   {% for page_number in page_range %}
-      {% if page_number == question_list.number %}
-      <li class="page-li active" aria-current="page">
-          <a class="page-link" href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ page_number }}">{{ page_number }}</a>
-      </li>
-      {% else %}
-      <li class="page-li">
-          <a class="page-link" href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ page_number }}">{{ page_number }}</a>
-      </li>
-      {% endif %}
+  {% if page_number == question_list.number %}
+  <li class="page-li active" aria-current="page">
+    <a class="page-link"
+      href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ page_number }}">{{ page_number }}</a>
+  </li>
+  {% else %}
+  <li class="page-li">
+    <a class="page-link"
+      href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ page_number }}">{{ page_number }}</a>
+  </li>
+  {% endif %}
   {% endfor %}
   <!-- 다음페이지 -->
   {% if articles.has_next %}
   <li class="page-li">
-      <a class="page-link" href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ articles.next_page_number }}">다음<i class="page-icon fas fa-chevron-right"></i></a>
+    <a class="page-link"
+      href="?category={{pk}}&price-start={{start}}&price-end={{end}}&sub-menu={{sub_pk}}&sort={{sort}}&page={{ articles.next_page_number }}">다음<i
+        class="page-icon fas fa-chevron-right"></i></a>
   </li>
   {% else %}
   <li class="page-li disabled">
-      <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음<i class="page-icon fas fa-chevron-right"></i></a>
+    <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음<i
+        class="page-icon fas fa-chevron-right"></i></a>
   </li>
   {% endif %}
 </ul>
@@ -175,9 +182,9 @@
   document.querySelector('.menu-category').classList.add('checked');
 
 
-// 정렬 초기화
-function productFilterReset(e){
-  event.preventDefault();
+  // 정렬 초기화
+  function productFilterReset(e) {
+    event.preventDefault();
     categorySelect = document.querySelector('.category-detail-select');
     priceStartSelect = document.querySelector('.product-price-start');
     priceEndSelect = document.querySelector('.product-price-end');
@@ -186,17 +193,17 @@ function productFilterReset(e){
     priceStartSelect.options[0].selected = true
     priceEndSelect.options[0].selected = true
     productSortSelect.options[0].selected = true
-}
-
-// 페이징 번호 선택한 버튼에 색상 포커스 주기 // 자바스크립트 파일 만들어서 작성하기
-let page_url = window.location.href
-page_lis = document.querySelectorAll('.page-li > a')
-page_lis.forEach(function(a){
-  if(page_url == a['href']){
-    console.log('haha')
-    a.classList.add('page-active')
   }
-})
+
+  // 페이징 번호 선택한 버튼에 색상 포커스 주기 // 자바스크립트 파일 만들어서 작성하기
+  let page_url = window.location.href
+  page_lis = document.querySelectorAll('.page-li > a')
+  page_lis.forEach(function (a) {
+    if (page_url == a['href']) {
+      console.log('haha')
+      a.classList.add('page-active')
+    }
+  })
 
 </script>
 {% endblock script %}
