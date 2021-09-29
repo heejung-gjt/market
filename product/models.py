@@ -10,7 +10,7 @@ class Article(Nameable, TimeStampable, Deleteable):
   content = models.TextField()
   origin_price = models.IntegerField(null=True)
   price = models.IntegerField(default=0)
-  writer = models.ForeignKey(User, on_delete=models.SET_NULL,null=True, related_name='article')
+  writer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='article')
   # image = models.TextField(null=True, blank=True)
   address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, related_name='article')
 

@@ -61,7 +61,7 @@ class ReCommentView(View):
         return JsonResponse(context)
 
     @staticmethod
-    def _build_recomment_dto(self, request):
+    def _build_recomment_dto(request):
         data = json.loads(request.body)
         return ReCommentDto(
             content = data.get('re_comment'),

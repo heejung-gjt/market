@@ -57,7 +57,7 @@ class SocialService():
     @staticmethod
     def create_recomment(dto:ReCommentDto):
         comment = SocialFilterService.find_by_comment_infor(dto.comment_pk)
-        user = UserFilterService.find_user_infor(dto.user_pk).username
+        user = UserFilterService.find_user_infor(dto.user_pk).email
         profile_nickname = UserFilterService.find_profile_infor(dto.user_pk).nickname
         recomment = ReComment.objects.create(
         content = dto.content,
@@ -74,8 +74,8 @@ class SocialService():
                 'updated_at':recomment.updated_at, 
                 'content':recomment.content,
                 'writer_pk':recomment.writer.pk,
-                'writer':recomment.writer.username,
-                'user_img': recomment.writer.profile.image.url,
+                'writer':recomment.writer.email,
+                'user_img': recomment.writer.image,
                 'profile_nickname':profile_nickname
                 }
 
@@ -84,7 +84,7 @@ class SocialService():
         user = user,
         comment_data = model_to_dict(comment),
         recomment_created = get_time_passed(recomment),
-        comment_user_img = comment.writer.profile.image.url,
+        comment_user_img = comment.writer.image,
         recomment_obj = recomment_contents, 
         )
         return context
