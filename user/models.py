@@ -27,19 +27,13 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampable, Deleteable):
-    """
-    is_agreed : 사용자 정책 동의 관련 필드
-    is_detailed : 사용자 부가 내용 작성 관련 필드
-    """
+
     image = models.TextField(verbose_name=('Profile image'),)
     email = models.TextField(verbose_name=('Email Address'), max_length=255,unique=True,)
     nickname = models.CharField(verbose_name=('Nickname'), max_length=30,unique=True)
     is_active = models.BooleanField(verbose_name=('Is active'), default=True)
     is_staff = models.BooleanField(verbose_name=('Is staff'), default=False)
-    is_agreed = models.BooleanField(verbose_name=('Is agreed'), default=False)
-    is_detailed = models.BooleanField(verbose_name=('Is detailed'), default=False)
     is_address = models.BooleanField(verbose_name=('Is address'), default=False)    
-    auth = models.CharField(max_length=50,blank=True,null=True)
     objects = UserManager()
     
     USERNAME_FIELD = 'email'
