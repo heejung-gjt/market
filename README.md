@@ -1,40 +1,69 @@
 # market v2.0
 
-자신이 가지고 있는 제품들을 사고 팔 수 있는 웹 사이트입니다.
+![블루 우드](https://user-images.githubusercontent.com/64240637/136060285-08c6a17f-bdd3-4afc-a57e-ae4fce92183c.png)
 
-## [개발배경](https://github.com/heejung-gjt/market/wiki/%EA%B0%9C%EB%B0%9C%ED%95%98%EA%B2%8C-%EB%90%9C-%EB%B0%B0%EA%B2%BD)
-
-### [WIKI](https://github.com/heejung-gjt/market/wiki)
-<br>
-
-
-## 개발환경
-- IDE : Visual Studio Code
-- OS : Ubuntu20.04
-
-## 사용기술
-- HTML
-- CSS
-- JavaScript
-- Django 3.2.6
-- Sqlite3
-- OAuth
-- Github
 
 <br>
 
+## 목차 | Contents
+1. [감자마켓 소개]()   
+2. [개요]()   
+3. [개발환경 및 기술스택]()  
+4. [Sequence Diagram]()
+5. [주요 기능]()     
+6. [ERD]()   
+7. [History]()   
 
-## 1. Sequence Diagram
-<p align="center"><img src="https://user-images.githubusercontent.com/64240637/134929474-c0e39c91-fcb8-49b2-8462-bc47d4ce71b9.png" width=600 height=500></p>
+<br>
+
+## 📚 감자마켓 소개
+
+__자신이 가지고 있는 제품들을 사고 팔 수 있는 웹 사이트입니다.__
+
+<br>
+
+## 📌 개요
+
+- 기간 : 2021.06.03 ~ 
+- 팀원
+  - Back-end & Front-end : [손희정](https://github.com/heejung-gjt)
+  - 개인 프로젝트로 진행하였습니다.   
+
+<br>
+
+## 개발환경 및 기술스택
+
+|종류|이름|
+|---|---|
+|IDE|Visual Studio Code|
+|OS|Ubuntu20.04|
+
+<br>
+
+|Stack|Role|
+|---|---|
+|HTML||
+|CSS||
+|JavaScript||
+|Django 3.2.6||
+|Scrapping||
+|Ajax||
+|OAuth||
+|ORM||
+|Github||
+|AWS RDS||
+|AWS S3||
 
 
-## 2. ERD
-<p align="center"><img src="https://user-images.githubusercontent.com/64240637/134930266-fc5ddc21-ce41-485b-9d33-3553fb4f7bbd.png" width=600 height=500></p>
+<br>
 
+## Sequence Diagram
+<!-- <p align="center"><img src="https://user-images.githubusercontent.com/64240637/134929474-c0e39c91-fcb8-49b2-8462-bc47d4ce71b9.png" width=600 height=500></p> -->
+<img src="https://user-images.githubusercontent.com/64240637/134929474-c0e39c91-fcb8-49b2-8462-bc47d4ce71b9.png"></p>
 
-## 3. 구현기능
+<br>
 
-
+## 주요 기능
 
 - ### user 기능
   - 로그인/회원가입 기능
@@ -102,6 +131,18 @@
 ![대댓글](https://user-images.githubusercontent.com/64240637/135299562-bbc7c7fa-31aa-4372-8157-bff0b6f337d2.gif)
 
 
+<br>
+
+## ERD
+<!-- <p align="center"><img src="https://user-images.githubusercontent.com/64240637/134930266-fc5ddc21-ce41-485b-9d33-3553fb4f7bbd.png" width=600 height=500></p> -->
+<img src="https://user-images.githubusercontent.com/64240637/134930266-fc5ddc21-ce41-485b-9d33-3553fb4f7bbd.png">
+
+
+<br>
+
 ## History
 
-[v1.0](https://github.com/heejung-gjt/market/wiki/v1.0)
+### [WIKI](https://github.com/heejung-gjt/market/wiki)
+
+[v1.0](https://github.com/heejung-gjt/market/wiki/v1.0)    
+[v2.0](https://github.com/heejung-gjt/market/wiki/v2.0)   
