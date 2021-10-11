@@ -28,9 +28,9 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampable, Deleteable):
 
-    image = models.TextField(verbose_name=('Profile image'),)
-    email = models.TextField(verbose_name=('Email Address'), max_length=255,unique=True,)
-    nickname = models.CharField(verbose_name=('Nickname'), max_length=30,unique=True)
+    image = models.TextField(verbose_name=('Profile image'))
+    email = models.EmailField(verbose_name=('Email address'), max_length=255,unique=True,)
+    nickname = models.CharField(verbose_name=('Nickname'), max_length=30, unique=True)
     is_active = models.BooleanField(verbose_name=('Is active'), default=True)
     is_staff = models.BooleanField(verbose_name=('Is staff'), default=False)
     is_address = models.BooleanField(verbose_name=('Is address'), default=False)    
