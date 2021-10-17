@@ -21,10 +21,10 @@
 }
 .login-section span,.register-section span{
   display: block;
-  font-size: 4.8em;
+  font-size: 2.8em;
   letter-spacing: 3px;
   font-weight: bold;
-  font-family: 'Nanum Pen Script', cursive;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 .login-form,.register-form{
   text-align: center;

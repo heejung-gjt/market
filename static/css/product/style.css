@@ -221,6 +221,7 @@ width: 0px;
 .comment-profile-span{
   display: flex;
   align-items: center;
+  margin-right: 20px;
 }
 .comment-content{
   margin-left: 43px;
