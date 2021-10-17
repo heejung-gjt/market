@@ -1,6 +1,7 @@
+from os import name
 from filter.dto import CategoryProductDto
 from user.models import User
-from product.models import Article
+from product.models import Article, Photo
 from django.shortcuts import get_object_or_404
 from filter.models import Category,CategoryDetail
 from django.db.models import Count
@@ -55,6 +56,7 @@ class ProductFilterService():
     @staticmethod
     def find_by_not_deleted_article():
         article_list = Article.objects.filter(is_deleted = False).order_by('-created_at')
+       
         return article_list
 
     @staticmethod
@@ -84,11 +86,14 @@ class ProductFilterService():
 
     @staticmethod
     def get_filter_product_infor(request, dto:ProductFilterDto):
-        print(dto)
         categorys = ProductFilterService.find_by_all_category()
         price_from = int(dto.price_from)
         price_to = int(dto.price_to)
         articles = None
+        if dto.category_pk:
+            product_title = Category.objects.filter(pk = dto.category_pk).first().name
+        else:
+            product_title = '모든'
         q = Q()
         if dto.category_pk:
             q &= Q(category = dto.category_pk)
@@ -110,12 +115,14 @@ class ProductFilterService():
             articles = Article.objects.filter(q).order_by('-created_at')
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 9)
+
         context = context_infor(
             sort = dto.product_sort, 
             pk = dto.category_pk, 
+            product_title = product_title,
             start = price_from, 
             end = price_to, 
-            article_list = articles, 
+            articles = articles, 
             category_list = categorys, 
             is_page = False, 
             page_range = page_range
@@ -125,9 +132,11 @@ class ProductFilterService():
     @staticmethod
     def get_filter_sub_product_infor(request, dto:ProductSubFilterDto):
         category_title = Category.objects.get(pk=dto.category)
-        categorys = ProductFilterService.find_by_all_category()
+        category_list = ProductFilterService.find_by_all_category()
+        categorys = None
         price_from = int(dto.price_from)
         price_to = int(dto.price_to)
+        sub_category_pk = dto.category_detail
         articles = None
         q = Q()
         q &= Q(category = dto.category)
@@ -147,11 +156,16 @@ class ProductFilterService():
         else:
             articles = Article.objects.filter(q).all()
         category_sub_list = CategoryDetail.objects.filter(category__pk = dto.category)
-        category_name = Category.objects.filter(pk = dto.category).first().name
+        
+        if sub_category_pk:
+            category_name = CategoryDetail.objects.filter(pk = int(sub_category_pk)).first().name
+        else:
+            category_name = Category.objects.filter(pk = dto.category).first().name
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 9)
         context = context_infor(
-            category_list = categorys,
+            category_list = category_list,
+            categorys = categorys,
             category_sub_list = category_sub_list,
             articles = articles,
             page_range = page_range,
@@ -174,17 +188,18 @@ class ProductFilterService():
     @staticmethod
     def get_product(request, dto:CategoryProductDto):
         articles = ProductFilterService.find_by_product_list(dto.category_pk)
-        print(articles)
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 9) 
-        print(page_range)
         category_title = ProductFilterService.find_by_category_title(dto.category_pk)
         category_list = ProductFilterService.find_by_all_category()
         category_sub_list = CategoryDetail.objects.filter(category__pk = dto.category_pk)
         sub_state = False
+        print(category_title)
+
         context = context_infor(
             articles = articles, 
             category_title = category_title,
+            category_name = category_title,
             page_range = page_range, 
             category_list = category_list, 
             category_sub_list = category_sub_list, 

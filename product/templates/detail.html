@@ -11,7 +11,7 @@
 <section class="detail-section">
   <div class="detail-img">
     {% for photo in article.photo.all %}
-    <img class="detail-user-img" src="{{photo.image.url}}" alt="">
+    <img class="detail-user-img" src="{{photo.image}}" alt="">
     {% endfor %}
   </div>
   <div class="detail-writer">
@@ -19,7 +19,7 @@
       <div class="writer-infor">
         {% if article.writer.image %}
         <img src="{{article.writer.image}}" alt="" class="product-user-image"
-          onerror="this.src='/static/img/potato.png'">
+        onerror="this.src='/static/img/potato.png'">
         {% else %}
         <i class="product-icon fas fa-user-circle"></i>
         {% endif %}
@@ -82,7 +82,7 @@
             {{comment.comment_obj.created_string}}</span></span>
         {% else %}
         <span class="comment-profile-span"><img class="user-img comment-profile-img" src="{{comment.image_url}}" alt=""
-            onerror="this.src='/static/img/potato.png'">{{comment.writer_nickname}}<span>{{comment.comment_obj.created_string}}</span></span>
+            onerror="this.src='/static/img/potato.png'">{{comment.writer.nickname}}<span>{{comment.comment_obj.created_string}}</span></span>
         {% endif %}
         {% if user == comment.writer %}
         <span class="comment-content comment-content{{comment.pk}}">{{comment.content}}</span>
@@ -114,13 +114,13 @@
           <li class="recomment-li recomment-li{{recomment.pk}}">
             {% if article.writer == recomment.writer %}
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
-                src="{{recomment.writer.profile.image.url}}" alt="" onerror="this.src='/static/img/potato.png'"><strong
+                src="{{recomment.writer.image}}" alt="" onerror="this.src='/static/img/potato.png'"><strong
                 class="owner">판매자</strong>
               <span>{{recomment.created_string}}</span> </span>
             {% else %}
             <span class="comment-profile-span"><img class="user-img comment-profile-img"
-                src="{{recomment.writer.profile.image.url}}" alt=""
-                onerror="this.src='/static/img/potato.png'">{{recomment.writer.profile.nickname}}<span>{{recomment.created_string}}</span></span>
+                src="{{recomment.writer.image}}" alt=""
+                onerror="this.src='/static/img/potato.png'">{{recomment.writer.nickname}}<span>{{recomment.created_string}}</span></span>
             {% endif %}
             {% if user == recomment.writer %}
             <span class="comment-content">{{recomment.content}}</span>
@@ -159,15 +159,11 @@
 
 {% block script %}
 <script>
-  // <script src="{% static 'js/product/script.js' %}">
-
   function commentReply(comment_pk) {
     document.querySelector(`.recomment-form${comment_pk}`).classList.remove('non-display');
   }
 
-
   function likeBtn(article_pk) {
-
     let likeCsrfValue = document.getElementsByName("csrfmiddlewaretoken")[0].value;
     let param = {
       'article_pk': article_pk,
@@ -299,13 +295,9 @@
         <input class="re-comment-btn re-comment-cancel-btn${data_id}" type="submit" value="취소하기" onclick="reCommentCancelBtn('${data_id}')">
         </div>
         </form>`
-
-
     }).catch((error) => {
       console.log('error', error);
     })
-
-
   }
 
   // 재댓글 취소하기 버튼
@@ -327,8 +319,8 @@
       'comment_pk': comment_pk,
       're_comment': recomment,
       'article_pk': '{{article.pk}}'
-
     }
+
 
     if (document.querySelector(`.input-re-comment${comment_pk}`).value == '') {
       return

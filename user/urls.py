@@ -4,9 +4,6 @@ from user.views import (
     LoginView,RegisterView,ProfileView,logout, KakaoLoginView, 
     KakaoLoginCallBackView, SignupAddressView
     )
-from django.conf import settings
-from django.conf.urls.static import static
-
 
 app_name = 'user'
 
@@ -18,4 +15,4 @@ urlpatterns = [
   path('signin/kakao/', KakaoLoginView.as_view(), name='kakao_login'),
   path('signin/kakao/callback/', KakaoLoginCallBackView.as_view(), name='kakao-callback'),
   path('signup/address/', SignupAddressView.as_view(), name='kakao-address'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
