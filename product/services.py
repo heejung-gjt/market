@@ -64,25 +64,24 @@ class ProductService():
             )
 
         # 여러개의 이미지 s3에 넣기
+        session = Session(
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name=AWS_S3_REGION_NAME
+        )
+        s3 = session.resource('s3')
+        s3_url = "https://django-s3-practices.s3.ap-northeast-2.amazonaws.com/"
+
         for file in dto.image:
-            session = Session(
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_S3_REGION_NAME
-            )
-            s3 = session.resource('s3')
             now = datetime.now().strftime('%Y%H%M%S')
             s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
             Key = now+file.name,
             Body = file
             )
-            s3_url = "https://django-s3-practices.s3.ap-northeast-2.amazonaws.com/"
-    
-            photo = Photo.objects.create(
+            Photo.objects.create(
             article = article,
-            image = s3_url+now+file.name,
+            image = s3_url+now+file.name
             )  
-            photo.save()
 
         result = context_infor(state = False, msg = 'completed', category_pk = category_pk)
         return result
@@ -109,14 +108,28 @@ class ProductService():
             article = article,
             discount_rate = discount_rate 
         )
+         # 여러개의 이미지 s3에 넣기
+        session = Session(
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name=AWS_S3_REGION_NAME
+        )
+        s3 = session.resource('s3')
+        s3_url = "https://django-s3-practices.s3.ap-northeast-2.amazonaws.com/"
+
         if dto.image:
             Photo.objects.filter(article__pk = dto.article_pk).delete() 
-
-            for img in dto.image:
+            for file in dto.image:
+                now = datetime.now().strftime('%Y%H%M%S')
+                s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key = now+file.name,
+                Body = file
+                )
                 Photo.objects.filter(article__pk = dto.article_pk).create(
                     article = article,
-                    image = img
-                    )  
+                    image = s3_url+now+file.name
+                ) 
+
         return False
 
     @staticmethod
@@ -132,21 +145,6 @@ class ProductService():
         article_list = ProductFilterService.find_by_not_deleted_article()
         page = request.GET.get('page', '1')
         articles, page_range = paginator(article_list, page, 9)
-        # articles = [
-        # # 변경이유 : image를 한장 가져오기 위해, 장고 템플릿에서 이미지를 위한 for문과 Article를 위한 for문이 각각 쓰여지고 있었음 하나의 for문으로 해결하기 위해서
-        # {   'pk': article.pk,
-        #     'writer_image': article.writer.image,
-        #     'writer': article.writer,
-        #     'image': Photo.objects.filter(article__pk = article.pk).first().image,
-        #     'nickname': article.writer.nickname,
-        #     'title': article.name,
-        #     'price': article.price,
-        #     'price_rate': article.article_price.discount_rate,
-        #     'comment': article.comment.all(),
-        #     'like': len(article.like.users.all()),
-        #     'address': article.address
-        # } for article in articles]
-
         context = context_infor(
             articles = articles,
             product_title = '모든',
@@ -203,7 +201,6 @@ class ProductService():
         categorys = ProductFilterService.find_by_all_category()
         articles = Article.objects.filter(Q(name__icontains=dto.search_keyword) | Q(content__icontains=dto.search_keyword) | Q(category__name__icontains=dto.search_keyword), is_deleted = False).distinct().order_by('-created_at')
         article_sum = articles.count()
-        print('흠')
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 12)
 

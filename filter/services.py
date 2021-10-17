@@ -190,6 +190,7 @@ class ProductFilterService():
         articles = ProductFilterService.find_by_product_list(dto.category_pk)
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 9) 
+        print(page_range)
         category_title = ProductFilterService.find_by_category_title(dto.category_pk)
         category_list = ProductFilterService.find_by_all_category()
         category_sub_list = CategoryDetail.objects.filter(category__pk = dto.category_pk)
