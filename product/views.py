@@ -44,7 +44,7 @@ class ProductCreateView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         categorys = ProductFilterService.find_by_all_category()
-        context = context_infor(category_list = categorys, state = True)
+        context = context_infor(category_list = categorys, state = False)
         return render(request, 'upload_product.html',context)
 
     def post(self, request, *args, **kwargs):
@@ -98,7 +98,7 @@ class FilterProductView(View):
 
     def _build_product_filter_dto(self, request):
         return ProductFilterDto(
-            category_pk = request.GET.get('sub-menu-pk', None),
+            category_pk = request.GET.get('sub-menu-pk', 0),
             price_from = request.GET.get('price-start',0),
             price_to = request.GET.get('price-end', 10000000),
             product_sort = request.GET.get('sort', None)
@@ -118,7 +118,7 @@ class FilterSubProductView(View):
             price_to = request.GET.get('price-end', 10000000),
             product_sort = request.GET.get('sort', None),
             category = request.GET.get('category', None),
-            category_detail = request.GET.get('sub-menu', None)
+            category_detail = request.GET.get('sub-menu', 0)
         )
     
 
@@ -133,7 +133,6 @@ class ProductSearchView(View):
         return ProductSearchDto(
             search_keyword = request.GET.get('search', '')
         )
-
 
 
 class ProductEditView(View):

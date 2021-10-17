@@ -1,7 +1,8 @@
 {% extends 'category.html' %}
-
 {% block head %}
 {% load static %}
+{% load filter_number %}
+{% load comment_sum %}
 <link rel="stylesheet" href="/static/css/product/style.css">
 <link rel="stylesheet" href="/static/css/filter/style.css">
 {% endblock head %}
@@ -65,26 +66,30 @@
   {% if sub_state and not is_deleted %}
   <section class="product-section">
     <ul class="product-list">
-      <!-- <h1 class="product-main">{{category_title.name}} 제품</h1> -->
-      {% for article in articles.all %}
+      <h1 class="product-main">{{category_name}} 제품</h1>
+      {% for article in articles %}
       <a class="product-link" href="{% url 'product:detail' article.pk %}">
         <li class="product">
           <div class="product-writer">
-            <span> <img src="{{article.writer.image_beta}}" alt="" class="product-user-image"
-                onerror="this.src='/static/img/potato.png'"><strong>{{article.writer.nickname}}</strong></span>
+            <span>
+              <img src="{{article.writer.image}}" alt="" class="product-user-image"
+                onerror="this.src='/static/img/potato.png'">
+              <strong>{{article.writer.nickname}}</strong></span>
           </div>
+
           <div class="product-imgs">
-            {% for photo in article.photo.all %}
-            <img class="product-img" src="{{photo.image.url}}" alt="">
-            {% endfor %}
+            <img class="product-img" src="{{article.photo.first.image}}" alt="">
           </div>
-          <span class="product-title">{{article.name}}</span>
-          <span class="product-discount">{{article.article_price.discount_rate}}% <i
-              class="fas fa-sort-down"></i></span>
-          <strong class="product-price">{{article.price}} 원</strong>
-          <div class="social">
-            <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
-            <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+          <div class="product-main-page">
+            <span class="product-title">{{article.name}}</span>
+            <span class="product-discount">{{article.article_price.discount_rate}}% <i
+                class="fas fa-sort-down"></i></span>
+            <strong class="product-price">{{article.price}} 원</strong>
+            <div class="social">
+              <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
+              <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+            </div>
+            <span class="product-address">{{ article.address | filter_numbers }}</span>
           </div>
         </li>
       </a>
@@ -94,19 +99,19 @@
   {% else %}
   <section class="product-section">
     <ul class="product-list">
-      <h1 class="product-main">{{category_title.name}} 제품</h1>
+      <h1 class="product-main">{{category_name}} 제품</h1>
       {% for article in articles %}
-      {% if not article.is_deleted %}
       <a class="product-link" href="{% url 'product:detail' article.pk %}">
         <li class="product">
           <div class="product-writer">
-            <span> <img src="{{article.writer.image}}" alt="" class="product-user-image"
-                onerror="this.src='/static/img/potato.png'"><strong>{{article.writer.nickname}}</strong></span>
+            <span>
+              <img src="{{article.writer.image}}" alt="" class="product-user-image"
+                onerror="this.src='/static/img/potato.png'">
+              <strong>{{article.writer.nickname}}</strong></span>
           </div>
+
           <div class="product-imgs">
-            {% for photo in article.photo.all %}
-            <img class="product-img" src="{{photo.image.url}}" alt="">
-            {% endfor %}
+            <img class="product-img" src="{{article.photo.first.image}}" alt="">
           </div>
           <div class="product-main-page">
             <span class="product-title">{{article.name}}</span>
@@ -114,14 +119,13 @@
                 class="fas fa-sort-down"></i></span>
             <strong class="product-price">{{article.price}} 원</strong>
             <div class="social">
-              <span class="social-comment">댓글 +{{article.comment.all| length}} </span>
+              <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
               <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
             </div>
-            <span class="product-address">{{article.address}}</span>
+            <span class="product-address">{{ article.address | filter_numbers }}</span>
           </div>
         </li>
       </a>
-      {% endif %}
       {% endfor %}
     </ul>
   </section>

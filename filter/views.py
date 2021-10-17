@@ -6,7 +6,6 @@ from filter.services import ProductFilterService
 class CategoryView(View):
 
     def get(self, request, *args, **kwargs):
-        context = {}
         data = self._build_category_list_dto()
         context = ProductFilterService.get_product(request, data)
         return render(request, 'category-list.html',context)
