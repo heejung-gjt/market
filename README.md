@@ -6,19 +6,21 @@
 <br>
 
 ## 목차 | Contents
-1. [감자마켓 소개]()   
-2. [개요]()   
-3. [개발환경 및 기술스택]()  
-4. [Sequence Diagram]()
-5. [주요 기능]()     
-6. [ERD]()   
-7. [History]()   
+1. [감자마켓 소개](https://github.com/heejung-gjt/market#-%EA%B0%90%EC%9E%90%EB%A7%88%EC%BC%93-%EC%86%8C%EA%B0%9C)      
+2. [개요](https://github.com/heejung-gjt/market#-%EA%B0%9C%EC%9A%94)    
+3. [개발환경 및 기술스택](https://github.com/heejung-gjt/market#%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD-%EB%B0%8F-%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D)     
+4. [Sequence Diagram](https://github.com/heejung-gjt/market#sequence-diagram)    
+5. [주요 기능](https://github.com/heejung-gjt/market#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5)    
+6. [ERD](https://github.com/heejung-gjt/market#erd)     
+7. [History](https://github.com/heejung-gjt/market#history)     
 
 <br>
 
 ## 📚 감자마켓 소개
 
-__자신이 가지고 있는 제품들을 사고 팔 수 있는 웹 사이트입니다.__
+__자신이 가지고 있는 제품들을 사고 팔 수 있는 웹 사이트입니다.__    
+<br>
+장고의 기본적인 CRUD와 다양한 기능을 구현해보기 위해서 중고 쇼핑몰 사이트를 선택했습니다. 실제 유저가 사용할 수 있는 완성도로 개발하기 위해 여전히 진행중에 있습니다. 
 
 <br>
 
@@ -42,17 +44,16 @@ __자신이 가지고 있는 제품들을 사고 팔 수 있는 웹 사이트입
 
 |Stack|Role|
 |---|---|
-|HTML||
-|CSS||
-|JavaScript||
-|Django 3.2.6||
-|Scrapping||
-|Ajax||
-|OAuth||
-|ORM||
-|Github||
-|AWS RDS||
-|AWS S3||
+|HTML|프론트 구현|
+|CSS|프론트 구현|
+|JavaScript|프론트 구현, Ajax요청|
+|Django 3.2.6|프레임워크|
+|Ajax|좋아요, 댓글등 비동기처리|
+|OAuth|회원가입|
+|ORM|DB조작, 관리|
+|AWS RDS|데이터베이스|
+|AWS S3|이미지 저장공간|
+|AWS 53|DNS서비스|
 
 
 <br>
