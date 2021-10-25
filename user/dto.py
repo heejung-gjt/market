@@ -21,6 +21,8 @@ class SigninDto():
 class UpdateUserDto():
     image:str
     nickname:str
+    address:str
+    address_detail:str
     user_pk:str
 
 
