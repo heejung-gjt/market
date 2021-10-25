@@ -136,12 +136,37 @@ a{
   }
   
   .footer{
-    margin-top: 300px;
+    position: absolute;
+    width: 100%;
+    /* bottom: 0; */
     background-color: #495057;
-    min-height: 250px;
+    min-height: 150px;
+    text-align: left;
   }
-  
-  
+  .footer-container{
+    display: inline-block;
+    padding-left: 20px;
+    width: 100%;
+    margin-top: 50px;
+  }
+
+  .footer-title{
+    font-weight: bold;
+    font-size: 1.4em;
+    display: inline-block;
+    margin: 5px 5px;
+    /* margin-right:10px; */
+    color: rgb(180, 178, 178);
+  }
+
+  .footer-container > ul li a{
+    font-size: 1.2em;
+    font-style: none;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    margin: 0px 4px;
+  }
+
   .product-add{
   display: inline-block;
   margin-right: 25px;
@@ -183,6 +208,7 @@ a{
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-bottom: 80px;
   margin-left: 140px;
 } 
 .page-li{
