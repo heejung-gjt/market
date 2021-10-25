@@ -96,7 +96,7 @@ class KakaoLoginView(View):
     def _build_kakao_dto():
         return KakaoUserInforDto(
             client_id = os.environ.get('KAKAO_ID'),
-            redirect_uri = "http://127.0.0.1:8000/user/signin/kakao/callback",
+            redirect_uri = "http://gamjamarket.site/user/signin/kakao/callback",
             code = None,
             client_uri = None,
             client_secret = None

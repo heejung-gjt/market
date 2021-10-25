@@ -14,7 +14,7 @@ from django.db.models import Q
 from datetime import datetime
 
 import time
-
+import boto3
 
 # product crud 
 class ProductService():
@@ -64,25 +64,27 @@ class ProductService():
             )
 
         # 여러개의 이미지 s3에 넣기
-        session = Session(
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name=AWS_S3_REGION_NAME
-        )
-        s3 = session.resource('s3')
         s3_url = "https://django-s3-practices.s3.ap-northeast-2.amazonaws.com/"
-
+        client = boto3.client(
+            's3',
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        )
+        bucket = AWS_STORAGE_BUCKET_NAME
         for file in dto.image:
             now = datetime.now().strftime('%Y%H%M%S')
-            s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
-            Key = now+file.name,
-            Body = file
+            client.upload_fileobj(
+                file,
+                bucket,
+                now+file.name,
+                ExtraArgs={
+                     "ContentType": file.content_type,
+                }
             )
             Photo.objects.create(
             article = article,
             image = s3_url+now+file.name
             )  
-
         result = context_infor(state = False, msg = 'completed', category_pk = category_pk)
         return result
 
@@ -108,7 +110,7 @@ class ProductService():
             article = article,
             discount_rate = discount_rate 
         )
-         # 여러개의 이미지 s3에 넣기
+         # 여러개의 이미지 삭제후 -> 업로드하기
         session = Session(
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -116,8 +118,21 @@ class ProductService():
         )
         s3 = session.resource('s3')
         s3_url = "https://django-s3-practices.s3.ap-northeast-2.amazonaws.com/"
+        client = boto3.client(
+            's3',
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            )
+        bucket = AWS_STORAGE_BUCKET_NAME
 
         if dto.image:
+            photos = Photo.objects.filter(article__pk = dto.article_pk)
+            for photo in photos:
+                photo = photo.image.split('/')[-1]
+                client.delete_object(
+                    Bucket= bucket,
+                    Key = photo
+                )
             Photo.objects.filter(article__pk = dto.article_pk).delete() 
             for file in dto.image:
                 now = datetime.now().strftime('%Y%H%M%S')
@@ -129,7 +144,6 @@ class ProductService():
                     article = article,
                     image = s3_url+now+file.name
                 ) 
-
         return False
 
     @staticmethod
@@ -141,7 +155,7 @@ class ProductService():
         return result
     
     @staticmethod
-    def get_product_infor(request, articles):
+    def get_product_infor(request):
         article_list = ProductFilterService.find_by_not_deleted_article()
         page = request.GET.get('page', '1')
         articles, page_range = paginator(article_list, page, 9)
@@ -199,7 +213,7 @@ class ProductService():
     @staticmethod
     def get_search_product_infor(request, dto:ProductSearchDto):
         categorys = ProductFilterService.find_by_all_category()
-        articles = Article.objects.filter(Q(name__icontains=dto.search_keyword) | Q(content__icontains=dto.search_keyword) | Q(category__name__icontains=dto.search_keyword), is_deleted = False).distinct().order_by('-created_at')
+        articles = Article.objects.filter(Q(name__icontains=dto.search_keyword) | Q(content__icontains=dto.search_keyword) | Q(category__name__icontains=dto.search_keyword), is_deleted = False).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').distinct().order_by('-created_at')
         article_sum = articles.count()
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 12)

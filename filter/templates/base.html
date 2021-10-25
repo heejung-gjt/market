@@ -40,7 +40,7 @@
       <li class="menu-category-li"><a class="menu-category" href="#"> 카테고리별</a>
         <div class="menu-category-list">
           <ul class="menu-category-list-ul active">
-            {% for category in category_list.all %}
+            {% for category in category_list %}
             <li class="product-menu"><a href="{% url 'filter:category-list' category.pk %}"><i class="fas fa-dot-circle right"></i>{{category.name}}</a></li>
             {% endfor %}
           </ul>

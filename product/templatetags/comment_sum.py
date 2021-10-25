@@ -7,6 +7,6 @@ register = template.Library()
 def comment_sum(comment):
   cnt = 0
   for recomment in comment:
-    cnt += recomment.re_comment.all().count()
+    cnt += recomment.re_comment.prefetch_related('comment').all().count()
   sum = comment.count() + cnt
   return sum
