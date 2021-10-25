@@ -18,6 +18,8 @@ from django.urls import path, include
 from product.views import ProductView
 from django.conf.urls.static import static
 from django.conf import settings
+import debug_toolbar
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,3 +29,8 @@ urlpatterns = [
     path('filter/', include('filter.urls')),
     path('social/', include('social.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns +=[
+        path('__debug__/' , include(debug_toolbar.urls)),
+    ]

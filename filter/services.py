@@ -14,7 +14,7 @@ class ProductFilterService():
 
     @staticmethod
     def find_by_product_list(category_pk):
-        articles = Article.objects.filter(category__pk = category_pk, is_deleted = False)
+        articles = Article.objects.filter(category__pk = category_pk, is_deleted = False).prefetch_related('photo', 'comment').select_related('category', 'article_price', 'writer', 'like', 'address')
         return articles
 
     @staticmethod
@@ -55,8 +55,7 @@ class ProductFilterService():
 
     @staticmethod
     def find_by_not_deleted_article():
-        article_list = Article.objects.filter(is_deleted = False).order_by('-created_at')
-       
+        article_list = Article.objects.filter(is_deleted = False).prefetch_related('photo', 'comment').select_related('writer', 'address', 'category', 'article_price','like').order_by('-created_at')
         return article_list
 
     @staticmethod
@@ -100,19 +99,19 @@ class ProductFilterService():
             q &= Q(price__range =(price_from, price_to))
         if dto.product_sort:
             if dto.product_sort == '1':
-                articles = Article.objects.filter(q).order_by('-created_at')
+                articles = Article.objects.filter(q).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').order_by('-created_at')
             elif dto.product_sort == '2':
-                articles = Article.objects.filter(q).order_by('created_at')
+                articles = Article.objects.filter(q).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like','address').order_by('created_at')
             elif dto.product_sort == '3':
-                articles = Article.objects.filter(q).order_by('price')
+                articles = Article.objects.filter(q).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like','address').order_by('price')
             elif dto.product_sort == '4':
-                articles = Article.objects.filter(q).order_by('-price')
+                articles = Article.objects.filter(q).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like','address').order_by('-price')
             elif dto.product_sort == '5':
-                articles = Article.objects.filter(q, is_deleted=False).annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
+                articles = Article.objects.filter(q, is_deleted=False).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like','address').annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
             elif dto.product_sort == '6':
-                articles = Article.objects.filter(q, is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
+                articles = Article.objects.filter(q, is_deleted=False).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like','address').annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
         else:
-            articles = Article.objects.filter(q).order_by('-created_at')
+            articles = Article.objects.filter(q).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like','address').order_by('-created_at')
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 9)
 
@@ -146,13 +145,13 @@ class ProductFilterService():
 
         if dto.product_sort:
             if dto.product_sort == '1':
-                articles = Article.objects.filter(q).order_by('price')
+                articles = Article.objects.filter(q).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').order_by('price')
             elif dto.product_sort == '2':
                 articles = Article.objects.filter(q).order_by('-price')
             elif dto.product_sort == '3':
-                articles = Article.objects.filter(q, is_deleted=False).annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
+                articles = Article.objects.filter(q, is_deleted=False).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').annotate(like_count=Count('like__users')).order_by('-like_count','-created_at')
             elif dto.product_sort == '4':
-                articles = Article.objects.filter(q, is_deleted=False).annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
+                articles = Article.objects.filter(q, is_deleted=False).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').annotate(review_count=Count('comment')).order_by('-review_count','-created_at')
         else:
             articles = Article.objects.filter(q).all()
         category_sub_list = CategoryDetail.objects.filter(category__pk = dto.category)
@@ -190,12 +189,10 @@ class ProductFilterService():
         articles = ProductFilterService.find_by_product_list(dto.category_pk)
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 9) 
-        print(page_range)
         category_title = ProductFilterService.find_by_category_title(dto.category_pk)
         category_list = ProductFilterService.find_by_all_category()
         category_sub_list = CategoryDetail.objects.filter(category__pk = dto.category_pk)
         sub_state = False
-        print(category_title)
 
         context = context_infor(
             articles = articles, 

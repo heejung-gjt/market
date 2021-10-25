@@ -3,6 +3,7 @@
 {% load static %}
 {% load filter_number %}
 {% load comment_sum %}
+{% load get_one_image %}
 <link rel="stylesheet" href="/static/css/product/style.css">
 <link rel="stylesheet" href="/static/css/filter/style.css">
 {% endblock head %}
@@ -42,7 +43,7 @@
       <p class="product-category">상세상품</p>
       <select class="category-detail-select" name="sub-menu">
         <option value="">전체보기</option>
-        {% for sub_menu in category_sub_list.all %}
+        {% for sub_menu in category_sub_list %}
         <option value="{{sub_menu.pk}}">{{sub_menu.name}}</option>
         {% endfor %}
       </select>
@@ -78,7 +79,7 @@
           </div>
 
           <div class="product-imgs">
-            <img class="product-img" src="{{article.photo.first.image}}" alt="">
+            <img class="product-img" src="{{article.photo | get_one_image}}" alt="">
           </div>
           <div class="product-main-page">
             <span class="product-title">{{article.name}}</span>
@@ -86,8 +87,8 @@
                 class="fas fa-sort-down"></i></span>
             <strong class="product-price">{{article.price}} 원</strong>
             <div class="social">
-              <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
-              <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+              <span class="social-comment">댓글 +{{article.comment.all | comment_sum}} </span>
+              <span class="social-like"> 찜 +{{article.like.users | length}}</span>
             </div>
             <span class="product-address">{{ article.address | filter_numbers }}</span>
           </div>
@@ -111,7 +112,7 @@
           </div>
 
           <div class="product-imgs">
-            <img class="product-img" src="{{article.photo.first.image}}" alt="">
+            <img class="product-img" src="{{article.photo | get_one_image }}" alt="">
           </div>
           <div class="product-main-page">
             <span class="product-title">{{article.name}}</span>
@@ -119,8 +120,8 @@
                 class="fas fa-sort-down"></i></span>
             <strong class="product-price">{{article.price}} 원</strong>
             <div class="social">
-              <span class="social-comment">댓글 +{{article.comment.all|length}} </span>
-              <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
+              <span class="social-comment">댓글 +{{article.comment.all | comment_sum}} </span>
+              <span class="social-like"> 찜 +{{article.like.users | length}}</span>
             </div>
             <span class="product-address">{{ article.address | filter_numbers }}</span>
           </div>

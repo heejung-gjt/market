@@ -19,8 +19,8 @@ from .dto import (
 class ProductView(View):
 
     def get(self, request, *args, **kwargs):
-        articles = ProductFilterService.find_by_not_deleted_article()
-        context = ProductService.get_product_infor(request, articles)
+        # articles = ProductFilterService.find_by_not_deleted_article()
+        context = ProductService.get_product_infor(request)
         return render(request, 'article.html', context)
 
 

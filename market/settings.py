@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'debug_toolbar',
     'user',
     'product',
     'social',
@@ -57,7 +58,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware', 
 ]
+# debug toolbar 사용위해
+INTERNAL_IPS = ('127.0.0.1',) 
 
 ROOT_URLCONF = 'market.urls'
 
@@ -86,7 +90,7 @@ WSGI_APPLICATION = 'market.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'market',
+        'NAME': 'gamjamarket',
         'USER': 'admin',
         'PASSWORD': env('PASSWORD'),
         'HOST': env('HOST'),
