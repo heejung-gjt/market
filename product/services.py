@@ -213,7 +213,7 @@ class ProductService():
     @staticmethod
     def get_search_product_infor(request, dto:ProductSearchDto):
         categorys = ProductFilterService.find_by_all_category()
-        articles = Article.objects.filter(Q(name__icontains=dto.search_keyword) | Q(content__icontains=dto.search_keyword) | Q(category__name__icontains=dto.search_keyword), is_deleted = False).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').distinct().order_by('-created_at')
+        articles = Article.objects.filter(Q(name__icontains=dto.search_keyword) | Q(content__icontains=dto.search_keyword) | Q(category_detail__name__icontains=dto.search_keyword), is_deleted = False).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').distinct().order_by('-created_at')
         article_sum = articles.count()
         page = request.GET.get('page', '1')
         articles, page_range = paginator(articles, page, 12)

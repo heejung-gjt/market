@@ -487,6 +487,7 @@ option{
 .product-main-flex{
   margin-top: 150px;
   display: flex;
+  min-height: 480px;
 }
 .product-filter{
   /* background-color: yellow; */
