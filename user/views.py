@@ -42,8 +42,8 @@ class RegisterView(View):
         return render(request, 'signup.html',context)
 
     def post(self, request):
-        user_dto = self._build_user_dto(request.POST)
-        context = UserService.signup(user_dto)
+        data = self._build_user_dto(request.POST)
+        context = UserService.signup(data)
         if not context['error']['state']:
             auth.login(request, context['user'])
             return redirect('product:article')
@@ -188,6 +188,8 @@ class ProfileView(View):
         return UpdateUserDto(
             image = request.FILES.get('image'),
             nickname = request.POST['nickname'],
+            address = request.POST['address'],
+            address_detail = request.POST['address_detail'],
             user_pk = request.user.pk 
         )
 			

@@ -36,7 +36,7 @@
             <strong class="product-price">{{article.price}} 원</strong>
             <div class="social">
               <span class="social-comment">댓글 +{{article.comment.all | comment_sum}} </span>
-              <span class="social-like"> 찜 +{{article.like.users | length}}</span>
+              <span class="social-like"> 찜 +{{article.like.users.all | length}}</span>
             </div>
             <span class="product-address">{{ article.address | filter_numbers }}</span>
           </div>

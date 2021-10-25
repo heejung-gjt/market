@@ -14,6 +14,11 @@
     {% endif %}
     <div class="profile-edit-infor">
     <input class="register-nickname" type="text" name="nickname" placeholder="NICKNAME" value="{{user.nickname}}">
+
+    <br>
+    <br>
+    <input type="text" class="profile-address" value="{{user.address.address}}" name='address' placeholder="주소입력">
+    <input type="text" class="profile-detail-address" value="{{user.address.address_detail}}" name='address_detail' placeholder="동/호수입력">
     <input class="register-submit" type="submit" value="수정하기">
     </div> 
   </form>

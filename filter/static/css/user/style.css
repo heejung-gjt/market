@@ -59,7 +59,7 @@
   padding-left: 3px;
   font-size: 1.0rem;
 }
-.register-id,.register-nickname,.register-pwd,.register-pwd-chk{
+.register-id,.register-nickname,.register-pwd,.register-pwd-chk, .profile-address, .profile-detail-address{
   width: 500px;
   margin-bottom:15px;
   padding:15px 10px;
@@ -91,7 +91,7 @@
   font-size: 1.2rem;
   font-weight:bold;
 }
-.login-id,.register-nickname,.login-pwd,
+.login-id,.register-nickname,.login-pwd, .profile-address, .profile-detail-address,
 .register-id,.register-pwd,.register-pwd-chk, .address, .address-detail{
   box-shadow: 0px 0px 4px 0px rgb(199, 199, 199);
 }
