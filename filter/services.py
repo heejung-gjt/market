@@ -88,6 +88,7 @@ class ProductFilterService():
         categorys = ProductFilterService.find_by_all_category()
         price_from = int(dto.price_from)
         price_to = int(dto.price_to)
+        print(price_from, price_to)
         articles = None
         if dto.category_pk:
             product_title = Category.objects.filter(pk = dto.category_pk).first().name
@@ -96,7 +97,7 @@ class ProductFilterService():
         q = Q()
         if dto.category_pk:
             q &= Q(category = dto.category_pk)
-            q &= Q(price__range =(price_from, price_to))
+        q &= Q(price__range =(price_from, price_to))
         if dto.product_sort:
             if dto.product_sort == '1':
                 articles = Article.objects.filter(q).prefetch_related('photo', 'comment').select_related('writer', 'article_price', 'like' ,'address').order_by('-created_at')
@@ -136,6 +137,7 @@ class ProductFilterService():
         price_from = int(dto.price_from)
         price_to = int(dto.price_to)
         sub_category_pk = dto.category_detail
+        print(price_from, price_to)
         articles = None
         q = Q()
         q &= Q(category = dto.category)
