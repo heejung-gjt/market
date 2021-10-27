@@ -19,7 +19,6 @@ from .dto import (
 class ProductView(View):
 
     def get(self, request, *args, **kwargs):
-        # articles = ProductFilterService.find_by_not_deleted_article()
         context = ProductService.get_product_infor(request)
         return render(request, 'article.html', context)
 
@@ -109,6 +108,7 @@ class FilterSubProductView(View):
 
     def get(self, request, *args, **kwargs):
         data = self._build_sub_product_dto(request)
+        print(data, 'ddddata')
         context = ProductFilterService.get_filter_sub_product_infor(request, data)
         return render(request, 'category-list.html',context)
 
